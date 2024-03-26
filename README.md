@@ -16,14 +16,19 @@ php-ssl is a php certificate scanner webapp, that checks predefined hostnames fo
 
 
 ## Screenshots
-<img src="css/images/Dashboard.png" align="left"  width="30%"/>
-<img src="css/images/certificates.png" align="left" width="30%"/>
-<img src="css/images/certificate.png" align="left" width="30%"/>
-<img src="css/images/cert_fetch.png" align="left" width="30%"/>
-<img src="css/images/fetch.png" align="left" width="30%"/>
-<img src="css/images/zone_axfr.png" align="left" width="30%"/>
+<table>
+  <tr>
+    <td><img src="css/images/Dashboard.png"></td>
+    <td><img src="css/images/certificates.png"></td>
+    <td><img src="css/images/certificate.png"></td>
+  </tr>
+  <tr>
+    <td><img src="css/images/cert_fetch.png"></td>
+    <td><img src="css/images/fetch.png"></td>
+    <td><img src="css/images/zone_axfr.png"></td>
+  </tr>
+</table>
 
-***
 
 ## Requirements:
 php-ssl has following requirements:
