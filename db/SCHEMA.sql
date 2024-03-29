@@ -258,6 +258,21 @@ CREATE TABLE `zones` (
 
 
 
+# Dump of table ignored_issuers
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ignored_issuers`;
+
+CREATE TABLE `ignored_issuers` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `t_id` int(11) unsigned NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `ski` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_sku_tid` (`t_id`,`ski`),
+  CONSTRAINT `tid` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
