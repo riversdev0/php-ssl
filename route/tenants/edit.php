@@ -26,8 +26,9 @@ $title = _(ucwords($_GET['action']))." "._("tenant");
 # validate action
 if(!$User->validate_action($_GET['action'])) {
 	# content
-	$content = [];
-	$content[] = $Result->show("danger", _("Invalid action"), false, false, true);
+	$content      = [];
+	$content[]    = $Result->show("danger", _("Invalid action"), false, false, true);
+	$header_class = "danger";
 	# btn
 	$btn_text = "";
 }
@@ -35,15 +36,17 @@ if(!$User->validate_action($_GET['action'])) {
 elseif($user->admin !== "1") {
 	# content
 	$content = [];
-	$content[] = $Result->show("danger", _("Admin user required"), false, false, true);
+	$content[]    = $Result->show("danger", _("Admin user required"), false, false, true);
+	$header_class = "danger";
 	# btn
 	$btn_text = "";
 }
 # validate tenant
 elseif ($_GET['action']!=="add" && is_null($tenant)) {
 	# content
-	$content = [];
-	$content[] = $Result->show("danger", _("Invalid tenant"), false, false, true);
+	$content      = [];
+	$content[]    = $Result->show("danger", _("Invalid tenant"), false, false, true);
+	$header_class = "danger";
 	# btn
 	$btn_text = "";
 }
@@ -56,10 +59,9 @@ else {
 
 	// import form
 	$content[] = "<form id='modal-form'>";
-	$content[] = "<table class='table table-condensed table-borderless align-middle table-zone-management'>";
+	$content[] = "<table class='table table-condensed table-sm table-borderless align-middle table-zone-management'>";
 	// name
 	$content[] = "<tbody class='name'>";
-	$content[] = "<tr><td colspan='2'><h4>"._("Tenant details")."</h3></td></tr>";
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Tenant name")."</th>";
 	$content[] = "	<td>";
@@ -138,8 +140,13 @@ else {
 	# button text
 	#
 	$btn_text = _(ucwords($_GET['action']))." "._("tenant");
+
+	// header class
+	if($_GET['action']=="add") 		  { $header_class = "success"; }
+	elseif($_GET['action']=="delete") { $header_class = "danger"; }
+	else 					  		  { $header_class = "info"; }
 }
 
 
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/tenants/edit-submit.php");
+$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/tenants/edit-submit.php", false, $header_class);

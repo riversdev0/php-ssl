@@ -28,6 +28,9 @@ $title = _("Update host SSL certificate");
 // content
 $content = [];
 
+// hader
+$header_class = "info";
+
 # try to fetch certificate
 try {
 	// set execution time
@@ -55,19 +58,20 @@ try {
 		$status = $Certificates->get_status ($cert_parsed, true, true, $host->hostname);
 
 		$cert_text = [];
-		$cert_text[] = _("Issuer").": ".$cert_parsed['issuer']['O'];
-		$cert_text[] = _("Status").": ".$status['text'];
-		$cert_text[] = _("Subject").": ".$cert_parsed['subject']['CN'];
-		$cert_text[] = _("Serial").": ".$cert_parsed['serialNumberHex'];
-		$cert_text[] = _("Valid to").": ".$cert_parsed['custom_validTo']." (".$cert_parsed['custom_validDays']." days)";
-		$cert_text[] = _("TLS version").": ".$host_certificate['tls_proto'];
-		$cert_text[] = _("Scan agent").": ".$host->agname;
-		$cert_text[] = "<a href='".$tenant->href."/certificates/".$host->zone_name."/".$cert_parsed['serialNumber']."/' target='_blank' class='btn btn-sm btn-outline-success'> "._("Show details")."</a>";
-
+		$cert_text[] = "<div class='' style='line-height:1.5rem'>";
+		$cert_text[] = _("Issuer").": ".$cert_parsed['issuer']['O']."<br>";
+		$cert_text[] = _("Status").": ".$status['text']."<br>";
+		$cert_text[] = _("Subject").": ".$cert_parsed['subject']['CN']."<br>";
+		$cert_text[] = _("Serial").": ".$cert_parsed['serialNumberHex']."<br>";
+		$cert_text[] = _("Valid to").": ".$cert_parsed['custom_validTo']." (".$cert_parsed['custom_validDays']." days)"."<br>";
+		$cert_text[] = _("TLS version").": ".$host_certificate['tls_proto']."<br>";
+		$cert_text[] = _("Scan agent").": ".$host->agname."<br>";
+		$cert_text[] = "<hr><a href='".$tenant->href."/certificates/".$host->zone_name."/".$cert_parsed['serialNumber']."/' target='_blank' class='btn btn-sm btn-outline-info'>".$url_items["certificates"]["icon"]." "._("Show certificate details")."</a>";
+		$cert_text[] = "</div>";
 		// ok
 		$content[] = $Result->show("success", _("Certificate fetched"), false, false, true, false);
 		$content[] = "<hr>";
-		$content[] = implode("<br>", $cert_text);
+		$content[] = implode("", $cert_text);
 	}
 	// error
 	else {
@@ -86,4 +90,4 @@ try {
 
 
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), "", "", true);
+$Modal->modal_print ($title, implode("\n", $content), "", "", true, $header_class);

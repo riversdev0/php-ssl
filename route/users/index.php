@@ -1,15 +1,30 @@
-<div class='header'>
-	<h3><?php print _("Users"); ?></h3>
+<?php
+# validate user session - requires admin
+$User->validate_session (false);
+?>
+
+<div class="page-header">
+	<h2 class="page-title"><?php print $url_items["users"]['icon']; ?> <?php print _("Users"); ?></h2>
+	<hr>
 </div>
+
+<p class='text-secondary'><?php print _('List of all available users'); ?>.</p>
+
 
 <!-- back -->
-<div class="container-fluid main">
-	<a href="/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chevron-left"></i> <?php print _("Back"); ?></a>
+<div>
+<div class='btn-group'>
+<a href="/zones/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> <?php print _("Back"); ?></a>
+
+<a href="/route/error/modal.php" data-bs-toggle="modal" data-bs-target="#modal1" class="btn btn-sm btn-outline-success btn-sm btn-5 d-none d-sm-inline-block">
+	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2"><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg> Create new user </a>
 </div>
-<br>
+</div>
+<br><br>
 
 
-<div class="container-fluid main">
+
+
 <?php
 
 # fetch users
@@ -37,62 +52,67 @@ if(sizeof($users)>0) {
 // set text for no certs
 $no_user_text = "No users available";
 
-print "<div class='table-responsive'>";
-print "<table class='table table-hover align-top table-sm' data-toggle='table' data-mobile-responsive='true' data-check-on-init='true' data-classes='table table-hover table-sm' data-cookie='true' data-cookie-id-table='certs' data-pagination='true' data-page-size='250' data-page-list='[50,250,500,All]' data-search='true' data-icons-prefix='fa' data-icon-size='xs' data-show-footer='false' data-smart-display='true' showpaginationswitch='true'>";
 
 
-$hide_hosts = $_params['app']=="hosts" ? "" : "visually-hidden";
-
-// header
-print "<thead>";
-print "<tr>";
-print "	<th data-field='icon' data-width='20' data-width-unit='px'></th>";
-print "	<th data-field='name'>"._("Name")."</th>";
-print "	<th data-field='email'>"._("Email")."</th>";
-print "	<th data-field='permission'>"._("Permission")."</th>";
-print "	<th data-field='warning'>"._("Warning")."</th>";
-print "	<th data-field='expire'>"._("Expire")."</th>";
-print "</tr>";
-print "</thead>";
-
-print "<tbody>";
 // body
 if(sizeof($tenants)==0) {
-	print "<tr>";
-	print "	<td colspan=6><i class='fa fa-certificate' style='color:#ccc;padding:0px 5px;'></i> <span class='text-info'>"._($no_user_text).".</span></td>";
-	print "</tr>";
+	$Result->show("info", $url_items["tenants"]['icon']." "._("No users available").".");
 }
 else {
-foreach ($cert_tenant_groups as $tenant_id=>$group) {
+	print '<div class="page-body">';
 
-	if($user->admin=="1") {
-	print "<tr class='header'>";
-	print "	<td colspan=6><i class='fa fa-users text-muted'></i> "._("Tenant")." <a href='/".$user->href."/tenants/".$tenants[$tenant_id]->href."/'>".$tenants[$tenant_id]->name."</a></td>";
-	print "</tr>";
-	}
+	foreach ($cert_tenant_groups as $tenant_id=>$group) {
 
-	if(sizeof($group)==0) {
-		print "<tr>";
-		print "	<td colspan=6><i class='fa fa-certificate text-info' style='color:#ccc;padding:0px 5px;'></i> <span class='text-info'>"._($no_user_text).".</span></td>";
-		print "</tr>";
-	}
-	else {
-		foreach ($group as $t) {
-			print "<tr>";
-			print "<td><i class='fa fa-user d-none d-sm-table-cell' style='color:#ccc;padding:0px 5px;'></i></td>";
-			print "	<td class='align-top'>".$t->name."</td>";
-			print "	<td class='align-top'>".$t->email."</td>";
-			print "	<td class='align-top'>"._($User->get_permissions_nice($t->permission))."</td>";
-			print "	<td class='align-top'>".$t->days." "._("days")."</td>";
-			print "	<td class='align-top'>".$t->days_expired." "._("days")."</td>";
+		print "<div class='card' style='margin-bottom:20px;padding:0px'>";
 
-			print "</tr>";
+		// title = for admins
+		if($user->admin=="1") {
+			print "<div class='card-header'>";
+			print "	<h3 class='h4'>".$url_items["tenants"]['icon']." "._("Tenant")." <a href='/".$user->href."/tenants/".$tenants[$tenant_id]->href."/'>".$tenants[$tenant_id]->name."</a> </h3>";
+			print '<div class="card-actions">';
+			print '<a href="/route/error/modal.php" data-bs-toggle="modal" data-bs-target="#modal1" class="btn btn-sm btn-outline-success btn-sm btn-5 d-none d-sm-inline-block" style="float:right">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2"><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg> Create new user
+                  </a>';
+			print "</div>";
+			print "</div>";
 		}
+		// body
+		print "<div class='card-body row'>";
+
+		if(sizeof($group)==0) {
+			print "<div class='alert alert-info'>".$url_items["users"]['icon']." "._($no_user_text)."</div>";
+		}
+		else {
+			foreach ($group as $u) {
+				print '
+				<div class="col col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+				<div class="card text-center" style="padding:0px;padding-top:10px;">
+                    <h3 class="m-0 mb-1">'.$u->name.'</h3>
+                    <div class="text-secondary">'.$u->email.'</div>
+                    <div class="mt-2">
+                      <span class="badge badge-outline text-red">'._($User->get_permissions_nice($u->permission)).'</span>
+                    </div>
+                    <div class="mt-2">
+                      <span class="badge bg-info-lt" data-bs-toggle="tooltip" title="'._("Days before expiry to show warning").'">'.$u->days." "._("Days").'</span>
+                      <span class="badge bg-info-lt" data-bs-toggle="tooltip" title="'._("Days after expiry to show warning").'">'.$u->days_expired." "._("Days").'</span>
+                    </div>
+
+					<div class="d-flex" style="margin-top:10px;">
+                    <a href="/route/error/modal.php" data-bs-toggle="modal" data-bs-target="#modal1" class="card-btn" style="padding:0.6rem">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415" /><path d="M16 5l3 3" /></svg>
+                      Edit</a>
+                    <a href="/route/error/modal.php" data-bs-toggle="modal" data-bs-target="#modal1" class="card-btn" style="padding:0.6rem">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                      Delete</a>
+                  </div>
+                  </div>
+                  </div>';
+			}
+		}
+
+		print "</div>";
+		print "</div>";
 	}
+
+	print "</div>";
 }
-}
-print "</tbody>";
-print "</table>";
-print "</div>";
-?>
-</div>

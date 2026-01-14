@@ -3,7 +3,7 @@ $(document).ready(function () {
 
 
 /* loading spinner functions */
-function showSpinner() { $('div.loading').show(); }
+function showSpinner() { $('div.loading').css("display","flex") }
 function hideSpinner() { $('div.loading').fadeOut('fast'); }
 
 /**
@@ -30,14 +30,29 @@ $(document).on("click", '[data-bs-toggle=modal]', function() {
     var index = $(this).attr('data-bs-target')
     // default modeal1
     if(index===undefined) { index = "#modal1"; }
-    // show loading
-    showSpinner ();
-    // clear old
-    $(index+' .modal-content').html("");
+    // set default
+    modal_html =  '<div class="modal-status"></div>'
+    modal_html += '<div class="modal-header">Loading</div>'
+    modal_html += '<div class="modal-body text-center">'
+    modal_html += '     <div class="text-secondary mb-3">Please wait, loading content...</div>'
+    modal_html += '     <div class="progress progress-sm" style="height:.25rem">'
+    modal_html += '         <div class="progress-bar progress-bar-indeterminate"></div>'
+    modal_html += '     </div>'
+    modal_html += '</div>'
+    modal_html += '<div class="modal-footer"><button type="button" class="btn btn-sm btn-default btn-outline-secondary" onclick="$(&quot;#modal1&quot;).modal(&quot;hide&quot;);">Close window</button></div>';
+
+    // set default content
+    $(index+' .modal-content').html(modal_html);
     // load
-    $(index+' .modal-content').load($(this).attr('href'), function() {
-        // hide spinner
-        hideSpinner ()
+    $(index+' .modal-content').load($(this).attr('href'), function(response, status, xhr) {
+        if ( status == "error" ) {
+            $(index+' .modal-status').addClass("bg-danger")
+            $(index+' .modal-header').html( "Error" );
+            $(index+' .modal-body').html( "<div class='alert alert-danger'>"+"There was an error loading resource: " + xhr.status + " " + xhr.statusText+"</div>" );
+        }
+        else {
+            //hideSpinner ()
+        }
     });
     // show
     $(index).modal('show');
@@ -57,9 +72,13 @@ $(document).on("click", '.reload-window', function() {
  * Tooltips
  * @type {Array}
  */
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl)
+tippy('[data-bs-toggle="tooltip"]', {
+    duration: 0,
+    arrow: false,
+    followCursor: false,
+    allowHTML: true,
+    offset: [0, 10],
+    content: (reference) => reference.getAttribute('title'),
 })
 
 /**
@@ -83,6 +102,7 @@ $('.circle-expire').click(function () {
 
 // login
 $('form#login').submit(function() {
+    showSpinner();
     var logindata = $(this).serialize();
 
     $('div#loginCheck').hide();
@@ -93,7 +113,9 @@ $('form#login').submit(function() {
         if(data.search("alert alert-success") != -1) {
             setTimeout(function (){window.location="/";}, 1000)
         }
-        else {}
+        else {
+            hideSpinner();
+        }
     });
     return false;
 })
@@ -105,7 +127,10 @@ $('.expand_hosts, .shrink_hosts').click(function(){
     if($(this).hasClass('expand_hosts')) {
         $(this).removeClass('expand_hosts').addClass('shrink_hosts')
         $('td.td-hosts, th.td-hosts').removeClass('visually-hidden');
-        $(this).find('i').removeClass('fa-expand').addClass('fa-compress');
+
+        $(this).find('svg').remove()
+        $(this).prepend('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-minimize"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 9l4 0l0 -4" /><path d="M3 3l6 6" /><path d="M5 15l4 0l0 4" /><path d="M3 21l6 -6" /><path d="M19 9l-4 0l0 -4" /><path d="M15 9l6 -6" /><path d="M19 15l-4 0l0 4" /><path d="M15 15l6 6" /></svg>');
+
         $(this).html($(this).html().replace("Expand", "Shrink"))
         createCookie("show_hosts","1",30)
     }
@@ -113,7 +138,10 @@ $('.expand_hosts, .shrink_hosts').click(function(){
     else {
         $(this).removeClass('shrink_hosts').addClass('expand_hosts')
         $('td.td-hosts, th.td-hosts').addClass('visually-hidden');
-        $(this).find('i').removeClass('fa-compress').addClass('fa-expand');
+
+        $(this).find('svg').remove()
+        $(this).prepend('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-maximize"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 4l4 0l0 4" /><path d="M14 10l6 -6" /><path d="M8 20l-4 0l0 -4" /><path d="M4 20l6 -6" /><path d="M16 20l4 0l0 -4" /><path d="M14 14l6 6" /><path d="M8 4l-4 0l0 4" /><path d="M4 4l6 6" /></svg>');
+
         $(this).html($(this).html().replace("Shrink", "Expand"))
         createCookie("show_hosts","0",30)
     }

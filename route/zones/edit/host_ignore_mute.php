@@ -37,9 +37,11 @@ try {
 	$Database->runQuery("update hosts set `mute` = IF(`mute`=1, 0, 1) where id = ?", [$_GET['host_id']]);
 	// ok
 	$content[] = $Result->show("success", _("Updated").".", false, false, true, false);
+	$header_class = "success";
 } catch (Exception $e) {
     // print error
 	$content[] = $Result->show("danger", $e->getMessage(), false, false, true, false);
+	$header_class = "danger";
 }
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), "", "", true);
+$Modal->modal_print ($title, implode("\n", $content), "", "", true, $header_class);

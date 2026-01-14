@@ -83,7 +83,7 @@ class URL extends Common {
 	 */
 	private function validate_requested_uri () {
 		foreach ($this->uri_params as $k=>$p) {
-			if(preg_match('/[^a-z0-9\._\-]/i', $p)!=0 && $k!="certificate") {
+			if(preg_match('/[^a-z0-9\._\-]/i', $p)!=0 && $k!="certificate" && $k!="search") {
 				$this->errors[] = "Invalid URI string";
 				$this->result_die ();
 			}

@@ -92,6 +92,10 @@ class Certificates extends Common {
 	 * @return array
 	 */
 	public function get_expired ($days = 30, $expired_days = 7) {
+		// default to 30 and 7 if not set !
+		if(!is_numeric($days))			$days = 30;
+		if(!is_numeric($expired_days)) 	$expired_days = 7;
+
 		// set from date
 		$from_date         = date("Y-m-d H:i:s", strtotime("+$days days"));				// expire in next x days
 		$expired_from_date = date("Y-m-d H:i:s", strtotime("-$expired_days days"));		// expired in last y days
@@ -304,15 +308,19 @@ class Certificates extends Common {
 	public function get_status_text ($status_int = 0, $text = false) {
 		// span status
 		$span_hidden      = $text===true ? "" : "visually-hidden";
-		$span_hidden_icon = $text===true ? "visually-hidden" : "";
 		$status_class     = $text===true ? "" : "status";
 
 		// return
-		if ($status_int==10){ return "<span class='badge $status_class bg-danger' 			data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Domain mismatch")."'><i class='fa fa-question $span_hidden_icon'></i> <span class='$span_hidden'>"._("Domain mismatch")."</span></span> "; }
-		if ($status_int==0) { return "<span class='badge $status_class bg-light text-muted' data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Unknown")."'><i class='fa fa-question $span_hidden_icon'></i> <span class='$span_hidden'>"._("Unknown")."</span></span> "; }
-		if ($status_int==1)	{ return "<span class='badge $status_class bg-danger' 		  	data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Expired")."'><i class='fa fa-times $span_hidden_icon'></i> <span class='$span_hidden'>"._("Expired")."</span></span> "; }
-		if ($status_int==2)	{ return "<span class='badge $status_class bg-warning' 			data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Expires soon")."'><i class='fa fa-exclamation $span_hidden_icon'></i> <span class='$span_hidden'>"._("Expires soon")."</span></span> "; }
-		if ($status_int==3)	{ return "<span class='badge $status_class bg-success' 		    data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Valid")."'><i class='fa fa-check $span_hidden_icon'></i> <span class='$span_hidden'>"._("Valid")."</span></span> "; }
+		if ($status_int==10) {
+			return "<span class='badge bg-red-lt $status_class' data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Domain mismatch")."'> <span class='$span_hidden'>"._("Domain mismatch")."</span></span> "; }
+		if ($status_int==0) {
+			return "<span class='badge bg-light-lt $status_class bg-light text-muted' data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Unknown")."'> <span class='$span_hidden'>"._("Unknown")."</span></span> "; }
+		if ($status_int==1)	{
+			return "<span class='badge bg-red-lt $status_class' data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Expired")."'> <span class='$span_hidden'>"._("Expired")."</span></span> "; }
+		if ($status_int==2)	{
+			return "<span class='badge bg-orange-lt $status_class' data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Expires soon")."'> <span class='$span_hidden'>"._("Expires soon")."</span></span> "; }
+		if ($status_int==3)	{
+			return "<span class='badge bg-green-lt $status_class' data-bs-toggle='tooltip' data-bs-placement='left' title='"._("Valid")."'> <span class='$span_hidden'>"._("Valid")."</span></span> "; }
 
 	}
 

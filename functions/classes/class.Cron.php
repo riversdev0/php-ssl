@@ -186,4 +186,13 @@ class Cron extends Common {
 		// default not valie
 		return false;
 	}
+
+	public function rand ($min = 0, $max = 60, $step = 5) {
+	    // Generate a random number between 0 and 12
+	    $randomNumber = rand($min, ($max-$step)/$step);
+	    // multiply by step
+	    $randomNumber *= $step;
+	    // return
+	    return $randomNumber;
+	}
 }

@@ -45,7 +45,7 @@ elseif ($host===null || $host->z_id!=$zone->id) {
 # create hosts to insert
 foreach ($_POST as $k=>$p) {
 	if (strpos($k, "hostname-")!==false) {
-		if($Common->validate_mail($p)) {
+		if($Common->validate_mail($p) || strlen($p)===0) {
 			$out[] = $p;
 		}
 		else {

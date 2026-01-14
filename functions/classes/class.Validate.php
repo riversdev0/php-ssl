@@ -83,6 +83,7 @@ class Validate extends Result {
 	public function validate_alphanumeric ($text = "", $allow_empty = false) {
 		// empty
 		if($allow_empty && strlen($text)==0) { return true; }
+		elseif(!$allow_empty && strlen($text)==0) { return false; }
 		// check
 		return preg_match('/^[a-zA-Z\,čČšŠžŽ.\d\-_\s]+$/i', $text);
 	}

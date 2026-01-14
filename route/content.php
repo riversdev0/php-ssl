@@ -9,30 +9,27 @@
 # validate user session
 $User->validate_session ();
 
-# valid flag
-$valid = false;
-
-# validate route
-foreach ($url_items as $type=>$nav) {
-	if (array_key_exists($_params['route'], $url_items[$type])) {
-		$valid = true;
-		continue;
-	}
-}
-if(!$valid) {
-	print "<div class='header'><h3>"._("Error")."</h3></div>";
-	print '<div class="container-fluid main">';
+# check
+if(!array_key_exists($_params['route'], $url_items)) {
 	$Common->save_error("Invalid route");
-	$Common->result_die ();
+	include ("error/500.php");
+	die();
 }
 
 # include route
 if(file_exists(dirname(__FILE__)."/".$_params['route']."/index.php")) {
 	include ($_params['route']."/index.php");
+	// set url
+	$_SESSION['url'] = "/".$_params['tenant']."/".$_params['route']."/";
+	// app ?
+	if(isset($_params['app']))
+	$_SESSION['url'] .= $_params['app']."/";
+	// app ?
+	if(isset($_params['id1']))
+	$_SESSION['url'] .= $_params['id1']."/";
 }
 else {
-	print "<div class='header'><h3>"._("Error")."</h3></div>";
-	print '<div class="container-fluid main">';
 	$Common->save_error("Invalid route");
-	$Common->result_die ();
+	include ("error/404.php");
+	die();
 }

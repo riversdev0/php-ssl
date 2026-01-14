@@ -5,18 +5,17 @@ $stats = $User->get_stats ();
 
 ?>
 
-<div class='col-xs-12 col-lg-6'>
-<div class='bubble'>
-	<div class='bubble-header'><i class='links fa fa-chart-pie'></i> <?php print _("Statistics"); ?></div>
-		<div class="bubble-content row" style='padding: 15px 5px 0px 15px;'>
-			<?php
-			foreach ($stats as $name=>$cnt) {
-				print "<div class='col-xs-12 col-lg-6'>";
-				print "	<div class='circle circle-card' style='margin-right:6px;'>$cnt</div><div class='circle-text'>"._(ucwords($name))."</div>";
-				print "</div>";
-			}
-			?>
-		</div>
-	</div>
+<div class="card-header">
+	<h3 class="h2"><?php print _("Statistics"); ?></h3>
 </div>
+
+<div class="card-body">
+	<div class="row">
+		<?php foreach ($stats as $name=>$cnt) { ?>
+		<div class="col-6 flex-column" style='margin-bottom:3px;'>
+			<span class='badge badge-circle'><?php print $cnt;?></span>
+			<span style='padding:13px !important;position: absolute' class='text-secondary'><?php print _(ucwords($name)); ?></span>
+		</div>
+		<?php } ?>
+	</div>
 </div>

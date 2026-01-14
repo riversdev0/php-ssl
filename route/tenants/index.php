@@ -3,33 +3,41 @@
 $User->validate_session (true);
 ?>
 
-<div class='header'>
-	<h3><?php print _("Tenants"); ?></h3>
+<div class="page-header">
+	<h2 class="page-title"><?php print $url_items["tenants"]['icon']; ?> <?php print _("Tenants"); ?></h2>
+	<hr>
 </div>
 
-<div class="container-fluid main">
+
+<p class='text-secondary'><?php print _('List of all available tenants in the system'); ?>.</p>
+
 
 <?php
 
 # fetch tenants
 $tenants = $Tenants->get_all();
 
-# add
-print '<div class="btn-group" role="group">';
-print '<a href="/zones/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chevron-left"></i> '._("Back").'</a>';
-print '<a href="/route/tenants/edit.php?action=add" data-bs-toggle="modal" data-bs-target="#modal1" class="btn btn-sm btn-outline-success"><i class="fa fa-plus"></i> '._("Create tenant").'</a>';
+# back
+print '<div>';
+print '<a href="/zones/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> '._("Back").'</a>';
 print '</div><br><br>';
 
-# text
-print "<p>"._('List of all available tenants in the system').".</p>";
+
+print '<div style="text-align:right !important">';
+print '<a href="/route/tenants/edit.php?action=add" data-bs-toggle="modal" data-bs-target="#modal1" class="btn btn-sm btn-outline-success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg> '._("Create new tenant").'</a>';
+print "</div>";
 
 # nont
 if (sizeof($tenants)==0) {
 	$Result->show("info", _("No tenants available").".");
 }
 else {
+
+	print '<div class="page-body">';
+	print '<div class="card">';
+
 	print "<div class='table-responsive'>";
-	print "<table class='table table-hover align-top table-sm' style='margin-bottom:0px;'>";
+	print "<table class='table table-hover table-md table-vcenter card-table table-striped align-top'>";
 
 	// header
 	print "<thead>";
@@ -37,11 +45,11 @@ else {
 	print "	<th>"._("Name")."</th>";
 	print "	<th>"._("Status")."</th>";
 	print "	<th>"._("Description")."</th>";
-	print "	<th class='text-center' style='width:20px;'><i class='fa fa-server' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Agents")."'></i></th>";
-	print "	<th class='text-center' style='width:20px;'><i class='fa fa-database' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Zones")."'></i></th>";
-	print "	<th class='text-center' style='width:20px;'><i class='fa fa-user' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Users")."'></i></th>";
-	print "	<th class='text-center' style='width:20px;border-left:1px solid rgba(200,200,200,0.3);'><i class='fa fa-pencil' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Edit tenant")."'></i></th>";
-	print "	<th class='text-center' style='width:20px;'><i class='fa fa-remove' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Delete tenant")."'></i></th>";
+	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Agents")."'>".$url_items["scanning"]["icon"]."</th>";
+	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Zones")."'>".$url_items["zones"]["icon"]."</th>";
+	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Users")."'>".$url_items["users"]["icon"]."</th>";
+	print "	<th class='text-center' style='width:15px;padding:0.5rem 0rem'><i class='fa fa-pencil' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Edit tenant")."'></i></th>";
+	print "	<th class='text-center' style='width:15px;padding:0.5rem 0rem'><i class='fa fa-remove' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Delete tenant")."'></i></th>";
 	print "</tr>";
 	print "</thead>";
 
@@ -50,26 +58,39 @@ else {
 	foreach ($tenants as $t) {
 
 
-	$status = $t->active == 1 ? "<span class='badge bg-success'>Active</span>" : "<span class='badge bg-danger'>Disabled</span>";
+	$status = $t->active == 1 ? "<span class='badge bg-green-lt'>Active</span>" : "<span class='badge bg-red-lt'>Disabled</span>";
 	$zones  = $Database->count_database_objects("zones", "t_id", $t->id);
 	$users  = $Database->count_database_objects("users", "t_id", $t->id);
 	$agents = $Database->count_database_objects("agents", "t_id", $t->id);
 
 	print "<tr>";
-	print "	<td><i class='fa fa-user-o' style='color:#ccc;padding:0px 5px;'></i><strong><a href='/route/tenants/edit.php?id=".$t->id."&action=edit' data-bs-toggle='modal' data-bs-target='#modal1'>".$t->name."</td>";
+	print "	<td>".$url_items["tenants"]['icon']." <strong><a href='/route/tenants/edit.php?id=".$t->id."&action=edit' data-bs-toggle='modal' data-bs-target='#modal1' style='color:var(--tblr-primary-color);'>".$t->name."</td>";
 	print "	<td>".$status."</td>";
 	print "	<td class='text-muted'>".$t->description."</td>";
-	print "	<td class='text-center'><span class='badge bg-light text-dark'>".$agents."</span></td>";
-	print "	<td class='text-center'><span class='badge bg-light text-dark'>".$zones."</span></td>";
-	print "	<td class='text-center'><span class='badge bg-light text-dark'>".$users."</span></td>";
-	print "	<td class='text-center' style='width:20px;border-left:1px solid rgba(200,200,200,0.3);'><span class='badge bg-success'><a href='/route/tenants/edit.php?id=".$t->id."&action=edit' data-bs-toggle='modal' data-bs-target='#modal1' style='color:rgb(34,155,115) !important;'><i class='fa fa-pencil'></i></a></span></td>";
-	print "	<td class='text-center' style='width:20px;'><span class='badge bg-danger'><a href='/route/tenants/edit.php?id=".$t->id."&action=delete' data-bs-toggle='modal' data-bs-target='#modal1' style='color:rgb(210,51,40) !important;'><i class='fa fa-trash'></i></a></span></td>";
+	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge'>".$agents."</span></td>";
+	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge'>".$zones."</span></td>";
+	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge'>".$users."</span></td>";
+	print "	<td class='text-center' style='padding:0.5rem 0.2rem;padding-left:0.5rem;border-left:1px solid var(--tblr-border-color);'>
+					<a href='/route/tenants/edit.php?id=".$t->id."&action=edit' data-bs-toggle='modal' data-bs-target='#modal1'>
+						<span class='badge badge-outline text-info'>
+						<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-edit'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1' /><path d='M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415' /><path d='M16 5l3 3' /></svg>
+						</span>
+					</a>
+			</td>";
+	print "	<td class='text-center' style='padding:0.5rem 0.2rem;'>
+				<a href='/route/tenants/edit.php?id=".$t->id."&action=delete' data-bs-toggle='modal' data-bs-target='#modal1' style='color:rgb(210,51,40) !important;'>
+					<span class='badge badge-outline text-red'>
+						<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-trash'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M4 7l16 0' /><path d='M10 11l0 6' /><path d='M14 11l0 6' /><path d='M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12' /><path d='M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3' /></svg>
+					</span>
+				</a>
+			</td>";
 	print "</tr>";
 	}
 
 	print "</table>";
 	print "</div>";
+
+	print '</div>';
+	print '</div>';
 }
 ?>
-
-</div>

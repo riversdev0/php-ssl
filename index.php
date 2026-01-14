@@ -13,10 +13,13 @@ if (!$Common->config_exists()) { die(_("Config file missing")); }
 header("Cache-Control: no-cache, must-revalidate"); //HTTP 1.1
 header("Pragma: no-cache");                         //HTTP 1.0
 header("Expires: Sat, 26 Jul 2016 05:00:00 GMT");   //Date in the past
+
+// theme ?
+if(!isset($_SESSION['theme'])) { $_SESSION['theme'] = "dark"; }
 ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme-base="gray" data-theme="<?php print $_SESSION['theme']; ?>" data-bs-theme="<?php print $_SESSION['theme']; ?>" style="color-scheme: gray;">
 
 <head>
 	<base href="<?php print $url.BASE; ?>">
@@ -38,22 +41,20 @@ header("Expires: Sat, 26 Jul 2016 05:00:00 GMT");   //Date in the past
 	<title><?php print $title; ?></title>
 
 	<!-- css -->
-	<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,400,600,700,800|Open+Sans|Raleway|Source+Sans+Pro" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-	<script src="https://kit.fontawesome.com/17a8c71dca.js?v=1" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
 	<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/css/style.css?v=<?php print md5(time()); ?>>">
 
 	<!-- js -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-	<!-- bootstrap table -->
-	<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
-	<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/cookie/bootstrap-table-cookie.min.js"></script>
-	<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/mobile/bootstrap-table-mobile.min.js"></script>
+    <!-- js -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
 
 	<script type="text/javascript" src="/js/magic.js?v=<?php print md5(time()); ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+	<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
 
 </head>
 
@@ -63,18 +64,17 @@ header("Expires: Sat, 26 Jul 2016 05:00:00 GMT");   //Date in the past
 		include ("route/login/index.php");
 	}
 	else {
+		// header
+		include ("route/common/header.php");
 	?>
-	<!-- Header -->
-	<?php include ("route/common/header.php"); ?>
 
 	<!-- content -->
-	<div class="container-fluid" style='margin-top:52px;'>
+	<div class="container-fluid">
 	  <div class="row">
-	    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+	  	<aside class="navbar navbar-vertical navbar-expand-lg">
 	    	<?php include ("route/common/left-menu.php"); ?>
-	    </nav>
-
-	    <main class="col-md-9 ms-sm-auto col-lg-10 1px-md-4" style='padding-left:0px;padding-right:0px;'>
+		</aside>
+	    <div class='page-wrapper'>
 	    	<?php include ("route/content.php"); ?>
 	    </main>
 	  </div>
@@ -99,7 +99,10 @@ header("Expires: Sat, 26 Jul 2016 05:00:00 GMT");   //Date in the past
 
 
 	<!-- loader -->
-	<div class="loading"><?php print _('Loading');?>...<br><i class="fa fa-spinner fa-spin"></i></div>
+	<div class="loading progress progress-sm">
+        <div class="progress-bar progress-bar-indeterminate"></div>
+    </div>
+
 	<iframe class="download" style="display:none;"></iframe>
 </body>
 </html>

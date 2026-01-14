@@ -34,13 +34,14 @@ class Modal {
      * @param mixed $content
      * @param string $footer_text (default: "Save")
      * @param mixed $action_script
+     * @param mixed $header_class (default: "info")
      * @return void
      */
-    public function modal_print ($header, $content, $footer_text = "Save", $action_script = "", $reload = false) {
+    public function modal_print ($header, $content, $footer_text = "Save", $action_script = "", $reload = false, $header_class = "info") {
         // set html
-        $html[] = $this->modal_header ($header);
+        $html[] = $this->modal_header ($header, $header_class);
         $html[] = $this->modal_body ($content);
-        $html[] = $this->modal_footer ($footer_text, $reload);
+        $html[] = $this->modal_footer ($footer_text, $reload, $header_class);
         $html[] = $this->modal_action ($action_script);
         // print
         print implode("\n", $html);
@@ -51,14 +52,16 @@ class Modal {
      *
      * @access private
      * @param mixed $header (default: null)
+     * @param mixed $header_class (default: "info")
      * @return void
      */
-    private function modal_header ($header = null) {
+    private function modal_header ($header = null, $header_class = "info") {
         // define
         $html = array();
         // null
         if(is_null($header))    { $header = "Naslov"; }
         // set html
+        $html[] = "<div class='modal-status bg-".$header_class."'></div>";
         $html[] = "<div class='modal-header'>";
         $html[] = " <h2 class='modal-title' id='myModalLabel'>";
         $html[] = $header;
@@ -93,11 +96,12 @@ class Modal {
      * @param mixed $footer_text
      * @return void
      */
-    private function modal_footer ($footer_text, $reload) {
+    private function modal_footer ($footer_text, $reload, $header_class) {
         // reload ?
         $reload_class = $reload ? "reload-window" : "";
         // btn class
         $btn_class = strpos($footer_text, "Delete")===false ? "success" : "danger";
+        $btn_class = $header_class;
         // define
         $html = array();
         // set html
@@ -176,7 +180,9 @@ class Modal {
     		$html[] = "     } else {";
     		$html[] = "         $('.loading').fadeOut('fast')";
     		$html[] = "     } ";
-    		$html[] = "	});";
+    		$html[] = "	}).fail(function(xhr) {";
+            $html[] = "     $('.modal-result').html('<div class=\"alert alert-danger\">There was an error loading resource: http ' + xhr.status + ' ' + xhr.statusText + '</div>').fadeIn('fast');";
+            $html[] = " });";
     		$html[] = "	return false;";
     		$html[] = "});";
 

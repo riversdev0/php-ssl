@@ -4,10 +4,8 @@
 # Edit agent - submit
 #
 
-
-
 # functions
-require('../../functions/autoload.php');
+require('../../../functions/autoload.php');
 # validate user session
 $User->validate_session ();
 # validate permissions
@@ -36,6 +34,16 @@ else {
 	// not allowed
 	if($user->admin !== "1" && $user->t_id!=$agent->t_id)
 	$Result->show("danger", _("Admin privileges required").".", true, false, false, false);
+}
+
+
+# validate variables
+if($_POST['action']!=="delete") {
+	if($Common->validate_alphanumeric($_POST['name'])===false)
+	$Result->show("danger", _("Invalid name").". "._("Only alphanumeric characters are allowed").".", true, false, false, false);
+
+	if($Common->validate_url($_POST['url'])===false)
+	$Result->show("danger", _("Invalid url value").".", true, false, false, false);
 }
 
 # add, edit

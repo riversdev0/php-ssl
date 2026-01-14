@@ -1,26 +1,56 @@
-<div class='header'>
-	<h3><?php print _("Dashboard"); ?></h3>
+<div class="page-header">
+	<h2 class="page-title"><?php print _("Dashboard"); ?></h2>
+	<hr>
 </div>
 
 
-<div class="container-fluid dashboard main">
-<div class="row">
+<div class="page-body">
+<div class="row dashboard">
 
-	<?php
-	// agent-errors
-	include("card-agent-errors.php");
-	// links
-	include("card-links.php");
-	// statistics
-	include("card-statistics.php");
-	// expire soon certificates
-	$expired_certs = false;
-	include("card-certificates-expire.php");
-	// expired certificates
-	$expired_certs = true;
-	include("card-certificates-expire.php");
-	// checks
-	include("card-checks.php");	?>
+	<!-- links -->
+	<div class="col-sm-6">
+	<div class="card">
+		<?php include("card-links.php"); ?>
+	</div>
+	</div>
+
+	<!-- stats -->
+	<div class="col-sm-6">
+	<div class="card">
+		<?php include("card-statistics.php"); ?>
+	</div>
+	</div>
+
+	<!-- Agent errors -->
+	<?php include("card-agent-errors.php"); ?>
+
+	<!-- Expire soon certs -->
+	<div class="col-sm-12">
+	<div class="card">
+		<?php
+		$expired_certs = false;
+		include("card-certificates-expire.php");
+		?>
+	</div>
+	</div>
+
+	<!-- Expired certs -->
+	<div class="col-sm-12">
+	<div class="card">
+		<?php
+		$expired_certs = true;
+		include("card-certificates-expire.php");
+		?>
+	</div>
+	</div>
+
+	<!-- Checks -->
+	<div class="col-sm-6">
+	<div class="card">
+		<?php include("card-checks.php"); ?>
+	</div>
+	</div>
+
 
 </div>
 </div>

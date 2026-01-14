@@ -26,13 +26,13 @@ if($_POST['action']!="add") {
 
 # add, edit
 if ($_POST['action']!="delete") {
-	// href
-	if($Common->validate_alphanumeric($_POST['href'])===false)
-	$Result->show("danger", _("Invalid href value").".", true, false, false, false);
-
 	// validate name
 	if($Common->validate_alphanumeric($_POST['name'])===false)
 	$Result->show("danger", _("Invalid name value").".", true, false, false, false);
+
+	// href
+	if($Common->validate_alphanumeric($_POST['href'])===false)
+	$Result->show("danger", _("Invalid href value").".", true, false, false, false);
 
 	// active
 	if($Common->validate_bin($_POST['active'])===false)
@@ -51,7 +51,6 @@ if ($_POST['action']!="delete") {
 		}
 	}
 	$_POST['recipients'] = implode(";", $recipients);
-
 }
 
 // general update parameters
@@ -74,7 +73,16 @@ if($_POST['action']!="add") {
 try {
 	// add
 	if($_POST['action']=="add") {
-		$Database->insertObject("tenants", $update);
+		$new_tenant_id = $Database->insertObject("tenants", $update);
+		// set random cronjobs
+		$rand = $Cron->rand(0,60,5);
+		// add default cronjobs
+		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>"*", "day"=>"*", "weekday"=>"*", "script"=>"update_certificates"]);
+		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>2,   "day"=>"*", "weekday"=>"*", "script"=>"remove_orphaned"]);
+		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>8,   "day"=>"*", "weekday"=>"*", "script"=>"expired_certificates"]);
+		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>3,   "day"=>"*", "weekday"=>"*", "script"=>"axfr_transfer"]);
+		// add default ports
+
 		// ok
 		$Result->show("success", _("Tenant created").".", false, false, false, false);
 	}

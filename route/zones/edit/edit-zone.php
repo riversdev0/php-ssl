@@ -36,8 +36,9 @@ $title = _(ucwords($_GET['action']))." "._("zone");
 # validate action
 if(!$User->validate_action($_GET['action'])) {
 	# content
-	$content = [];
-	$content[] = $Result->show("danger", _("Invalid action"), false, false, true);
+	$content      = [];
+	$content[]    = $Result->show("danger", _("Invalid action"), false, false, true);
+	$header_class = "danger";
 	# btn
 	$btn_text = "";
 }
@@ -48,12 +49,28 @@ else {
 	// disabled
 	$disabled = $_GET['action']=="delete" ? "disabled" : "";
 
+	$header_class = $_GET['action']=="delete" ? "danger" : "success";
+
+
 	// import form
 	$content[] = "<form id='modal-form'>";
-	$content[] = "<table class='table table-condensed table-borderless align-middle table-zone-management'>";
+	$content[] = "<table class='table table-condensed table-borderless align-middle table-sm table-zone-management'>";
+	// tenant - admin
+	if($user->admin === "1" && $_GET['action']=="add") {
+		$content[] = "<tr>";
+		$content[] = "	<th style='width:100px;'>"._("Tenant")."</th>";
+		$content[] = "	<td>";
+		foreach ($Tenants->get_all () as $t) {
+			if($zone->t_id == $t->id || $t->href==$_GET['tenant']) {
+				$content[] = "<input name='tenant' class='form-select' type='hidden' value='".$t->id."'>";
+				$content[] = $t->name;
+			}
+		}
+		$content[] = "	</td>";
+		$content[] = "</tr>";
+	}
 	// name
 	$content[] = "<tbody class='name'>";
-	$content[] = "<tr><td colspan='2'><h4>"._("Zone parameters")."</h3></td></tr>";
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Zone name")."</th>";
 	$content[] = "	<td>";
@@ -65,20 +82,6 @@ else {
 	$content[] = "	</td>";
 	$content[] = "	<td>";
 	$content[] = "</tr>";
-	// tenant - admin
-	if($user->admin === "1" && $_GET['action']=="add") {
-	$content[] = "<tr>";
-	$content[] = "	<th style='width:100px;'>"._("Tenant")."</th>";
-	$content[] = "	<td>";
-	$content[] = "<select name='tenant' class='form-select form-select-sm' style='width:auto'>";
-	foreach($Tenants->get_all () as $id=>$t) {
-	$selected = $zone->t_id == $t->id ? "selected" : "";
-	$content[] =  "<option value='$t->href' $selected>".$t->name."</option>";
-	}
-	$content[] = "</select>";
-	$content[] = "	</td>";
-	$content[] = "</tr>";
-	}
 	// type
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Type")."</th>";
@@ -232,7 +235,7 @@ else {
 
 
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/zones/edit/edit-zone-submit.php");
+$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/zones/edit/edit-zone-submit.php", false, $header_class);
 
 ?>
 

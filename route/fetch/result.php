@@ -23,7 +23,6 @@ else {
 	// fetch local
 	if ($agent->atype=="local") {
 		$fetched_cert = $SSL->fetch_website_certificate_single ($_POST['website']);
-
 	}
 	// fetch via agent
 	else {

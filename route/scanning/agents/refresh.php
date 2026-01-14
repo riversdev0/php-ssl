@@ -5,7 +5,7 @@
 #
 
 # functions
-require('../../functions/autoload.php');
+require('../../../functions/autoload.php');
 # validate user session
 $User->validate_session ();
 # validate permissions
@@ -30,6 +30,7 @@ if($user->admin !== "1" && $user->t_id!=$_GET['tenant']) {
 	# content
 	$content = [];
 	$content[] = $Result->show("danger", _("Admin user required"), false, false, true);
+	$header_class = "danger";
 	# btn
 	$btn_text = "";
 }
@@ -38,6 +39,7 @@ elseif (is_null($agent)) {
 	# content
 	$content = [];
 	$content[] = $Result->show("danger", _("Invalid agent"), false, false, true);
+	$header_class = "danger";
 	# btn
 	$btn_text = "";
 }
@@ -49,6 +51,9 @@ else {
 	// test
 	$resp = $Agent->test_agents ($Database, "google.com", 443, date("Y-m-d H:i:s"), $agent->id, true);
 
+	$header_class = "info";
+
+
 	// print "<pre>";
 	// print_r($resp);
 
@@ -58,11 +63,12 @@ else {
 
 	// process response
 	$content[] = "<hr>";
-	$content[] = "<table>";
+	$content[] = "<table class='table table-sm table-borderless'>";
 	$content[] = "<tr><th>"._("Queried URL")."</th><td>".$resp['info']['url']."</td>";
 	// error ?
 	if(strlen($resp['error'])>0) {
 		$content[] = "<tr><th>"._("Curl error")."</th><td>http/".$resp['error']."</td>";
+		$header_class = "danger";
 	}
 	else {
 		$content[] = "<tr><th>"._("HTTP code")."</th><td>http ".$resp['info']['http_code']." :: ".$Agent->name_http_code($resp['info']['http_code'])."</td>";
@@ -84,4 +90,4 @@ else {
 
 
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), "", false, true);
+$Modal->modal_print ($title, implode("\n", $content), "", false, true, $header_class);

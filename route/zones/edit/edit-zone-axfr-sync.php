@@ -53,14 +53,22 @@ else {
 $title = _("AXFR zone sync");
 
 # content
+$content_text = [
+	"Discovered records" => "<span class='badge badge-outline text-light' style='width:100%'>".sizeof($AXFR->records['axfr_records'])."</span>",
+	"Existing records"   => "<span class='badge badge-outline text-info' style='width:100%'>".sizeof($AXFR->records['old_records'])."</span>",
+	"Removed records"    => "<span class='badge badge-outline text-danger' style='width:100%'>".sizeof($AXFR->records['removed_records'])."</span>",
+	"Created records"    => "<span class='badge badge-outline text-success' style='width:100%'>".sizeof($AXFR->records['new_records'])."</span>",
+
+];
+
 $content = [];
-$content[] = "<h4>"._("Zone AXFR sync results").":</h4><hr>";
-$content[] = "<ul>";
-$content[] = "	<li>"._("Discovered records").": ".sizeof($AXFR->records['axfr_records'])."</li>";
-$content[] = "	<li>"._("Existing records").": ".sizeof($AXFR->records['old_records'])."</li>";
-$content[] = "	<li>"._("Removed records").": ".sizeof($AXFR->records['removed_records'])."</li>";
-$content[] = "	<li>"._("Created records").": ".sizeof($AXFR->records['new_records'])."</li>";
-$content[] = "</ul>";
+$content[] = "<div class='text-secondary' style='margin-bottom:10px'>"._("Zone AXFR sync results").":</div>";
+foreach ($content_text as $title2=>$text)  {
+	$content[] = '<div class="row" style="margin-bottom:5px;">';
+	$content[] = '	<div class="col-1">'.$text.'</div>';
+	$content[] = '	<div class="col-11">'._($title2).'</div>';
+	$content[] = '</div>';
+}
 
 # print modal
 $Modal->modal_id = "#modal1";

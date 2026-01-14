@@ -34,7 +34,6 @@ else {
 	// content
 	$content = [];
 	// import form
-	$content[] = "<hr>";
 	$content[] = "<form id='modal-form'>";
 	$content[] = '<fieldset class="form-group">';
 	$content[] = '  <div class="row">';
@@ -54,7 +53,6 @@ else {
 	$content[] = '  </div>';
 	$content[] = '</fieldset>';
 	$content[] = "</form>";
-	$content[] = "<hr>";
 
 	#
 	# button text
@@ -63,7 +61,7 @@ else {
 }
 
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), $btn_text, "", false);
+$Modal->modal_print ($title, implode("\n", $content), $btn_text, "", false, "info");
 ?>
 
 

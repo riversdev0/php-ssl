@@ -35,9 +35,14 @@ print '<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-tabl
 
 // error ?
 if($results['success']==false) {
-	$content[] = "<div class='alert alert-danger'>".$results['error']."</div>";
+	$title        = "Error";
+	$content[]    = "<div class='alert alert-danger'>".$results['error']."</div>";
+	$header_class = "danger";
 }
 else {
+	# title
+	$title = _("AXFR test");
+
 	// calculate differences [create, remove, new etc]
 	$AXFR->calculate_diffs ($dns_params['zone_id'], $dns_params['check_ip']);
 
@@ -60,17 +65,17 @@ else {
 	if (sizeof($results['values'])>0) {
 		foreach ($results['values'] as $v) {
 			// action
-			if(in_array($v->name, $AXFR->records['removed_records'])) 		{ $action = "<span class='badge bg-danger'>"._("Remove")."</span>"; }
-			elseif(in_array($v->name, $AXFR->records['new_records'])) 		{ $action = "<span class='badge bg-success'>"._("Create")."</span>"; }
-			else 															{ $action = "<span class='badge bg-light text-dark'>"._("Existing")."</span>"; }
+			if(in_array($v->name, $AXFR->records['removed_records'])) 		{ $action = "<span class='badge bg-red-lt'>"._("Remove")."</span>"; }
+			elseif(in_array($v->name, $AXFR->records['new_records'])) 		{ $action = "<span class='badge bg-green-lt'>"._("Create")."</span>"; }
+			else 															{ $action = "<span class='badge bg-azure-lt'>"._("Existing")."</span>"; }
 
 			// content
 			$content[] = "<tr>";
-			$content[] = "	<td class='align-top'><span class='badge bg-light text-dark' style='margin-right: 20px;'>".$v->type."</span></td>";
+			$content[] = "	<td class='align-top'><span class='badge badge-outline text-light' style='margin-right: 20px;'>".$v->type."</span></td>";
 			$content[] = "	<td class='align-top'>".$action."</td>";
 			$content[] = "	<td class='align-top'>".$v->name."</td>";
 			$content[] = "	<td class='align-top'>".$v->address."</td>";
-			$content[] = "	<td class='align-top'>".$v->ttl."</td>";
+			$content[] = "	<td class='align-top text-secondary'>".$v->ttl."</td>";
 			$content[] = "</tr>";
 		}
 	}
@@ -86,11 +91,10 @@ else {
 	$content[] = "	<li>"._("Exclude regex:")." ".$dns_params['regex_exclude']."</li>";
 	$content[] = "</ul>";
 	$content[] = "</div>";
-}
 
-# title
-$title = _("AXFR test");
+	$header_class = "info";
+}
 
 # print modal
 $Modal->modal_id = "#modal2";
-$Modal->modal_print ($title, implode("\n", $content), $btn_text, "");
+$Modal->modal_print ($title, implode("\n", $content), $btn_text, "", false, $header_class);

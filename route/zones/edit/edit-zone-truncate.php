@@ -35,11 +35,15 @@ try {
 	$Database->runQuery("delete from hosts where z_id = ?", $_GET['zone_id']);
 	// ok
 	$content[] = $Result->show("success", _("All hosts in zone removed").".", false, false, true, true);
+	// header
+	$header_class = "success";
 
 } catch (Exception $e) {
 	// error
 	$content[] = $Result->show("danger", $e->getMessage().".", false, false, true, true);
+	// header
+	$header_class = "danger";
 }
 
 // modal
-$Modal->modal_print ($title, implode("\n", $content), $btn_text, "", true);
+$Modal->modal_print ($title, implode("\n", $content), $btn_text, "", true, $header_class);

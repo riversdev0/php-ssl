@@ -169,7 +169,7 @@ class SSL extends Common {
 	 * @param  string $errstr
 	 * @return void
 	 */
-	private function php_error_handler ($errno = 0, $errstr = "") {
+	public function php_error_handler ($errno = 0, $errstr = "") {
 		$this->errors[] = "Unable to establish connection to host (err $errno : $errstr)";
 	}
 
@@ -302,6 +302,9 @@ class SSL extends Common {
 		// init stream
 		$this->init_stream ();
 
+		// save host for later resolving
+		$this->hostname = $url_arr['host'];
+
 		// default time
 		if($execution_time==NULL)
 		$execution_time = date("Y-m-d H:i:s");
@@ -406,6 +409,7 @@ class SSL extends Common {
 	 * @return int|void
 	 */
 	public function update_db_certificate ($certificate = [], $tenant_id = 0, $zone_id = 0, $execution_time) {
+
 		try {
 			// serve from cache ?
 			if(isset($this->existing_db_certs[$tenant_id][$zone_id])) {
@@ -425,7 +429,7 @@ class SSL extends Common {
 				}
 				catch (Exception $e) {
 					// do nothing
-					// die($e->getMessage());
+					die($e->getMessage());
 				}
 				// fetch
 				$db_cert = $this->Database->getObjectQuery ("select * from certificates where serial = ? and z_id = ? and t_id = ?", [$certificate['serial'], $zone_id, $tenant_id]);
@@ -521,6 +525,8 @@ class SSL extends Common {
 	 * @return void
 	 */
 	private function update_host_last_check ($host_id = 0, $ip = NULL, $execution_time = NULL) {
+		// IP must not be hostname !
+		if (!filter_var($ip, FILTER_VALIDATE_IP)) { $ip = NULL; }
 		// insert
 		try {
 			$this->Database->runQuery("update hosts set last_check = ?, ip = ? where id = ?", [$execution_time, $ip, $host_id]);

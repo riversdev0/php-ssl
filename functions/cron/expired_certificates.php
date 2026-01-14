@@ -35,8 +35,11 @@ try {
     // init certs
     $Certificates = new Certificates ($Database, $cron_user);
 
+    // get config for $expired_days and $expired_after_days
+    include(dirname(__FILE__)."/../../config.php");
+
     // fetch all certificates that will expire
-    $expired_certificates = $Certificates->get_expired ();
+    $expired_certificates = $Certificates->get_expired ($expired_days, $expired_after_days);
 
     // mail diff
     if(sizeof($expired_certificates)>0) {

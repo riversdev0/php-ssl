@@ -15,26 +15,22 @@ if(!isset($is_from_fetch)) {
 
 // invalid zone
 if(is_null($zone_check) && !isset($is_from_fetch)) {
-	print '<div class="header">';
-	print '	<h3>'._("Zone not found").'</h3>';
+	print '<div class="page-header">';
+	print '	<h2 class="page-title">'.$url_items['zones']['icon']." "._("Error").'</h2><hr>';
 	print '</div>';
-	print '<div class="container-fluid main">';
-	print '	<a href="/'.$_params['tenant'].'/certificates/" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chevron-left"></i>'. _("All certificates").'</a>';
-	print '</div>';
-	print '<div class="container-fluid main">';
-	print '	<div class="alert alert-danger">'._("Zone not found").'</div>';
+	print '<div class="page-content">';
+	print '	<a href="/'.$_params['tenant'].'/certificates/" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg></i>'. _("All certificates").'</a>';
+	print '	<div class="alert alert-danger" style="margin-top:10px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-database-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3" /><path d="M4 6v6c0 1.657 3.582 3 8 3m8 -3.5v-5.5" /><path d="M4 12v6c0 1.657 3.582 3 8 3" /><path d="M15 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M20.2 20.2l1.8 1.8" /></svg>'._("Zone not found").'.</div>';
 	print '</div>';
 }
 // null ?
 elseif(is_null($certificate)) {
-	print '<div class="header">';
-	print '	<h3>'._("Certificate not found").'</h3>';
+	print '<div class="page-header">';
+	print '	<h2 class="page-title">'.$url_items['certificates']['icon']." "._("Error").'</h2><hr>';
 	print '</div>';
-	print '<div class="container-fluid main">';
-	print '	<a href="/'.$_params['tenant'].'/certificates/" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chevron-left"></i>'. _("All certificates").'</a>';
-	print '</div>';
-	print '<div class="container-fluid main">';
-	print '	<div class="alert alert-danger">'._("Certificate not found").'</div>';
+	print '<div class="page-content">';
+	print '	<a href="/'.$_params['tenant'].'/certificates/" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>'. _("All certificates").'</a>';
+	print '	<div class="alert alert-danger" style="margin-top:10px;">'.$url_items['certificates']['icon']." "._("Certificate not found").'.</div>';
 	print '</div>';
 
 }
@@ -53,21 +49,6 @@ else {
 
 	// get all ignored issuers
 	$Certificates->get_all_ignored_issuers ();
-?>
-
-<div class='header'>
-	<h3><?php print _("Certificate details"); ?> :: <?php print $certificate_details['subject']['CN']; ?></h3>
-</div>
-
-<!-- back -->
-<div class="container-fluid main">
-	<a href="/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chevron-left"></i> <?php print _("Back"); ?></a>
-</div>
-
-<div class="container-fluid main">
-<?php
-	print '<div class="table-responsive-sm">';
-	print "<table class='table table-cert-details table-borderless table-auto table-details table-condensed' style='margin-bottom:50px;' >";
 
 	// get public key details
 	$key = openssl_pkey_get_public($certificate->certificate);
@@ -80,7 +61,7 @@ else {
 	$status = $Certificates->get_status ($certificate_details, true, false);
 
 	// valid_period
-	$valid_period = $certificate_details['custom_validAllDays']>398 ? "<br><span class='text-danger'><i class='fa fa-exclamation-triangle'></i> "._("Certificate validity is more than 398 days")."</span>" : "";
+	$valid_period = $certificate_details['custom_validAllDays']>398 ? "<br><span class='badge bg-orange-lt'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-triangle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v4" /><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0" /><path d="M12 16h.01" /></svg>'." "._("Certificate validity is more than 398 days")."</span>" : "";
 
 	// text class
 	if($status['code']==0)		{ $textclass='muted'; }
@@ -94,265 +75,132 @@ else {
 		$certificate_details['extensions']['subjectAltName'] = "/";
 	}
 
-	// Subject name
-	print "<tr>";
-	print "	<td colspan='2'><h4 style='margin-top:20px;'>"._("Issued to")."</h4><hr></td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Common name")."</th>";
-	print "	<td>".$certificate_details['subject']['CN_all']."</td>";
-	print "</tr>";
-	print "	<th>"._("Valid for domains")."</th>";
-	print "	<td>".str_replace(",","<br>",$certificate_details['extensions']['subjectAltName'])."</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Status")."</th>";
-	print "	<td>".$status['text']."$valid_period</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th></th>";
-	print "	<td><hr>";
-	print "<a href='/route/zones/edit/download-certificate.php?certificate=".base64_encode($certificate->certificate)."' data-bs-toggle='modal' data-bs-target='#modal1'><span class='badge bg-light text-dark bg-success' style='width:auto;'><i class='fa fa-certificate'></i> "._("Download")."</a>";
+	// width:
+	$td_min_width = "160px";
+	?>
 
-	if(!isset($is_from_fetch))
-	print "<br><a href='/route/zones/edit/delete_certificate.php?tenant=".$_params['tenant']."&serial=".$certificate_details['serialNumber']."' data-bs-toggle='modal' data-bs-target='#modal1'><span class='badge bg-light text-dark bg-danger' style='width:auto;'><i class='fa fa-trash'></i> "._("Remove certificate");
-	print "</td>";
-	print "</tr>";
+	<div class='page-header'>
+		<h2 class="page-title"><?php print _("Certificate details"); ?> :: <?php print $certificate_details['subject']['CN']; ?></h2>
+		<hr>
+	</div>
 
-	// found domains
-	if(!isset($is_from_fetch)) {
-
-		// get all hosts
-		$hosts = $Certificates->get_certificate_hosts ($certificate->id);
-
-		print "<tr>";
-		print "	<td colspan='2'><h4 style='margin-top:50px;'>"._("Assigned to hosts")."</h4><hr></td>";
-		print "</tr>";
-		if(sizeof($hosts)==0) {
-			print "<tr>";
-			print "	<th></th>";
-			print "	<td>"._("None")."</td>";
-			print "</tr>";
-		}
-		else {
-			// group by zone
-			$hosts_grouped = [];
-			foreach ($hosts as $h) {
-				$hosts_grouped[$h->name][] = $h;
-			}
-			foreach($hosts_grouped as $group=>$host) {
-				print "<tr>";
-				print "	<th>"._("Zone")." <a href='/".$_params['tenant']."/zones/".$h->name."/'>".$host[0]->name."</a></th>";
-				print "	<td>";
-				foreach ($host as $h) {
-					// check valoidity of certificate
-					$h_cert_status = $Certificates->get_status ($certificate_details, true, true, $h->hostname);
-
-					$h->ip = $User->validate_ip ($h->hostname) ? $h->hostname : $h->ip;
-					$h->ip = strlen($h->ip)>0 ? "[".$h->ip."]" : "";
-
-					print "<a href='/".$_params['tenant']."/zones/".$h->name."/".$h->hostname."/'>".$h->hostname."</a> <span class='text-muted'>".$h->ip."</span> ".$h_cert_status['text']."<br>";
-				}
-				print "</td>";
-				print "</tr>";
-			}
-		}
-	}
-
-	// Certificate details
-	print "<tr>";
-	print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Certificate details")."</h4><hr></td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Serial number")."</th>";
-	print "	<td>".chunk_split($certificate_details['serialNumberHex'], 2, ' ')."</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Key size")."</th>";
-	print "	<td>".$key_details['bits']." kB</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Version")."</th>";
-	print "	<td>".$certificate_details['version']."</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Signature algorithm")."</th>";
-	print "	<td>".$certificate_details['signatureTypeSN']."</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Valid from")."</th>";
-	print "	<td>".date("Y-m-d H:i:s", $certificate_details['validFrom_time_t'])."</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Valid Until")."</th>";
-	print "	<td class='text-$textclass'>".date("Y-m-d H:i:s", $certificate_details['validTo_time_t'])." (".$certificate_details['custom_validDays']." "._("days remaining").")</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Lifetime")."</th>";
-	print "	<td>".$certificate_details['custom_validAllDays']." "._("days")." $valid_period</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Purposes")."</th>";
-	print "	<td>";
-	foreach($certificate_details['custom_purposes'] as $p=>$val) {
-		$icon = $val == "Yes" ? "fa-check text-success" : "fa-times text-danger";
-		print "<span class='badge'><i class='fa $icon' style='width:15px;'></i></span> ".$p."<br>";
-	}
-	print "</td>";
-	print "</tr>";
-
-	// Fingerptints
-	print "<tr>";
-	print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Fingerprints")."</h4><hr></td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("SHA-512")."</th>";
-	print "	<td>".chunk_split(openssl_x509_fingerprint($cert, 'SHA512'), 2, ' ')."</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("SHA-256")."</th>";
-	print "	<td>".chunk_split(openssl_x509_fingerprint($cert, 'SHA256'), 2, ' ')."</td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("SHA-1")."</th>";
-	print "	<td>".chunk_split(openssl_x509_fingerprint($cert, 'SHA1'), 2, ' ')."</td>";
-	print "</tr>";
-
-	// Issuer
-	print "<tr>";
-	print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Issuer")."</h4><hr></td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._("Common name")."</th>";
-	print "	<td>".$certificate_details['issuer']['CN']."</td>";
-	print "</tr>";
-	if(strlen($certificate_details['issuer']['O'])>0) {
-	print "<tr>";
-	print "	<th>"._("Organisation name")."</th>";
-	print "	<td>".$certificate_details['issuer']['O']."</td>";
-	print "</tr>";
-	}
-	if(strlen($certificate_details['issuer']['C'])>0) {
-	print "<tr>";
-	print "	<th>"._("Country")."</th>";
-	print "	<td>".$certificate_details['issuer']['C']."</td>";
-	print "</tr>";
-	}
-	if(strlen($certificate_details['issuer']['ST'])) {
-	print "<tr>";
-	print "	<th>"._("County")."</th>";
-	print "	<td>".$certificate_details['issuer']['ST']."</td>";
-	print "</tr>";
-	}
-	if(strlen($certificate_details['issuer']['L'])) {
-	print "<tr>";
-	print "	<th>"._("Locality")."</th>";
-	print "	<td>".$certificate_details['issuer']['L']."</td>";
-	print "</tr>";
-	}
-
-	// Extensions
-	unset($certificate_details['extensions']['ct_precert_scts']);
-	unset($certificate_details['extensions']['subjectAltName']);
-
-	print "<tr>";
-	print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Extensions")."</h4><hr></td>";
-	print "</tr>";
-	foreach($certificate_details['extensions'] as $ext_key=>$e) {
-		print "<tr>";
-		print "	<th>".ucwords(preg_replace('/(?<!\ )[A-Z]/', ' $0', $ext_key))."</th>";
-		print "	<td>".str_replace(",","<br>",$e)."</td>";
-		print "</tr>";
-	}
-
-	// chain
-	$delimiter = "-----BEGIN CERTIFICATE-----\n";
-	$chains = array_reverse(array_values(array_filter(explode($delimiter, $certificate->chain))));
+	<!-- back -->
+	<div>
+		<a href="/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> <?php print _("Back"); ?></a>
+	</div>
 
 
-	// chain
-	$cert_chain = $SSL->process_certificate_chain ($certificate->chain);
+	<!-- content -->
+	<div style="margin-top:20px;">
 
-	print "<tr>";
-	print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Certificate chain")."</h4><hr></td>";
-	print "</tr>";
+	<div class="row">
 
-	// print chain
-	$int = 1;
-	$valid_cert = true;
-	$valid_cert_text = [];
+	<!-- Issued to -->
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" style="margin-bottom: 15px;">
+	<div class="card">
+		<div class="card-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+			<?php print _("Issued to"); ?>
+		</div>
+		<div class="card-content">
+			<?php include('certificate/certificate-issued-to.php'); ?>
+		</div>
+	</div>
+	</div>
 
+	<?php if($is_from_fetch) { ?>
+	<!-- Fetch details-->
+	<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6" style="margin-bottom: 15px;">
+	<div class="card">
+		<div class="card-header"><?php print $url_items['scanning']['submenu']['agents']['icon']; ?> <?php print _("Connection details"); ?></div>
+		<div class="card-content">
+			<?php include('certificate/certificate-fetch.php'); ?>
+		</div>
+	</div>
+	</div>
+	<?php } ?>
 
-	// chain print
-	foreach ($cert_chain as $index=>$cert) {
+	<!-- Assigned to -->
+	<?php if(!isset($is_from_fetch)) { ?>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" style="margin-bottom: 15px;">
+	<div class="card">
+		<div class="card-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-server"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /><path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /><path d="M7 8l0 .01" /><path d="M7 16l0 .01" /></svg>
+			<?php print _("Assigned hosts"); ?>
+		</div>
+		<div class="card-content">
+			<?php include('certificate/certificate-assigned.php'); ?>
+		</div>
+	</div>
+	</div>
+	<?php } ?>
 
-		// title
-		if($index==sizeof($cert_chain)-1) 	{ $title = "Server"; }
-		elseif($index==0) 					{ $title = "Root"; }
-		else 								{ $title = _("Intermediate")." #".$int; $int++; }
+	<!-- Issuer -->
+	<div class="col-12" style="margin-bottom: 15px;">
+	<div class="card">
+		<div class="card-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-id"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -10" /><path d="M7 10a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M15 8l2 0" /><path d="M15 12l2 0" /><path d="M7 16l10 0" /></svg>
+			<?php print _("Issuer"); ?>
+		</div>
+		<div class="card-content">
+			<?php include('certificate/certificate-issuer.php'); ?>
+		</div>
+	</div>
+	</div>
 
-		// errors ?
-		if(sizeof($cert['errors'])>0) {
-			$valid_cert = false;
+	<!-- Details -->
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom: 15px;">
+	<div class="card">
+		<div class="card-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-certificate"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 15a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5" /><path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -1 1.73" /><path d="M6 9l12 0" /><path d="M6 12l3 0" /><path d="M6 15l2 0" /></svg>
+			<?php print _("Certificate details"); ?>
+		</div>
+		<div class="card-content">
+			<?php include('certificate/certificate-details.php'); ?>
+		</div>
+	</div>
+	</div>
 
-			$validto_class 				  = isset($cert['errors']['validto']) ? "text-danger" : "";
-			$authorityKeyIdentifier_class = isset($cert['errors']['authorityKeyIdentifier']) ? "text-danger" : "";
-			$basicConstraints_class 	  = isset($cert['errors']['basicConstraints']) ? "text-danger" : "";
-		}
-		else {
-			$validto_class 				  = "text-muted";
-			$authorityKeyIdentifier_class = "text-muted";
-			$basicConstraints_class 	  = "text-muted";
-		}
+	<!-- FP -->
+	<div class="col-12" style="margin-bottom: 15px;">
+	<div class="card">
+		<div class="card-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-fingerprint"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18.9 7a8 8 0 0 1 1.1 5v1a6 6 0 0 0 .8 3" /><path d="M8 11a4 4 0 0 1 8 0v1a10 10 0 0 0 2 6" /><path d="M12 11v2a14 14 0 0 0 2.5 8" /><path d="M8 15a18 18 0 0 0 1.8 6" /><path d="M4.9 19a22 22 0 0 1 -.9 -7v-1a8 8 0 0 1 12 -6.95" /></svg>
+			<?php print _("Fingerprints"); ?>
+		</div>
+		<div class="card-content">
+			<?php include('certificate/certificate-fingerprints.php'); ?>
+		</div>
+	</div>
+	</div>
 
-		// ignored issuer ?
-		$ignored_cert = $Certificates->is_issuer_ignored (str_replace("keyid:", "", $cert['certificate']['extensions']['authorityKeyIdentifier']), $certificate->t_id)===true ? " <span class='badge bg-warning'><i class='fa fa-volume-xmark'></i></span>" : "";
-		$ignored_issuer = $Certificates->is_issuer_ignored ($cert['certificate']['extensions']['subjectKeyIdentifier'], $certificate->t_id)===true ? " <span class='badge bg-warning'>"._("Ignored issuer")."</span>" : "";
+	<!-- Extensions -->
+	<div class="col-12" style="margin-bottom: 15px;">
+	<div class="card">
+		<div class="card-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-hexagon-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.875 6.27c.7 .398 1.13 1.143 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033" /><path d="M9 12h6" /><path d="M12 9v6" /></svg>
+			<?php print _("Extensions"); ?>
+		</div>
+		<div class="card-content">
+			<?php include('certificate/certificate-extensions.php'); ?>
+		</div>
+	</div>
+	</div>
 
-		// get hash
-		$cert['raw'] = "-----BEGIN CERTIFICATE-----\n".$cert['raw'];
-		$cert_x509 = openssl_x509_read($cert['raw']);
+	<!-- chain -->
+	<div class="col-12" style="margin-bottom: 15px;">
+	<div class="card">
+		<div class="card-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-link"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
+			<?php print _("Certificate Chain"); ?>
+		</div>
+		<div class="card-content">
+			<?php include('certificate/certificate-chain-steps.php'); ?>
+		</div>
+	</div>
+	</div>
 
-		print "<tr>";
-		print "	<th style='padding-top: 15px;'>"._($title)."</th>";
-		print "	<td style='padding-left: 10px;padding-top: 15px;'>";
-		print "<strong><a href=''>".$cert['certificate']['subject']['CN']."</a></strong> $ignored_issuer $ignored_cert<br>";
-		print _("Issued by").": ".$cert['certificate']['issuer']['CN']."<br>";
-		print "<span class='text-muted $validto_class'>"._("Expires on").": ".date("Y-m-d H:i:s", $cert['certificate']['validTo_time_t'])."</span><br>";
-		print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted'>"._("SHA-256 Fingerprint").": ".chunk_split(openssl_x509_fingerprint($cert_x509, 'SHA256'), 2, ' ')."</span><br>";
-		print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted'>"._("Subject Key Identifier").": ".$cert['certificate']['extensions']['subjectKeyIdentifier']."</span><br>";
-		print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted $authorityKeyIdentifier_class'>"._("Authority Key Identifier").": ".str_replace("keyid:", "", $cert['certificate']['extensions']['authorityKeyIdentifier'])."</span><br>";
-		print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted $basicConstraints_class'>"._("basicConstraints").": ".$cert['certificate']['extensions']['basicConstraints']."</span><br>";
-		print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted'>"._("keyUsage").": ".$cert['certificate']['extensions']['keyUsage']."</span><br>";
-		print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted'><a href='/route/zones/edit/download-certificate.php?certificate=".base64_encode($cert['raw'])."' data-bs-toggle='modal' data-bs-target='#modal1'><span class='badge bg-light text-dark bg-success' style='width:auto;'><i class='fa fa-certificate'></i> "._("Download")."</a></span><br>";
-		if(sizeof($cert['errors'])>0) {
-			print "<span class='text-danger'><ul style='margin-bottom:0px;list-style-type: none;padding-left:0px;margin-top:10px;'>";
-			foreach ($cert['errors'] as $e) {
-				print "<li style='font-size:11px;'>$e</li>";
-			}
-			print "</ul>";
-		}
-		print "</td>";
-		print "</tr>";
-	}
+	</div>
 
-	// fail ?
-	print "<tr>";
-	print "	<th></th>";
-	print "	<td style='padding-left: 10px'><hr>";
-	if($valid_cert===true) {
-		print "<span class='text-success'><i class='fa fa-check'></i> "._("Certificate chain is Valid")."</span>";
-	}
-	else {
-		print "<span class='text-danger'><i class='fa fa-times'></i> ". _("Certificate chain is Invalid").".</span>";
-	}
-	print "</td>";
-	print "</tr>";
-
-	// server
-
-	print "</table>";
-	print '</div>';
-}
-?>
+<?php } ?>
 </div>

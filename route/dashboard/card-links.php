@@ -1,19 +1,47 @@
-<div class=' col-xs-12 col-lg-6'>
-<div class='bubble'>
-	<div class='bubble-header'><i class='links fa fa-link'></i> <?php print _("Links"); ?></div>
-	<div class='bubble-content'>
-		<div style='padding: 15px 5px;'>
-		<table class='table table-cert-details table-borderless table-auto table-details table-condensed'>
-			<?php if($user->admin=="1") { ?>
-			<tr><th><i class='links fa fa-users text-muted'></i> <a href='/admin/tenants/'><?php print _("Tenants"); ?></a></th><td class='text-muted'><?php print _("View and manage system tenants"); ?></td></tr>
-			<?php } ?>
-			<tr><th><i class='links fa fa-certificate text-muted'></i> <a href='/<?php print $user->href; ?>/certificates/'><?php print _("Certificates"); ?></a></th><td class='text-muted'><?php print _("View and manage found certificates"); ?></td></tr>
-			<tr><th><i class='links fa fa-database text-muted'></i> <a href='/<?php print $user->href; ?>/zones/'><?php print _("Zones"); ?></a></th><td class='text-muted'><?php print _("View and manage zones"); ?></td></tr>
-			<tr><th><i class='links fa fa-layer-group text-muted'></i> <a href='/<?php print $user->href; ?>/portgroups/'><?php print _("Port groups"); ?></a></th><td class='text-muted'><?php print _("View and manage scanning port groups"); ?></td></tr>
-			<tr><th><i class='links fa fa-clock-o text-muted'></i> <a href='/<?php print $user->href; ?>/cron/'><?php print _("Cron jobs"); ?></a></th><td class='text-muted'><?php print _("Scheduled actions"); ?></td></tr>
-
-		</table>
-		</div>
-	</div>
+<div class="card-header">
+	<h3 class="h2">
+		<?php print _("Links"); ?>
+	</h3>
+	<hr>
 </div>
+
+
+<div class="card-body">
+
+	<div class="row">
+
+		<!-- Tenanats -->
+		<?php if($user->admin=="1") { ?>
+		<div class="col-12 flex-column text-start" style='margin-bottom:4px;'>
+			<a href='/admin/tenants/' class='btn' style='width:130px;justify-content:left;margin-right:10px'><span class='text-info'><?php print $url_items["tenants"]['icon'];?></span> <?php print _("Tenants"); ?></a>
+			<span class='text-secondary'><?php print _("View and manage system tenants"); ?></span>
+		</div>
+		<?php } ?>
+
+		<!-- Certificates -->
+		<div class="col-12 flex-column" style='margin-bottom:4px'>
+			<a href='/<?php print $user->href; ?>/certificates/' class='btn' style='width:130px;justify-content:left;margin-right:10px'><span class='text-info'><?php print $url_items["certificates"]['icon'];?></span> <?php print _("Certificates"); ?></a>
+			<span class='text-secondary'><?php print _("View and manage found certificates"); ?></span>
+		</div>
+
+		<!-- Zones -->
+		<div class="col-12 flex-column" style='margin-bottom:4px'>
+			<a href='/<?php print $user->href; ?>/zones/' class='btn' style='width:130px;justify-content:left;margin-right:10px'><span class='text-info'><?php print $url_items["zones"]['icon'];?></span> <?php print _("Zones"); ?></a>
+			<span class='text-secondary'><?php print _("View and manage zones"); ?></span>
+		</div>
+
+		<!-- Port groups -->
+		<div class="col-12 flex-column" style='margin-bottom:4px'>
+			<a href='/<?php print $user->href; ?>/portgroups/'class='btn' style='width:130px;justify-content:left;margin-right:10px'><span class='text-info'><?php print $url_items["scanning"]['icon'];?></span> <?php print _("Port groups"); ?></a>
+			<span class='text-secondary'><?php print _("View and manage scanning port groups"); ?></span>
+		</div>
+
+		<!-- Cron -->
+		<div class="col-12 flex-column" style='margin-bottom:4px'>
+			<a href='/<?php print $user->href; ?>/cron/' class='btn' style='width:130px;justify-content:left;margin-right:10px'><span class='text-info'><?php print $url_items["scanning"]['submenu']['cron']['icon'];?></span> <?php print _("Cron jobs"); ?></a>
+			<span class='text-secondary'><?php print _("Scheduled actions"); ?></span>
+		</div>
+
+
+	</div>
 </div>

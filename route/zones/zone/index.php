@@ -11,17 +11,22 @@ $zone = $Zones->get_zone ($_params['tenant'], $_params['app']);
 
 # not existing ?
 if ($zone==NULL) {
-	print "<div class='header'>";
-	print "	<h3>"._("Invalid zone")."</h3>";
-	print "</div>";
 
-	print "<div class='container-fluid main'>";
+	// title
+	print '<div class="page-header">';
+	print '	<h2 class="page-title">'. _("Invalid zone").'</h2>';
+	print '	<hr>';
+	print '</div>';
 
+	// back
+	print "<div>";
 	print '<div class="btn-group" role="group">';
 	print '<a href="/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chevron-left"></i> '._("Back").'</a>';
 	print '</div>';
-	print '<br><br>';
+	print "</div>";
 
+	// content
+	print '<div class="page-content">';
 	$Result->show("danger", _("Zone does not exist."), false);
 	print "</div>";
 }
@@ -38,29 +43,24 @@ else {
 ?>
 
 
-<div class='header'>
-	<h3><?php print _("Zone details"); ?>  [<?php print @$zone->name; ?>]</h3>
+<div class='page-header'>
+	<h2 class='page-title'><?php print  $url_items["zones"]['icon']." "._("Zone details"); ?>  [<?php print @$zone->name; ?>]</h3>
+	<hr>
 </div>
 
 
-<div class="container-fluid main">
-<?php
+<div>
+	<a href="/zones/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> <?php print _("Back"); ?></a>
+</div><br><br>
 
-# add, back
-print '<div class="btn-group" role="group">';
-print '<a href="/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chevron-left"></i> '._("Back").'</a>';
-print '</div>';
-print '<br><br>';
-?>
-</div>
 
 <!-- details -->
-<div class="container-fluid main">
+<div>
 	<?php include("zone-details.php"); ?>
 </div>
 
 <!-- hosts -->
-<div class="container-fluid main" style='margin-top:50px;'>
+<div style='margin-top:20px;'>
 	<?php include("zone-hosts.php"); ?>
 </div>
 <?php } ?>

@@ -42,6 +42,24 @@ ini_set('display_startup_errors', 0);
 error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 
 /**
+ * Days before expiration to treat certificates as expire soon.
+ *
+ * This is used for cronjob reporting only, for GUI it is overridden by user settings
+ *
+ * @var int
+ */
+$expired_days = 20;
+
+/**
+ * Days after expiration to report certificates as expired
+ *
+ * This is used for cronjob reporting only, for GUI it is overridden by user settings
+ *
+ * @var int
+ */
+$expired_after_days = 7;
+
+/**
  * Mail sending parameters - move to database later !
  *
  * @var StdClass
