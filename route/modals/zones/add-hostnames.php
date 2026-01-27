@@ -99,7 +99,7 @@ else {
 
 
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/zones/edit/add-hostnames-submit.php", false, $header_class);
+$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/modals/zones/add-hostnames-submit.php", false, $header_class);
 
 ?>
 

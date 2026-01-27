@@ -217,7 +217,7 @@ else {
 	$content[] = "<tr>";
 	$content[] = "	<th></th>";
 	$content[] = "	<td>";
-	$content[] = "		<a href='/route/zones/edit/edit-zone-axfr-test.php' class='btn btn-sm btn-outline-success float-end' id='axfr-regex-test' data-bs-toggle='modal' data-bs-target='#modal2'>Test transfer</a>";
+	$content[] = "		<a href='/route/modals/zones/axfr-test.php' class='btn btn-sm btn-outline-success float-end' id='axfr-regex-test' data-bs-toggle='modal' data-bs-target='#modal2'>Test transfer</a>";
 	$content[] = "	</td>";
 	$content[] = "	<td>";
 	$content[] = "</tr>";
@@ -235,7 +235,7 @@ else {
 
 
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/zones/edit/edit-zone-submit.php", false, $header_class);
+$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/modals/zones/edit-submit.php", false, $header_class);
 
 ?>
 

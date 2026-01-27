@@ -100,7 +100,7 @@ else {
 
 
 # print modal
-$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/zones/edit/host-set-recipients-submit.php", false, "success");
+$Modal->modal_print ($title, implode("\n", $content), $btn_text, "/route/modals/zones/host-set-recipients-submit.php", false, "success");
 
 ?>
 

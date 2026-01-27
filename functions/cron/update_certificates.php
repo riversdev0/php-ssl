@@ -244,7 +244,7 @@ try {
 	        // added for ignored certs check
 	        if ($processed>0) {
 				// recipients
-				$to = explode(",", $tenant->recipients);
+				$to = explode(";", str_replace(",",";",$tenant->recipients));
 				// $to = ["miha.petkovsek@telemach.si"];
 
 	            // set proper content

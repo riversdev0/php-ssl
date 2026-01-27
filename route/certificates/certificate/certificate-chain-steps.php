@@ -67,7 +67,7 @@ foreach ($cert_chain as $index=>$cert) {
 	print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted $authorityKeyIdentifier_class'>"._("Authority Key Identifier").": ".str_replace("keyid:", "", $cert['certificate']['extensions']['authorityKeyIdentifier'])."</span><br>";
 	print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted $basicConstraints_class'>"._("basicConstraints").": ".$cert['certificate']['extensions']['basicConstraints']."</span><br>";
 	print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted'>"._("keyUsage").": ".$cert['certificate']['extensions']['keyUsage']."</span><br>";
-	print "<span style='font-size:10px;padding-left:10px;' class='text-muted'><a href='/route/zones/edit/download-certificate.php?certificate=".base64_encode($cert['raw'])."' data-bs-toggle='modal' data-bs-target='#modal1'><span class='badge badge-outline text-blue' style='width:auto;'>".$url_items['certificates']['icon']." "._("Download")."</a></span><br>";
+	print "<span style='font-size:10px;padding-left:10px;' class='text-muted'><a href='/route/modals/certificates/download.php?certificate=".base64_encode($cert['raw'])."' data-bs-toggle='modal' data-bs-target='#modal1'><span class='badge badge-outline text-blue' style='width:auto;'>".$url_items['certificates']['icon']." "._("Download")."</a></span><br>";
 	if(sizeof($cert['errors'])>0) {
 		print "<span><ul style='margin-bottom:0px;list-style-type: none;padding-left:0px;margin-top:10px;'>";
 		foreach ($cert['errors'] as $e) {

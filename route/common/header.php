@@ -12,10 +12,10 @@
 	  </button>
 	  <!-- END NAVBAR TOGGLER -->
 
-	  <div class="navbar-nav flex-row order-md-last">
+	  <div class="navbar-nav  flex-row order-md-last">
 
 	    <div class="nav-item d-n1one d-md-flex me-3">
-	      <div class="btn-list">
+	      <div class="btn-list d-none d-md-flex">
 	        <a href="https://github.com/phpipam/php-ssl" class="btn btn-5" target="_blank" rel="noreferrer">
 	          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2">
 	            <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path>
@@ -31,7 +31,9 @@
 	      </div>
 	    </div>
 
-		<div class="d-none d-md-flex">
+		<div class="d-flex">
+
+			<!-- Dark / Light theme -->
 			<div class="nav-item">
 				<a href="/<?php print $user->href; ?>/user/theme/dark/" class="nav-link px-0 hide-theme-dark" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Enable dark mode" title="Enable dark mode">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
@@ -48,13 +50,10 @@
 
 			<!-- Notifications -->
 			<div class="nav-item dropdown d-none d-md-flex">
-				<?php //include('header-notifications.php'); ?>
+				<?php include('header-notifications.php'); ?>
 			</div>
 
-
 	    </div>
-
-	    <!-- notifications -->
 
 
 	    <!-- user menu -->

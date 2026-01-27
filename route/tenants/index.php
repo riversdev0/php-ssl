@@ -43,6 +43,7 @@ else {
 	print "<thead>";
 	print "<tr>";
 	print "	<th>"._("Name")."</th>";
+	print "	<th>"._("ID")."</th>";
 	print "	<th>"._("Status")."</th>";
 	print "	<th>"._("Description")."</th>";
 	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Agents")."'>".$url_items["scanning"]["icon"]."</th>";
@@ -65,6 +66,7 @@ else {
 
 	print "<tr>";
 	print "	<td>".$url_items["tenants"]['icon']." <a href='/route/modals/tenants/edit.php?id=".$t->id."&action=edit' data-bs-toggle='modal' data-bs-target='#modal1' style='color:var(--tblr-primary-color);'>".$t->name."</a></td>";
+	print "	<td><span class='badge'>".$t->id."</span></td>";
 	print "	<td>".$status."</td>";
 	print "	<td class='text-muted'>".$t->description."</td>";
 	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge'>".$agents."</span></td>";

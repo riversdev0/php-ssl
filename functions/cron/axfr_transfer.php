@@ -108,7 +108,7 @@ try {
 				}
 
 				// recipients
-				$to = explode(",", $tenant->recipients);
+				$to = explode(";", str_replace(",",";",$tenant->recipients));
 				$to = ["miha.petkovsek@telemach.si"];
 
 				// send

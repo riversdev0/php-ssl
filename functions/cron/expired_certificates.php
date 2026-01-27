@@ -250,7 +250,7 @@ try {
         }
 
         // recipients
-        $to = explode(",", $tenant->recipients);
+        $to = explode(";", str_replace(",",";",$tenant->recipients));
 
         // set proper content
         $selected_content = $tenant->mail_style=="list" ? $content2 : $content;

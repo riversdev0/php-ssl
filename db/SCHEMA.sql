@@ -219,6 +219,7 @@ CREATE TABLE `users` (
   `permission` int(1) NOT NULL DEFAULT 0,
   `days` int(4) NOT NULL DEFAULT 30,
   `days_expired` int(4) NOT NULL DEFAULT 30,
+  `notif_id` int(11) unsigned DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `u_tenants` (`t_id`),
   CONSTRAINT `u_tenants` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -274,12 +275,12 @@ CREATE TABLE `ignored_issuers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-# Dump of table log
+# Dump of table logs
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `log`;
+DROP TABLE IF EXISTS `logs`;
 
-CREATE TABLE `log` (
+CREATE TABLE `logs` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `object` varchar(32) NOT NULL,
   `object_id` int(11) unsigned DEFAULT NULL,

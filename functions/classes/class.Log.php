@@ -83,10 +83,9 @@ class Log extends Common {
 			}
 
 			// insert
-			$this->Database->insertObject("log", $insert);
+			$this->Database->insertObject("logs", $insert);
 		}
 		catch (Exception $e) {
-			var_dump($text);
 			print "<div class='alert alert-warning'>Error: ".$e->getMessage()."</div>";
 		}
 	}
@@ -155,18 +154,36 @@ class Log extends Common {
 	}
 
 
-	public function get_logs ($user = null, $limit = 10) {
+	public function get_logs ($user = null, $new_only = false, $public = false, $limit = 10) {
 		try {
-			if ($user->admin=="1") {
-				$logs = $this->Database->getObjectsQuery("select * from logs order by id desc limit ".$limit);
+			// only new
+			$var_arr = [];
+
+			// set query
+			$query = [];
+			$query[] = "select * from logs where id > ?" ;
+			// unread entries only
+			if ($new_only)
+			$var_arr[] = $user->notif_id;
+			else
+			$var_arr[] = 0;
+			// public events only
+			if ($public)
+			$query[] = "and public = 1";
+			// tenant ?
+			if ($user->admin!="1") {
+			$query[] = "and object_t_id =?";
+			$var_arr[] = $user->t_id;
 			}
-			else {
-				$logs = $this->Database->getObjectsQuery("select * from logs where object_t_id = ? order by id desc limit ".$limit, [$user->t_id]);
-			}
+			// limit
+			$query[] = "order by id desc limit ".$limit;
+
+			// fetch
+			$logs = $this->Database->getObjectsQuery(implode(" ", $query), $var_arr);
+
 		} catch (Exception $e) {
 			$this->errors[] = $e->getMessage();
 		}
-
 		// return
 		return $logs;
 	}

@@ -4,6 +4,16 @@
  *
  * Cronjobs to be executed
  *
+ * Manual trugger:
+ * 	php cron.php <tenant_id> <script>
+ * 	ex: php cron.php 2 update_certificates
+ *
+ * Scripts:
+ * 	- expired_certificates
+ *  - update_certificates
+ *  - axfr_transfer
+ *  - remove_orphaned
+ *
  */
 
 # autoload classes

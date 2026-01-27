@@ -72,7 +72,7 @@ $('document').ready(function() {
 	    // remove old innerDiv
 	    $("div.dl").remove();
 	    // execute
-	    $('.download').append("<div style='display:none' class='dl'><iframe src='/route/zones/edit/download-certificate-submit.php?"+formdata+"'></iframe></div>");
+	    $('.download').append("<div style='display:none' class='dl'><iframe src='/route/modals/certificates/download-submit.php?"+formdata+"'></iframe></div>");
 	    return false;
 	})
 })

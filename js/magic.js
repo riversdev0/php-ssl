@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-
-
 /* loading spinner functions */
 function showSpinner() { $('div.loading').css("display","flex") }
 function hideSpinner() { $('div.loading').fadeOut('fast'); }
