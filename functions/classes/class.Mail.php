@@ -165,7 +165,7 @@ class mailer extends Common {
 		$this->Php_mailer = new PHPMailer\PHPMailer\PHPMailer();
 
 		$this->Php_mailer->CharSet   = "UTF-8";						//set utf8
-		$this->Php_mailer->SMTPDebug = 1;							//default no debugging
+		$this->Php_mailer->SMTPDebug = 0;							//default no debugging
 		// localhost or smtp?
 		if ($this->mail_settings->mtype=="smtp")    { $this->set_smtp(); }
 	}
