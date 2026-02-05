@@ -41,20 +41,25 @@ if(!isset($_SESSION['theme'])) { $_SESSION['theme'] = "dark"; }
 	<title><?php print $title; ?></title>
 
 	<!-- css -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
-	<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css"> -->
+	<!-- <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet"> -->
+	<link href="/css/tabler.1.4.0.min.css" rel="stylesheet">
+	<link href="/css/bootstrap-table.1.19.1.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/css/style.css?v=<?php print md5(time()); ?>>">
 
 	<!-- js -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-    <!-- js -->
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://unpkg.com/@popperjs/core@2"></script> -->
+    <!-- <script src="https://unpkg.com/tippy.js@6"></script> -->
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/popper.2.11.8.js"></script>
+    <script src="/js/tippy.js"></script>
 
 	<script type="text/javascript" src="/js/magic.js?v=<?php print md5(time()); ?>"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
-	<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script> -->
+	<!-- <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script> -->
+	<script src="/js/tabler.1.4.0.min.js"></script>
+	<script src="/js/bootstrap-table.min.js"></script>
 
 </head>
 

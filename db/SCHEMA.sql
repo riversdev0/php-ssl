@@ -247,6 +247,7 @@ CREATE TABLE `zones` (
   `record_types` varchar(255) DEFAULT NULL,
   `delete_records` tinyint(1) NOT NULL DEFAULT 0,
   `check_ip` tinyint(1) NOT NULL DEFAULT 0,
+  `is_domain` tinyint(1) NOT NULL DEFAULT 1,
   `regex_include` text DEFAULT NULL,
   `regex_exclude` text DEFAULT NULL,
   PRIMARY KEY (`id`),

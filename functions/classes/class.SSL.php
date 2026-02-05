@@ -428,7 +428,7 @@ class SSL extends Common {
 					$new_cert_id = $this->Database->insertObject("certificates", ["serial"=>$certificate['serial'], "certificate"=>$certificate['certificate'], "expires"=>$certificate['expires'], "chain"=>$certificate['chain'], "z_id"=>$zone_id, "t_id"=>$tenant_id, "created"=>$execution_time]);
 					// Write log :: object, object_id, tenant_id, user_id, action, public, text
 					global $Log;
-					$Log->write ("certificates", $new_cert_id, $tenant_id, null, "add", true, "New certificate added "." :: ".json_encode($certificate));
+					$Log->write ("certificates", $new_cert_id, $tenant_id, null, "add", true, "New certificate imported with serial ".$certificate['serial'], NULL, json_encode($certificate));
 				}
 				catch (Exception $e) {
 					// do nothing

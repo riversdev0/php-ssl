@@ -222,6 +222,16 @@ class User extends Common {
 		return $this->authenticated;
 	}
 
+	public function read_all_logs () {
+		try {
+			$this->Database->runQuery("update users set notif_id = (select id from logs order by id desc limit 1) where id = ?", [$this->user->id]);
+			return truel;
+		} catch (Exception $e) {
+			$this->errors[] = $e->getMessage();
+			return false;
+		}
+	}
+
 	/**
 	 * Valdates tenant
 	 * @method validate_tenant

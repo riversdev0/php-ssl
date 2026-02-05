@@ -31,6 +31,8 @@ $title = _("Zone hosts removal");
 
 # ok, validations passed, insert
 try {
+	// get old hosts
+	$old_hosts = $Database->getObjectsQuery("select * from hosts where z_id = ?", $_GET['zone_id']);
 	// delete
 	$Database->runQuery("delete from hosts where z_id = ?", $_GET['zone_id']);
 	// ok
@@ -38,7 +40,7 @@ try {
 	// header
 	$header_class = "success";
 	// Write log :: object, object_id, tenant_id, user_id, action, public, text
-	$Log->write ("zones", $_GET['zone_id'], $user->t_id, $user->id, "truncate", true, "Zone truncated");
+	$Log->write ("zones", $_GET['zone_id'], $user->t_id, $user->id, "truncate", true, "Zone truncated", json_encode($old_hosts), NULL);
 
 } catch (Exception $e) {
 	// error

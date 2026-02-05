@@ -118,6 +118,18 @@ else {
 	$content[] = "</select>";
 	$content[] = "	</td>";
 	$content[] = "</tr>";
+	// is_domain
+	$content[] = "<tr>";
+	$content[] = "	<th style='width:150px;'>"._("Is domain")."</th>";
+	$content[] = "	<td>";
+	$content[] = "<select name='is_domain' class='form-select form-select-sm' style='width:auto' $disabled>";
+	foreach(["0"=>"No", "1"=>"Yes"] as $type=>$name) {
+	$selected = $zone->is_domain == $type || ($_GET['action']=="add" && $type=="1") ? "selected" : "";
+	$content[] =  "<option value='$type' $selected>".$name."</option>";
+	}
+	$content[] = "</select>";
+	$content[] = "	</td>";
+	$content[] = "</tr>";
 	// description
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Description")."</th>";

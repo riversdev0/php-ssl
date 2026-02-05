@@ -43,6 +43,13 @@ print "	<td><span class='badge badge-outline text-azure' style='width:auto'>".$z
 print "</tr>";
 
 print "<tr>";
+print "	<th>"._("Is domain")."</th>";
+$zone->is_domain = $zone->is_domain=="1" ? "Yes" : "No";
+print "	<td><span class='badge badge-outline text-azure' style='width:auto'>".$zone->is_domain."</span></td>";
+print "</tr>";
+
+
+print "<tr>";
 print "	<th>"._("Scan agent")."</th>";
 print "	<td>".$zone->agname." <br><span class='text-muted' style='font-size:11px'>(".$zone->url.")</span></td>";
 print "</tr>";

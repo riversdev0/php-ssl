@@ -36,7 +36,7 @@ if($tenant===null) {
 try {
 	$Database->deleteObject("certificates", $certificate->id);
 	// Write log :: object, object_id, tenant_id, user_id, action, public, text
-	$Log->write ("certificates", $certificate->id, $tenant->id, $user->id, "delete", true, "Certificate deleted"." :: ".json_encode($certificate));
+	$Log->write ("certificates", $certificate->id, $tenant->id, $user->id, "delete", true, "Certificate serial ".$certificate->serial." deleted", json_encode($certificate), NULL);
 
 } catch (Exception $e) {
 	$Result->show("danger", $e->getMessage(), true, true, false, false);

@@ -72,6 +72,9 @@ try {
 		$content[] = $Result->show("success", _("Certificate fetched"), false, false, true, false);
 		$content[] = "<hr>";
 		$content[] = implode("", $cert_text);
+
+		// Write log :: object, object_id, tenant_id, user_id, action, public, text
+		$Log->write ("hosts", $host->host_id, $user->t_id, $user->id, "refresh", true, "New certificate assigned to host ".$host->hostname, NULL, json_encode($host_certificate));
 	}
 	// error
 	else {

@@ -42,12 +42,14 @@ else {
 
 
 	print "<div class='card' style='margin:$margin'>";
-	print "<table class='table table-hover align-top table-sm' data-toggle='table' data-mobile-responsive='true' data-check-on-init='true' data-classes='table table-hover table-sm' data-cookie='false' data-cookie-id-table='zonehosts' data-pagination='true' data-page-size='250' data-page-list='[50,250,500,All]' data-search='true' data-icons-prefix='fa' data-icon-size='xs' data-show-footer='false' data-smart-display='true' showpaginationswitch='true'>";
+
+	print "<table class='table table-hover align-top table-sm' data-toggle='table' data-mobile-responsive='true' data-check-on-init='true' data-classes='table table-hover table-sm' data-cookie='false' data-cookie-id-table='zonehosts' data-pagination='true' data-page-size='250' data-page-list='[50,250,500,All]' data-search='true' data-fixed-rtable='false' data-icons-prefix='fa' data-icon-size='xs' data-show-footer='false' data-smart-display='true' showpaginationswitch='true'>";
 
 	// header
 	print "<thead>";
 	print "<tr>";
-	print " <th class='checkbox-hidden visually-hidden'><input type='checkbox' class='form-check-input select-all' name='select-all'></th>";
+	print " <th class='checkbox-hidden visually-hidden' data-width='10'><input type='checkbox' class='form-check-input select-all' name='select-all'></th>";
+	print "	<th class='actions d-none d-lg-table-cell text-center' data-width='30' data-width-unit='px' style='width:30px;'><i class='fa fa-check' data-bs-toggle='tooltip' data-bs-placement='top'></i></th>";
 	print "	<th>"._("Hostname")."</th>";
 
 	if(isset($from_search)) {
@@ -72,11 +74,7 @@ else {
 	print "	<th style='width:150px;'>"._("Valid To")."</th>";
 	print "	<th style='width:50px;' data-width='50' data-width-unit='px' class='d-none d-xl-table-cell'>"._("Port")."</th>";
 	print "	<th style='width:50px;' data-width='50' data-width-unit='px' class='d-none d-xl-table-cell'>"._("Port group")."</th>";
-	print "	<th class='actions d-none d-lg-table-cell text-center' data-width='30' data-width-unit='px' style='width:30px;'><i class='fa fa-volume-high' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Notification status")."'></i></th>";
-	print "	<th class='actions d-none d-lg-table-cell text-center' data-width='30' data-width-unit='px' style='width:30px;'><i class='fa fa-check' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("SSL check status")."'></i></th>";
-	print "	<th class='actions d-none d-lg-table-cell text-center' data-width='30' data-width-unit='px' style='width:30px;'><i class='fa fa-refresh' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Refresh certificate")."'></i></th>";
-	print "	<th class='actions d-none d-lg-table-cell text-center' data-width='30' data-width-unit='px' style='width:30px;'><i class='fa fa-user' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Additional recipiens")."'></i></th>";
-	print "	<th class='actions d-none d-lg-table-cell text-center' data-width='30' data-width-unit='px' style='width:30px;'><i class='fa fa-xmark' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Remove host")."'></i></th>";
+	print "	<th style='width:50px;' data-width='50' data-width-unit='px' class='d-table-cell'></th>";
 
 	print "</tr>";
 	print "</thead>";
@@ -108,15 +106,6 @@ else {
 
 			// null IP
 			if(is_null($t->ip)) { $t->ip = "<span class='badge bg-light-lt bg-light text-muted'>Unresolved</span>"; }
-
-			// text on buttons
-			$muted = $t->mute=="1" ?
-				"<span class='badge badge-outline text-muted' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Notifications disabled")."'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-volume-3"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" /><path d="M16 10l4 4m0 -4l-4 4" /></svg>' :
-				 "<span class='badge badge-outline text-green' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Notifications enabled")."'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-volume"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 8a5 5 0 0 1 0 8" /><path d="M17.7 5a9 9 0 0 1 0 14" /><path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" /></svg>';
-
-			$ignore = $t->ignore=="1" ?
-				"<span class='badge badge-outline text-muted' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("SSL check disabled")."'>".$url_items["scanning"]["icon"] :
-				"<span class='badge badge-outline text-green' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("SSL check enabled")."'>".$url_items["scanning"]["icon"];
 
 
 			$refresh = $t->ignore=="1" ?
@@ -156,12 +145,23 @@ else {
 
 			// checkbox
 			print " <td title='checkbox' class='checkbox-hidden visually-hidden'><input type='checkbox' class='form-check-input select-current' data-type='hosts' name='item-{$t->id}'></td>";
+
+			// icon
+			print '	<td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-server"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /><path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /><path d="M7 8l0 .01" /><path d="M7 16l0 .01" /></svg></td>';
+
+
+			// status icons
+			$status_icons = " ";
+			$status_icons .= sizeof(array_filter(explode(";", $t->h_recipients)))>0 ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user text-info"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg> ' : '';
+			$status_icons .= $t->mute=="1" ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-volume-3 text-red"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" /><path d="M16 10l4 4m0 -4l-4 4" /></svg> ' : '';
+			$status_icons .= $t->ignore=="1" ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rosette-discount-check-off text-red"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12l2 2l1.5 -1.5m2 -2l.5 -.5" /><path d="M8.887 4.89a2.2 2.2 0 0 0 .863 -.53l.7 -.7a2.2 2.2 0 0 1 3.12 0l.7 .7c.412 .41 .97 .64 1.55 .64h1a2.2 2.2 0 0 1 2.2 2.2v1c0 .58 .23 1.138 .64 1.55l.7 .7a2.2 2.2 0 0 1 0 3.12l-.7 .7a2.2 2.2 0 0 0 -.528 .858m-.757 3.248a2.193 2.193 0 0 1 -1.555 .644h-1a2.2 2.2 0 0 0 -1.55 .64l-.7 .7a2.2 2.2 0 0 1 -3.12 0l-.7 -.7a2.2 2.2 0 0 0 -1.55 -.64h-1a2.2 2.2 0 0 1 -2.2 -2.2v-1a2.2 2.2 0 0 0 -.64 -1.55l-.7 -.7a2.2 2.2 0 0 1 0 -3.12l.7 -.7a2.2 2.2 0 0 0 .64 -1.55v-1c0 -.604 .244 -1.152 .638 -1.55" /><path d="M3 3l18 18" /></svg> ' : '';
+
 			// hostname
 			print "	<td>";
-			print '	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-server"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3" /><path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" /><path d="M7 8l0 .01" /><path d="M7 16l0 .01" /></svg>';
-			print "	<strong>".$t->hostname;
+			print "	<strong><a style='color:var(--tblr-body-color)' href='/".$t->href."/zones/".$t->zone_name."/".$t->hostname."/'>".$t->hostname."</a>";
+			print $status_icons;
 			if($show_details==1)
-			print "		<br><span class='visually-hi1dden text-muted' style='padding-left: 21px;font-weight:normal;font-size:11px;'>{$t->ip}</span>";
+			print "		<br><span class='visually-hi1dden text-muted' style='font-weight:normal;font-size:11px;'>{$t->ip}</span>";
 			print "	</td>";
 
 			if(isset($from_search)) {
@@ -219,16 +219,48 @@ else {
 			// portgroups for scan
 			print "	<td class='d-none d-xl-table-cell'><span class='badge' data-bs-toggle='tooltip'data-bs-html='true' data-bs-placement='bottom' title='tcp/".implode("<br>tcp/", $all_port_groups[$t->t_id][$t->pg_id]['ports'])."'>".$all_port_groups[$t->t_id][$t->pg_id]['name']."</span></td>";
 
-			// actions
-			print "	<td class='actions d-none d-lg-table-cell text-center'><a href='/route/modals/zones/host_ignore_mute.php?type=mute&tenant=".$_params['tenant']."&zone_id=".$zone->id."&host_id=".$t->id."' data-bs-toggle='modal' data-bs-target='#modal1'>".$muted."</a></span></td>";
-			print "	<td class='actions d-none d-lg-table-cell text-center'><a href='/route/modals/zones/host_ignore_mute.php?type=ignore&tenant=".$_params['tenant']."&zone_id=".$zone->id."&host_id=".$t->id."' data-bs-toggle='modal' data-bs-target='#modal1'>".$ignore."</a></span></td>";
-			print "	<td class='actions d-none d-lg-table-cell text-center'>".$refresh."</span></td>";
-			if(strlen($t->h_recipients)>5)
-			print "	<td class='actions d-none d-lg-table-cell text-center'><span class='badge badge-outline text-info' data-bs-toggle='tooltip' data-bs-html='true' data-bs-placement='top' title='".str_replace(";","<br>", $t->h_recipients)."'><a href='/route/modals/zones/host_set_recipients.php?tenant=".$zone->href."&zone_id=".$zone->id."&host_id=".$t->id."' data-bs-toggle='modal' data-bs-target='#modal1'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-cog"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h2.5" /><path d="M17.001 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19.001 15.5v1.5" /><path d="M19.001 21v1.5" /><path d="M22.032 17.25l-1.299 .75" /><path d="M17.27 20l-1.3 .75" /><path d="M15.97 17.25l1.3 .75" /><path d="M20.733 20l1.3 .75" /></svg>'."</a></span></td>";
-			else
-			print "	<td class='actions d-none d-lg-table-cell text-center'><span class='badge badge-outline text-muted' data-bs-toggle='tooltip' data-bs-html='true' data-bs-placement='top' title='No extra recipients'><a href='/route/modals/zones/host_set_recipients.php?tenant=".$zone->href."&zone_id=".$zone->id."&host_id=".$t->id."' data-bs-toggle='modal' data-bs-target='#modal1' class='text-secondary'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-cog"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h2.5" /><path d="M17.001 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19.001 15.5v1.5" /><path d="M19.001 21v1.5" /><path d="M22.032 17.25l-1.299 .75" /><path d="M17.27 20l-1.3 .75" /><path d="M15.97 17.25l1.3 .75" /><path d="M20.733 20l1.3 .75" /></svg>'."</a></span></td>";
+			// new actions
+			print '<td class="actions d-table-cell">';
+			print '	<span class="dropdown">';
+			print '		<button class="btn btn-sm dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg></button>';
+			print '		<div class="dropdown-menu dropdown-menu-en1d" style="">';
 
-			print "	<td class='actions d-none d-lg-table-cell text-center'><a href='/route/modals/zones/delete_hostname.php?tenant=".$zone->href."&zone_id=".$zone->id."&host_id=".$t->id."' data-bs-toggle='modal' data-bs-target='#modal1'><span class='badge badge-outline text-red' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Remove host")."'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>'."</td>";
+
+			print '			<h6 class="dropdown-header">'._('Notifications').'</h6>';
+
+			// recipients
+			$recipients = array_filter(explode(";", $t->h_recipients));
+			$recipients_badge = sizeof($recipients)>0 ? '<span class="badge bg-primary text-primary-fg ms-auto">'.sizeof($recipients).'</span>' : '';
+			print '			<a class="dropdown-item" href="/route/modals/zones/host-set-recipients.php?tenant='.$zone->href.'&zone_id='.$zone->id.'&host_id='.$t->id.'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-cog dropdown-item-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h2.5" /><path d="M17.001 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19.001 15.5v1.5" /><path d="M19.001 21v1.5" /><path d="M22.032 17.25l-1.299 .75" /><path d="M17.27 20l-1.3 .75" /><path d="M15.97 17.25l1.3 .75" /><path d="M20.733 20l1.3 .75" /></svg>'._("Manage recipients").''.$recipients_badge;
+
+			// mute notifications
+			$mute_icon = $t->mute=="1" ? 'text-red' : '';
+			if($t->mute=="1")
+			print '			<a class="dropdown-item" href="/route/modals/zones/host_ignore_mute.php?type=mute&tenant='.$_params['tenant'].'&zone_id='.$zone->id.'&host_id='.$t->id.'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-volume-3 dropdown-item-icon text-red"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" /><path d="M16 10l4 4m0 -4l-4 4" /></svg>'._("Enable notification").'</a>';
+			else
+			print '			<a class="dropdown-item" href="/route/modals/zones/host_ignore_mute.php?type=mute&tenant='.$_params['tenant'].'&zone_id='.$zone->id.'&host_id='.$t->id.'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline text-red icon-tabler-volume dropdown-item-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 8a5 5 0 0 1 0 8" /><path d="M17.7 5a9 9 0 0 1 0 14" /><path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" /></svg>'._("Disable notification").'</a>';
+			// ssl check
+			if($t->ignore=="1")
+			print '			<a class="dropdown-item" href="/route/modals/zones/host_ignore_mute.php?type=ignore&tenant='.$_params['tenant'].'&zone_id='.$zone->id.'&host_id='.$t->id.'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rosette-discount-check-off dropdown-item-icon text-red"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12l2 2l1.5 -1.5m2 -2l.5 -.5" /><path d="M8.887 4.89a2.2 2.2 0 0 0 .863 -.53l.7 -.7a2.2 2.2 0 0 1 3.12 0l.7 .7c.412 .41 .97 .64 1.55 .64h1a2.2 2.2 0 0 1 2.2 2.2v1c0 .58 .23 1.138 .64 1.55l.7 .7a2.2 2.2 0 0 1 0 3.12l-.7 .7a2.2 2.2 0 0 0 -.528 .858m-.757 3.248a2.193 2.193 0 0 1 -1.555 .644h-1a2.2 2.2 0 0 0 -1.55 .64l-.7 .7a2.2 2.2 0 0 1 -3.12 0l-.7 -.7a2.2 2.2 0 0 0 -1.55 -.64h-1a2.2 2.2 0 0 1 -2.2 -2.2v-1a2.2 2.2 0 0 0 -.64 -1.55l-.7 -.7a2.2 2.2 0 0 1 0 -3.12l.7 -.7a2.2 2.2 0 0 0 .64 -1.55v-1c0 -.604 .244 -1.152 .638 -1.55" /><path d="M3 3l18 18" /></svg>'._("Enable SSL check").'</a>';
+			else
+			print '			<a class="dropdown-item" href="/route/modals/zones/host_ignore_mute.php?type=ignore&tenant='.$_params['tenant'].'&zone_id='.$zone->id.'&host_id='.$t->id.'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rosette-discount-check dropdown-item-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7.2a2.2 2.2 0 0 1 2.2 -2.2h1a2.2 2.2 0 0 0 1.55 -.64l.7 -.7a2.2 2.2 0 0 1 3.12 0l.7 .7c.412 .41 .97 .64 1.55 .64h1a2.2 2.2 0 0 1 2.2 2.2v1c0 .58 .23 1.138 .64 1.55l.7 .7a2.2 2.2 0 0 1 0 3.12l-.7 .7a2.2 2.2 0 0 0 -.64 1.55v1a2.2 2.2 0 0 1 -2.2 2.2h-1a2.2 2.2 0 0 0 -1.55 .64l-.7 .7a2.2 2.2 0 0 1 -3.12 0l-.7 -.7a2.2 2.2 0 0 0 -1.55 -.64h-1a2.2 2.2 0 0 1 -2.2 -2.2v-1a2.2 2.2 0 0 0 -.64 -1.55l-.7 -.7a2.2 2.2 0 0 1 0 -3.12l.7 -.7a2.2 2.2 0 0 0 .64 -1.55v-1" /><path d="M9 12l2 2l4 -4" /></svg>'._("Disable SSL check").'</a>';
+
+    		print '			<div class="dropdown-divider"></div>';
+			print '			<h6 class="dropdown-header">'._('Manage').'</h6>';
+			// assign port-group
+			print '			<a class="dropdown-item disabled" href="/route/error/modal.php" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-category dropdown-item-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4h6v6h-6l0 -6" /><path d="M14 4h6v6h-6l0 -6" /><path d="M4 14h6v6h-6l0 -6" /><path d="M14 17a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg>'._("Assign portgroup").'</a>';
+			// refresh cert
+			print '			<a class="dropdown-item" href="/route/modals/zones/host_cert_refresh.php?tenant='.$zone->t_id.'&zone_id='.$zone->id.'&host_id='.$t->id.'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-refresh dropdown-item-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /></svg>'._("Refresh certificate").'</a>';
+			// delete
+			print '			<a class="dropdown-item" href="/route/modals/zones/delete_hostname.php?tenant='.$zone->href.'&zone_id='.$zone->id.'&host_id='.$t->id.'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash dropdown-item-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>'._("Delete host").'</a>';
+			// delete dert
+			$disabled = is_null($cert_parsed['serialNumber']) ? "disabled" : "";
+			print '			<a class="dropdown-item '.$disabled.'"  href="/route/modals/certificates/delete.php?tenant='.$_params['tenant'].'&serial='.$cert_parsed['serialNumber'].'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-certificate-off dropdown-item-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.876 12.881a3 3 0 0 0 4.243 4.243m.588 -3.42a3.012 3.012 0 0 0 -1.437 -1.423" /><path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5" /><path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2m4 0h10a2 2 0 0 1 2 2v10" /><path d="M6 9h3m4 0h5" /><path d="M6 12h3" /><path d="M6 15h2" /><path d="M3 3l18 18" /></svg>'._("Delete certificate").'</a>';
+			print "	</td>";
+
+			// recipients
+			$recipients_popover = strlen($t->h_recipients)>5 ? str_replace(";","<br>", $t->h_recipients) : "No extra recipients";
+
 
 			print "</tr>";
 		}

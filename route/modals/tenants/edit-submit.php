@@ -69,6 +69,24 @@ if($_POST['action']!="add") {
 	$update['id'] = $tenant->id;
 }
 
+
+# edit, verify change is present
+if($_POST['action']=="edit"){
+	$is_change = false;
+
+	foreach ($update as $k=>$u) {
+		if ($tenant->$k!==$u) {
+			$is_change = true;
+			break;
+		}
+	}
+
+	if($is_change===false)
+	$Result->show("info", _("No change").".", true, false, false, false);
+}
+
+
+
 # ok, validations passed, insert
 try {
 	// add
@@ -76,15 +94,18 @@ try {
 		$new_tenant_id = $Database->insertObject("tenants", $update);
 		// set random cronjobs
 		$rand = $Cron->rand(0,60,5);
+
 		// add default cronjobs
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>"*", "day"=>"*", "weekday"=>"*", "script"=>"update_certificates"]);
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>2,   "day"=>"*", "weekday"=>"*", "script"=>"remove_orphaned"]);
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>8,   "day"=>"*", "weekday"=>"*", "script"=>"expired_certificates"]);
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>3,   "day"=>"*", "weekday"=>"*", "script"=>"axfr_transfer"]);
+
 		// add default ports
+		$Database->insertObject("ssl_port_groups", ["t_id"=>$new_tenant_id, "name"=>"pg_ssl", "ports"=>"443"]);
 
 		// Write log :: object, object_id, tenant_id, user_id, action, public, text
-		$Log->write ("tenants", $new_tenant_id, $user->t_id, $user->id, $_POST['action'], true, "Tenant created", NULL, json_encode($update));
+		$Log->write ("tenants", $new_tenant_id, $user->t_id, $user->id, $_POST['action'], true, "New tenant created", NULL, json_encode($update));
 		// ok
 		$Result->show("success", _("Tenant created").".", false, false, false, false);
 	}
@@ -94,14 +115,14 @@ try {
 		// ok
 		$Result->show("success", _("Tenant updated").".", false, false, false, false);
 		// Write log :: object, object_id, tenant_id, user_id, action, public, text
-		$Log->write ("tenants", $tenant->id, $tenant->id, $user->id, $_POST['action'], true, "Tenant updated", json_encode($tenant), json_encode($update));
+		$Log->write ("tenants", $tenant->id, $tenant->id, $user->id, $_POST['action'], true, "Tenant $update[name] updated", json_encode($tenant), json_encode($update));
 	}
 	elseif($_POST['action']=="delete") {
 		$Database->deleteObject("tenants", $update['id']);
 		// ok
 		$Result->show("success", _("Tenant deleted").".", false, false, false, false);
 		// Write log :: object, object_id, tenant_id, user_id, action, public, text
-		$Log->write ("tenants", $tenant->id, $tenant->id, $user->id, $_POST['action'], true, "Tenant deleted", json_encode($tenant), NULL);
+		$Log->write ("tenants", $tenant->id, $tenant->id, $user->id, $_POST['action'], true, "Tenant ".$tenant->name." deleted", json_encode($tenant), NULL);
 	}
 	else {
 		throw new exception("Invalid action");

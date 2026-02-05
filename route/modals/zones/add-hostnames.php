@@ -61,9 +61,16 @@ else {
 	// import form
 	$content[] = "<form id='modal-form'>";
 	$content[] = "<table class='table table-condensed table-borderless align-middle'>";
+	// headers
+	$content[] = "<tr>";
+	$content[] = "	<th>"._("Hostname")."</th>";
+	if($zone->is_domain=="1")
+	$content[] = "	<th style='padding-left:0px'>"._("Domain")."</th>";
+	$content[] = "	<th>"._("Ports")."</th>";
+	$content[] = "	<td></td>";
+	$content[] = "</tr>";
 	// name
 	$content[] = "<tr>";
-	$content[] = "	<th style='width:100px;'>"._("Hostname")."</th>";
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='hostname-1'>";
 	$content[] = "		<input type='hidden' name='action' value='".$_GET['action']."'>";
@@ -71,6 +78,8 @@ else {
 	$content[] = "		<input type='hidden' name='id' value='$_GET[host_id]'>";
 	$content[] = "		<input type='hidden' name='zone_id' value='{$zone->id}'>";
 	$content[] = "	</td>";
+	if($zone->is_domain=="1")
+	$content[] = "	<td style='padding-left:0px'>.".$zone->name."</td>";
 	$content[] = "	<td>";
 	$content[] = "<select name='pg-1' class='form-select form-select-sm'>";
 	foreach($ports[$tenant->id] as $id=>$p) {
@@ -84,7 +93,7 @@ else {
 	$content[] = "</table>";
 	$content[] = "</form>";
 	$content[] = "<hr>";
-	$content[] = "<btn class='btn btn-sm btn-default btn-outline-success' id='add_hosts'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg> '._("Add more")."</btn>";
+	$content[] = "<btn class='btn btn-sm btn-default btn-outline-success' id='add_hosts' data-isdomain='".$zone->is_domain."' data-domain='".$zone->name."'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg> '._("Add more")."</btn>";
 
 	$content[] = "<div class='visually-hidden' id='hostcount'>1</div>";
 
@@ -112,11 +121,17 @@ $(document).ready(function() {
 		var current = $('#hostcount').html();
 		current++;
 		$('#hostcount').html(current);
+		// domain (1 0r 0)
+		var isdomain = $(this).attr('data-isdomain');
+		var domain 	 = $(this).attr('data-domain');
 
 		// template
 		var append = "";
-		append += "<tr><th style='width:100px;'><?php print _("Hostname"); ?></th>";
+		append += "<tr>";
 		append += "<td><input type='text' class='form-control form-control-sm' name='hostname-"+current+"'></td>";
+		// domain ?
+		if(isdomain==1)
+		append += "<td style='padding-left:0px'>."+domain+"</td>";
 		append += "<td><select name='pg-"+current+"' class='form-select form-select-sm'>";
 		<?php foreach ($ports[$tenant->id] as $id=>$p) { ?>
 		append += "<option value='<?php print $id; ?>'><?php print $p['name']; ?></option>";

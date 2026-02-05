@@ -228,8 +228,7 @@ try {
                 	$processed++;
             	}
 				// Write log :: object, object_id, tenant_id, user_id, action, public, text
-				//$Log->write ("hosts", $c->id, $user->t_id, null, "refresh", true, "New certificate assigned to host", NULL, json_encode($c));
-
+				$Log->write ("hosts", $c->id, $user->t_id, null, "refresh", true, "New certificate ".$cert_parsed['serialNumber']." assigned to host ".$c->hostname, NULL, json_encode($c));
 	        }
 			$content2[] = "</table>";
 

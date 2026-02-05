@@ -279,3 +279,11 @@ border-color: color-mix(in srgb,var(--tblr-cyan-lt) calc(var(--tblr-bg-opacity,1
 .search {
     float:right !important;
 }
+
+
+
+
+
+.bootstrap-table .fixed-table-container .fixed-table-body {
+    overflow: visible;
+}

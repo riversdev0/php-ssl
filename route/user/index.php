@@ -5,6 +5,7 @@
 if (@$_params['app']=="theme") {
 	if($_params['id1']=="light" || $_params['id1']=="dark") {
 		$_SESSION['theme'] = $_params['id1'];
+
 		if(isset($_SESSION['url'])) {
 			header('Location: '.$_SESSION['url']);
 		}

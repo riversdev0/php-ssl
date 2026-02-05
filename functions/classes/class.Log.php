@@ -54,6 +54,9 @@ class Log extends Common {
 
 	public function write ($object = "", $object_id = null, $object_t_id = null, $object_u_id = null, $action = null, bool $public = false, $text = "", $json_object_old = null, $json_object_new = null) {
 		try {
+			// fix string(null) for json objects. Comes with json_encode (NULL)
+			if($json_object_old=="null") $json_object_old = NULL;
+			if($json_object_new=="null") $json_object_new = NULL;
 			// validations
 			$this->validate_object ($object);
 			$this->validate_int ($object_id);
@@ -186,5 +189,17 @@ class Log extends Common {
 		}
 		// return
 		return $logs;
+	}
+
+	public function count_new_logs ($user = null) {
+		try {
+			// fetch
+			$logs = $this->Database->getObjectQuery("select count(*) as cnt from logs where public = 1 and id > ?", $user->notif_id);
+			// return
+			return is_null($logs->cnt) ? 0 : $logs->cnt;
+
+		} catch (Exception $e) {
+			$this->errors[] = $e->getMessage();
+		}
 	}
 }

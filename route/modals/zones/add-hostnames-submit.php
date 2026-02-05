@@ -35,17 +35,28 @@ if($tenant===null) {
 
 # create hosts to insert
 foreach ($_POST as $k=>$p) {
-	if (strpos($k, "hostname-")!==false) {
+	if (strpos($k, "hostname-")!==false && strlen($p)>0) {
+		// domain ?
+		if($zone->is_domain=="1") {
+			// append domain if they are not same !
+			if($zone->name!==$p)
+			$p .= ".".$zone->name;
+			// replace multiple dots to be sure
+			$p = preg_replace('/\.+/', '.', $p);
+
+			// make sure it is inside domain !
+			if($Zones->is_host_inside_domain ($p, $zone->name)===false) {
+				$Result->show("danger", _("Hostname not in zone").".", true, false, false, false);
+			}
+		}
+
+		// not domain
 		if($Common->validate_hostname($p)) {
 			$index = substr($k, 9);
 			$out[$index]['hostname'] = $p;
 		}
 		else {
 			$Result->show("danger", _("Invalid hostname").".", true, false, false, false);
-		}
-		// make sure it is inside domain !
-		if($Zones->is_host_inside_domain ($p, $zone->name)===false) {
-			$Result->show("danger", _("Hostname not in zone").".", true, false, false, false);
 		}
 	}
 	elseif (strpos($k, "pg-")!==false) {
@@ -56,12 +67,22 @@ foreach ($_POST as $k=>$p) {
 	}
 }
 
+// if empty entry was added we need to remove pg_id as hostname is missing
+foreach ($out as $i=>$item) {
+	if (!array_key_exists("hostname", $item)) {
+		unset($out[$i]);
+	}
+}
+
 # ok, validations passed, insert
 try {
 	foreach ($out as $o) {
-		$new_host_id = $Database->insertObject("hosts", ["z_id"=>$_POST['zone_id'], "pg_id"=>$o['pg_id'], "hostname"=>$o['hostname']]);
+		// object
+		$new_object = ["z_id"=>$_POST['zone_id'], "pg_id"=>$o['pg_id'], "hostname"=>$o['hostname']];
+		// insert
+		$new_host_id = $Database->insertObject("hosts", $new_object);
 		// Write log :: object, object_id, tenant_id, user_id, action, public, text
-		$Log->write ("hosts", $new_host_id, $tenant->id, $user->id, "add", true, "New host added to zone"." :: ".json_encode($o));
+		$Log->write ("hosts", $new_host_id, $tenant->id, $user->id, "add", true, "New host ".$o['hostname']." added to zone", NULL, json_encode($new_object));
 	}
 	// ok
 	$Result->show("success", _("Hosts created").".", false, false, false, false);

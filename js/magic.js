@@ -148,6 +148,24 @@ $('.expand_hosts, .shrink_hosts').click(function(){
 })
 
 
+// Mark all as read
+$('a#read-all').click(function() {
+    $.get('/route/modals/logs/read-all.php?id='+$(this).attr('data-id'), function(data) {
+    })
+    .done(function(data) {
+        $('#dropdown_new_log_indicator').remove();
+        $('#dropdown_new_logs .badge-blink').removeClass('badge-blink').removeClass('bg-red');
+        $('.read-error').html("<div class='alert alert-danger' style='margin-top:10px;'>"+data+"</div>");
+        $('a#read-all').addClass('disabled')
+        $('.read-error').html("<div class='alert alert-success' style='margin-top:10px;'>"+data+"</div>").fadeIn('fast').delay(1000).fadeOut('fast', function() { $('#dropdown').removeClass('show') });
+    })
+    .fail(function(data) {
+        $('.read-error').html("<div class='alert alert-danger' style='margin-top:10px;'>"+data+"</div>").fadeIn('fast').delay(3000).fadeOut('fast');
+    })
+    return false;
+});
+
+
 
 /* @cookies */
 function createCookie(name,value,days) {

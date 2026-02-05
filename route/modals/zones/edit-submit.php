@@ -42,6 +42,9 @@ if($_POST['action']!=="delete") {
 	// validate ignore
 	if (!in_array($_POST['ignore'], [0,1]))
 	$Result->show("danger", _("Invalid ignore value").".", true, false, false, false);
+	// validate is_domain
+	if (!in_array($_POST['is_domain'], [0,1]))
+	$Result->show("danger", _("Invalid is_domain value").".", true, false, false, false);
 	// agent validation
 	if (!$Common->validate_int($_POST['agent_id']))
 	$Result->show("danger", _("Invalid Agent").".", true, false, false, false);
@@ -53,6 +56,7 @@ $update = [
 	"type"        => $_POST['type'],
 	"t_id"        => $tenant->id,
 	"ignore"      => $_POST['ignore'],
+	"is_domain"   => $_POST['is_domain'],
 	"description" => $_POST['description'],
 	"agent_id"    => $_POST['agent_id']
 ];
@@ -95,6 +99,26 @@ if ($_POST['type']=="axfr" && $_POST['action']!=="delete") {
 	$update['regex_exclude']  = $_POST['regex_exclude'];
 }
 
+
+# edit, verify change is present
+if($_POST['action']=="edit"){
+	$is_change = false;
+
+	// description fix ker mergamo select iz 2 baz !
+	$zone->description = $zone->z_description;
+
+	foreach ($update as $k=>$u) {
+		if ($zone->$k!==$u) {
+			$is_change = true;
+			break;
+		}
+	}
+
+	if($is_change===false)
+	$Result->show("info", _("No change").".", true, false, false, false);
+}
+
+
 # ok, validations passed, insert
 try {
 	// add
@@ -103,7 +127,7 @@ try {
 		// ok
 		$Result->show("success", _("Zone created").".", false, false, false, false);
 		// Write log :: object, object_id, tenant_id, user_id, action, public, text
-		$Log->write ("zones", $new_zone_id, $tenant->id, $user->id, $_POST['action'], true, "Zone created");
+		$Log->write ("zones", $new_zone_id, $tenant->id, $user->id, $_POST['action'], true, "Zone $update[name] created", NULL, json_encode($update));
 	}
 	// update
 	elseif($_POST['action']=="edit") {
@@ -111,14 +135,14 @@ try {
 		// ok
 		$Result->show("success", _("Zone updated").".", false, false, false, false);
 		// Write log :: object, object_id, tenant_id, user_id, action, public, text
-		$Log->write ("zones", $zone->id, $tenant->id, $user->id, $_POST['action'], true, "Zone updated");
+		$Log->write ("zones", $zone->id, $tenant->id, $user->id, $_POST['action'], true, "Zone $update[name] updated", json_encode($zone), json_encode($update));
 	}
 	elseif($_POST['action']=="delete") {
 		$Database->deleteObject("zones", $update['id']);
 		// ok
 		$Result->show("success", _("Zone deleted").".", false, false, false, false);
 		// Write log :: object, object_id, tenant_id, user_id, action, public, text
-		$Log->write ("zones", $zone->id, $tenant->id, $user->id, $_POST['action'], true, "Zone deleted"." :: ".json_encode($zone));
+		$Log->write ("zones", $zone->id, $tenant->id, $user->id, $_POST['action'], true, "Zone ".$zone->name." deleted", json_encode($zone), NULL);
 	}
 	else {
 		throw new exception("Invalid action");

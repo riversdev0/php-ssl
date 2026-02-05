@@ -26,20 +26,16 @@ $zone   = $Zones->get_zone ($_POST['tenant'], $_POST['zone_id']);
 $host   = $Zones->get_host ($_POST['host_id']);
 
 # validate zone id
-if($Common->validate_int($_POST['zone_id'])===false || $zone===null) {
+if($Common->validate_int($_POST['zone_id'])===false || $zone===NULL) {
 	$Result->show("danger", _("Invalid zone").".", true, false, false, false);
 }
 # validate tenant
-elseif($tenant===null) {
+if($tenant===NULL) {
 	$Result->show("danger", _("Invalid tenant").".", true, false, false, false);
 }
 # invalid host
-elseif ($host===null || $host->z_id!=$zone->id) {
-	# content
-	$content = [];
-	$content[] = $Result->show("danger", _("Invalid host"), false, false, true);
-	# btn
-	$btn_text = "";
+if ($host===NULL || $host->z_id!=$zone->id) {
+	$Result->show("danger", _("Invalid host"), true, false, false, false);
 }
 
 # create hosts to insert
@@ -54,14 +50,18 @@ foreach ($_POST as $k=>$p) {
 	}
 }
 
+# no change ?
+if(json_encode($host->h_recipients) == json_encode(implode(";", $out))) {
+	$Result->show("info", _("No change").".", true, false, false, false);
+}
 
 
 # ok, validations passed, insert
 try {
-	$Database->updateObject("hosts", ["id"=>$_POST['id'], "h_recipients"=>implode(";", $out)]);
+	$Database->updateObject("hosts", ["id"=>$_POST['host_id'], "h_recipients"=>implode(";", $out)]);
 
 	// Write log :: object, object_id, tenant_id, user_id, action, public, text
-	$Log->write ("hosts", $_POST['id'], $tenant->id, $user->id, "edit", true, "Recipients updated"." :: ".json_encode($out));
+	$Log->write ("hosts", $_POST['host_id'], $tenant->id, $user->id, "edit", true, "Recipients updated for host ".$host->hostname, json_encode($host->h_recipients), json_encode(implode(";", $out)));
 
 } catch (Exception $e) {
 	$Result->show("danger", $e->getMessage(), true, false, false, false);

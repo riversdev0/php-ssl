@@ -16,8 +16,11 @@ $User->validate_session (false);
 <div class='btn-group'>
 <a href="/zones/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> <?php print _("Back"); ?></a>
 
+<?php if($user->admin=="0") { ?>
 <a href="/route/error/modal.php" data-bs-toggle="modal" data-bs-target="#modal1" class="btn btn-sm btn-outline-success btn-sm btn-5 d-none d-sm-inline-block">
 	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2"><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg> Create new user </a>
+<?php } ?>
+
 </div>
 </div>
 <br><br>
