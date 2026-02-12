@@ -172,6 +172,7 @@ class Agent {
 			else {
 				$all_agents = $Database->getObjectsQuery("select * from agents where atype = 'remote' and id = ?", [$id]);
 			}
+
 			// do we have some ?
 			if (sizeof($all_agents)>0) {
 				foreach ($all_agents as $a) {
@@ -230,6 +231,8 @@ class Agent {
 			        if($return) {
 			        	return ["error"=>curl_error($API_conn), "info"=>curl_getinfo($API_conn), "data"=>$resp_arr];
 			        }
+
+			        var_dump($update);
 
 			        // update db
 			        $Database->updateObject("agents", $update);

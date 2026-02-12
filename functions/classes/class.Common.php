@@ -149,7 +149,7 @@ function scan_host ($host, $execution_time, $tenant_id) {
 		// get IP if not set from remote agent
 		$ip = !isset($host_certificate['ip']) ? $SSL->resolve_ip($host->hostname) : $host_certificate['ip'];
 		// get new cert
-		$certificate = $this->Database->getObject ("certificates", $cert_id);
+		$certificate = $Database->getObject ("certificates", $cert_id);
 		// if Id of certificate changed
 		if($host->c_id!=$cert_id) {
 			$SSL->assign_host_certificate ($host, $ip, $host_certificate['port'], $certificate, $host_certificate['tls_proto'], $execution_time, null);
