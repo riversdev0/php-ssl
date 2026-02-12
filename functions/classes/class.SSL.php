@@ -14,6 +14,12 @@ class SSL extends Common {
 	private $Database = false;
 
 	/**
+	 * Log object
+	 * @var bool
+	 */
+	private $Log = false;
+
+	/**
 	 * SSL stream options array
 	 * @var array
 	 */
@@ -426,16 +432,17 @@ class SSL extends Common {
 				try {
 					// try to insert, if we get error because of threading it means one was entered in the meantime, so recheck !
 					$new_cert_id = $this->Database->insertObject("certificates", ["serial"=>$certificate['serial'], "certificate"=>$certificate['certificate'], "expires"=>$certificate['expires'], "chain"=>$certificate['chain'], "z_id"=>$zone_id, "t_id"=>$tenant_id, "created"=>$execution_time]);
-					// Write log :: object, object_id, tenant_id, user_id, action, public, text
-					global $Log;
-					$Log->write ("certificates", $new_cert_id, $tenant_id, null, "add", true, "New certificate imported with serial ".$certificate['serial'], NULL, json_encode($certificate));
 				}
 				catch (Exception $e) {
 					// do nothing
 					die($e->getMessage());
 				}
-				// fetch
-				$db_cert = $this->Database->getObjectQuery ("select * from certificates where serial = ? and z_id = ? and t_id = ?", [$certificate['serial'], $zone_id, $tenant_id]);
+				// fetch now that it is created
+				$db_cert = $this->Database->getObjectQuery ("select * from certificates where id = ?", [$new_cert_id]);
+
+				// Write log :: object, object_id, tenant_id, user_id, action, public, text
+				if($this->Log===false) $this->Log = new Log ($this->Database);
+				$this->Log->write ("certificates", $new_cert_id, $tenant_id, null, "add", true, "New certificate imported with serial ".$certificate['serial'], NULL, json_encode($db_cert));
 			}
 
 			// add to cache
@@ -453,7 +460,7 @@ class SSL extends Common {
 	 * Certificate chain processing
 	 * @method process_certificate_chain
 	 * @param  string $chain
-	 * @return array
+	 * @return array_reverse
 	 */
 	public function process_certificate_chain ($chain) {
 		// result
@@ -542,7 +549,7 @@ class SSL extends Common {
 	/**
 	 * Assigns certificate to host
 	 * @method assign_host_certificate
-	 * @param  string $hostname
+	 * @param  object $hostname
 	 * @param  string $ip
 	 * @param  int $host_id
 	 * @param  int $cert_id
@@ -550,9 +557,13 @@ class SSL extends Common {
 	 * @param  datetime $execution_time
 	 * @return void
 	 */
-	public function assign_host_certificate ($hostname = "", $ip = "", $host_id = 0, $cert_id = 0, $port = 0, $execution_time, $tls_version) {
+	public function assign_host_certificate ($host = "", $ip = "", $host_id = 0, $cert_id = 0, $port = 0, $execution_time, $tls_version, $serial = "") {
 		try {
 			$this->Database->runQuery("update hosts set c_id_old = c_id, c_id = ?, port = ?, ip = ?, last_change = ?, tls_version = ? where id = ?", [$cert_id, $port, $ip, $execution_time, $tls_version, $host_id]);
+	   		// Write log :: object, object_id, tenant_id, user_id, action, public, text
+	   		if(!isset($this->Log)) { $this->Log = new Log ($this->Database); }
+			$this->Log->write ("hosts", $host->id, $host->t_id, null, "refresh", true, "New certificate ".$serial." assigned to host ".$host->hostname, NULL, NULL);
+
 		} catch (Exception $e) {
 			$this->errors[] = $e->getMessage();
 			$this->result_die ();
