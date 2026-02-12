@@ -223,12 +223,9 @@ try {
 			                if(strlen($cert_parsed['extensions']['subjectAltName'])>0)
 			                $h_recipients_mails[$r][] = "<tr><td style='$td_style'>".$Mail->font_norm._("Altnames").":<br><span style='padding:2px;padding-left:15px;'>".str_replace(",","</span><br><span style='padding:0px;padding:2px;padding-left:15px;'>",$cert_parsed['extensions']['subjectAltName'])."</span></font></td></tr>";
 	                    }
-	                }
-                	// ignored no more
+	                }                	// ignored no more
                 	$processed++;
             	}
-				// Write log :: object, object_id, tenant_id, user_id, action, public, text
-				$Log->write ("hosts", $c->id, $c->t_id, null, "refresh", true, "New certificate ".$cert_parsed['serialNumber']." assigned to host ".$c->hostname, NULL, json_encode($c));
 	        }
 			$content2[] = "</table>";
 
