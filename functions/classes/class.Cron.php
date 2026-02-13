@@ -18,10 +18,6 @@ class Cron extends Common {
 									"expired_certificates" => "expired_certificates"
 									];
 
-
-	public $valid_minutes_full = [0,5,10,15,20,25,30,35,40,45,50,55,60];
-	public $valid_minutes_wild = ["*/5","*/10","*/15","*/20","*/30"];
-
 	/**
 	 * All crnjobs
 	 * @var array

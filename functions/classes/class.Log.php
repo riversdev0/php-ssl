@@ -27,7 +27,8 @@ class Log extends Common {
 		"ignored",
 		"certificates",
 		"scanning",
-		"portgroups"
+		"portgroups",
+		"cron"
 		];
 
 	/**

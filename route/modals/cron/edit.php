@@ -55,6 +55,8 @@ else {
 	$content[] = "	<th style='width:100px;'>"._("Script")."</th>";
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm disabled' name='script' value='{$cronjob->script}' disabled>";
+	$content[] = "		<input type='hidden' name='id' value='{$cronjob->id}'>";
+	$content[] = "		<input type='hidden' name='action' value='edit'>";
 	$content[] = "	</td>";
 	$content[] = "	<td>";
 	$content[] = "</tr>";

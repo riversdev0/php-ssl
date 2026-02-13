@@ -148,4 +148,36 @@ class Validate extends Result {
 		# stripped
 		return $input;
 	}
+
+	/**
+	 * Validate cron expression
+	 * @method validate_cron
+	 * @param  string $expression (minute hour day month weekday)
+	 * @return bool
+	 */
+	public function validate_cron ($expression = "") {
+		$parts = explode(' ', trim($expression));
+		if (count($parts) !== 5) {
+			$this->errors[] = "Cron expression must have 5 fields";
+			return false;
+		}
+
+		$patterns = [
+			0 => '/^(\*|\d+|\d+-\d+|(\d+,)+\d+|\*\/\d+)$/',   # minute: 0-59
+			1 => '/^(\*|\d+|\d+-\d+|(\d+,)+\d+|\*\/\d+)$/',   # hour: 0-23
+			2 => '/^(\*|\d+|\d+-\d+|(\d+,)+\d+|\*\/\d+)$/',   # day: 1-31
+			3 => '/^(\*|\d+|\d+-\d+|(\d+,)+\d+|\*\/\d+)$/',   # month: 1-12
+			4 => '/^(\*|\d+|\d+-\d+|(\d+,)+\d+|\*\/\d+)$/'    # weekday: 0-7
+		];
+
+		$names = ['minute', 'hour', 'day', 'month', 'weekday'];
+
+		foreach ($parts as $i => $part) {
+			if (!preg_match($patterns[$i], $part)) {
+				$this->errors[] = "Invalid cron {$names[$i]}: {$part}";
+				return false;
+			}
+		}
+		return true;
+	}
 }
