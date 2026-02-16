@@ -25,6 +25,29 @@
                     </div>
                 </div>
 
+
+                <?php
+                // fetch all active domains
+                $domains = $User->get_active_domains ();
+                // if only one ignore
+                if (sizeof($domains)==1) {
+                    print '<input type="hidden" class="form-control" name="domain" value="'.$domains[0]->id.'">';
+                }
+                else {
+                ?>
+                <div class="mb-3">
+                    <label class="form-label">Domain</label>
+                    <select class="form-select" name="domain">
+                    <?php
+                    // print
+                    foreach ($domains as $d) {
+                        print "<option value='$d->id'>$d->name</option>";
+                    }
+                    ?>
+                    </select>
+                </div>
+                <?php } ?>
+
                 <div class="form-footer">
                     <button type="submit" class="btn btn-primary w-100"><?php print _("Sign in"); ?></button>
                 </div>

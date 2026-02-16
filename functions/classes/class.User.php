@@ -108,6 +108,25 @@ class User extends Common {
 		}
 	}
 
+    /**
+     * Return all active domains
+     * @method get_domains
+     * @return array
+     */
+    public function get_active_domains () {
+        return $this->Database->fetch_multiple_objects ("domains", "active", "Yes");
+    }
+
+    /**
+     * Get domain details
+     * @method get_domain_id_details
+     * @param  int $domain_id
+     * @return obj|bool
+     */
+    public function get_domain_id_details (int $domain_id = 0) {
+        return $this->Database->fetch_object ("domains", "id", $domain_id);
+    }
+
 	/**
 	 * Executes authentication
 	 * @method authenticate
@@ -115,7 +134,33 @@ class User extends Common {
 	 * @param  string $password
 	 * @return void
 	 */
-	public function authenticate ($email, $password) {
+	public function authenticate ($email, $password, $domain_id) {
+        // get domain
+        $domain = $this->get_domain_id_details ($domain_id);
+
+        // false ?
+        if ($domain===false) {
+            print $this->Result->show("danger", _("Invalid domain").".");
+        }
+        // not active
+        elseif ($domain->active!="Yes") {
+            print $this->Result->show("danger", _("Domain is not active").".");
+        }
+        // ok
+        else {
+            // local
+            if ($domain->type=="local") {
+                return $this->authenticate_local ($email, $password, $domain);
+            }
+            // AD
+            else {
+                return $this->authenticate_ad ($email, $password, $domain);
+            }
+        }
+
+    }
+
+    public function authenticate_local (string $email = "", string $password = "", object $domain) {
 		// fetch user details
         $user = $this->fetch_user_details ($email);
         // auth ok
@@ -133,6 +178,73 @@ class User extends Common {
             $this->show("danger", _("Invalid username or password"), true);
         }
 	}
+
+
+    /**
+     * Main function for authenticating users via AD
+     *
+     * @access public
+     * @param mixed $username
+     * @param mixed $password
+     * @return void
+     */
+    public function authenticate_ad ($username = "", $password = "", object $domain) {
+        // connect to ad and init search
+        $AD = new ADsync ($this->Database, $domain);
+
+        // if user has provided email address, try to get username !
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            $dname = $AD->ad_user_info_by_email ($username);
+            $username = $dname===false ? $username : $dname;
+        }
+
+        // authenticate
+        if ($AD->ad_user_authenticate ($username, $password)) {
+            // first check if user is already in db, if not fetch from AD and save
+            $user = $this->fetch_db_user_details ($username);
+            // save username
+            $this->username = $username;
+
+            // create
+            if (!$user) {
+                // fetch
+                $AD->init_search ();
+                $userinfo = $AD->ad_user_info ($username);
+                // create
+                $AD->create_pw_user ($username);
+                // save user details
+                $user = $AD->user_tmp;
+                // update photo
+                $this->update_user_photo ($user['id'], $AD);
+                // update login
+                $this->update_login_time($user['id']);
+            }
+            else {
+                $this->update_login_time($user->id);
+                // update photo
+                $this->update_user_photo ($user->id, $AD);
+            }
+            # save locale
+            //$this->save_user_locale ($user);
+            # save to session
+            $this->username = $username;
+            $this->write_session_parameters();
+            // write log
+            $this->write_auth_log ($username, "success", "Login successfull");
+            # success print
+            print $this->Result->show("success", _("Login successfull").".");
+            // where to ?
+            $user->home = strlen($user->home)>0 ? $user->home : "/";
+            print "<div id='login_redirect'>".$user->home."</div>";
+        }
+        else {
+            // write log
+            $this->write_auth_log ($username, "error", "Invalid username or password");
+            // print
+            print $this->Result->show("danger", _("Invalid username or password").".");
+        }
+    }
+
 
 	/**
 	 * Fetches user details from email

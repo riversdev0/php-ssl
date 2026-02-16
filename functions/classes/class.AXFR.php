@@ -6,7 +6,8 @@
  *
  *
  */
-class AXFR {
+class AXFR
+{
 
 	/**
 	 * Nameservers to use for AXFR
@@ -24,7 +25,7 @@ class AXFR {
 	 * Id of zone
 	 * @var int
 	 */
-	private $zone_id= 0;
+	private $zone_id = 0;
 
 	/**
 	 * Record types to transfer from zone
@@ -73,6 +74,12 @@ class AXFR {
 	private $Database = false;
 
 	/**
+	 * Result object
+	 * @var Result
+	 */
+	private $Result = false;
+
+	/**
 	 * DNS AXFR link
 	 * @var bool
 	 */
@@ -83,21 +90,21 @@ class AXFR {
 	 * @var array
 	 */
 	private $result = [
-						"success" => false,
-						"error"   => "",
-						"values"  => []
-						];
+		"success" => false,
+		"error" => "",
+		"values" => []
+	];
 
 	/**
 	 * Processed diff of existing, new and records to be removed
 	 * @var array
 	 */
 	public $records = [
-						"old_records"     => [],
-						"axfr_records"    => [],
-						"removed_records" => [],
-						"new_records"     => []
-						];
+		"old_records" => [],
+		"axfr_records" => [],
+		"removed_records" => [],
+		"new_records" => []
+	];
 
 
 	/**
@@ -105,14 +112,15 @@ class AXFR {
 	 * @method __construct
 	 * @param  Database_PDO $Database
 	 */
-	public function __construct (Database_PDO $Database) {
+	public function __construct(Database_PDO $Database)
+	{
 		// Save database object
 		$this->Database = $Database;
 		// Results
 		$this->Result = new Result();
 		// include Net_DNS2
-		ini_set("include_path", dirname(__FILE__)."/../assets/Net_DNS2");
-		require_once(dirname(__FILE__)."/../assets/Net_DNS2/Net/DNS2.php");
+		ini_set("include_path", dirname(__FILE__) . "/../assets/Net_DNS2");
+		require_once(dirname(__FILE__) . "/../assets/Net_DNS2/Net/DNS2.php");
 	}
 
 	/**
@@ -120,18 +128,19 @@ class AXFR {
 	 * @method execute
 	 * @return void
 	 */
-	public function execute () {
+	public function execute()
+	{
 		try {
 			// link
-			$this->set_link ();
+			$this->set_link();
 			// make query
 			$result = $this->link->query($this->zone_name, 'AXFR');
 			// we are ok
 			$this->result['success'] = true;
 			// check response
-			if(isset($result->answer)) {
-				foreach($result->answer as $rr) {
-					if(in_array($rr->type, $this->valid_record_types)) {
+			if (isset($result->answer)) {
+				foreach ($result->answer as $rr) {
+					if (in_array($rr->type, $this->valid_record_types)) {
 						// save to result
 						$this->result["values"][] = $rr;
 					}
@@ -143,24 +152,25 @@ class AXFR {
 		}
 
 		// filter regexes
-		$this->filter_results_include_regex ();
-		$this->filter_results_exclude_regex ();
+		$this->filter_results_include_regex();
+		$this->filter_results_exclude_regex();
 	}
 
 	/**
 	 * Set connection link for AXFR
 	 * @method set_link
 	 */
-	private function set_link () {
-		if($this->link === false) {
+	private function set_link()
+	{
+		if ($this->link === false) {
 			$this->link = new Net_DNS2_Resolver([
-												'nameservers' => $this->nameservers,
-												'use_tcp'     => $this->use_tcp
-			                                     ]);
+				'nameservers' => $this->nameservers,
+				'use_tcp' => $this->use_tcp
+			]);
 		}
 
 		// sign request if needed
-		if(strlen($this->tsig)>0) {
+		if (strlen($this->tsig) > 0) {
 			$this->link->signTSIG($this->tsig_name, $this->tsig);
 		}
 	}
@@ -170,9 +180,10 @@ class AXFR {
 	 * @method set_nameservers
 	 * @param  array $nameservers
 	 */
-	public function set_nameservers ($nameservers = []) {
-		if(is_array($nameservers)) {
-			if (sizeof($nameservers)>0) {
+	public function set_nameservers($nameservers = [])
+	{
+		if (is_array($nameservers)) {
+			if (sizeof($nameservers) > 0) {
 				$this->nameservers = $nameservers;
 			}
 		}
@@ -183,8 +194,9 @@ class AXFR {
 	 * @method set_zone_name
 	 * @param  string $name
 	 */
-	public function set_zone_name ($name = "") {
-		if(strlen($name)>0) {
+	public function set_zone_name($name = "")
+	{
+		if (strlen($name) > 0) {
 			$this->zone_name = $name;
 		}
 	}
@@ -194,9 +206,10 @@ class AXFR {
 	 * @method set_valid_types
 	 * @param  array $types
 	 */
-	public function set_valid_types ($types = []) {
-		if(is_array($types)) {
-			if (sizeof($types)>0) {
+	public function set_valid_types($types = [])
+	{
+		if (is_array($types)) {
+			if (sizeof($types) > 0) {
 				$this->valid_record_types = $types;
 			}
 		}
@@ -207,8 +220,9 @@ class AXFR {
 	 * @method set_tcp
 	 * @param  bool $tcp
 	 */
-	public function set_tcp ($tcp = true) {
-		if(is_bool($tcp)) {
+	public function set_tcp($tcp = true)
+	{
+		if (is_bool($tcp)) {
 			$this->use_tcp = $tcp;
 		}
 	}
@@ -219,10 +233,11 @@ class AXFR {
 	 * @param  string $name
 	 * @param  string $tsig
 	 */
-	public function set_tsig ($name = "", $tsig = "") {
-		if(strlen($name)>0) {
+	public function set_tsig($name = "", $tsig = "")
+	{
+		if (strlen($name) > 0) {
 			$this->tsig_name = $name;
-			$this->tsig      = $tsig;
+			$this->tsig = $tsig;
 		}
 	}
 
@@ -232,7 +247,8 @@ class AXFR {
 	 * @param  string $regex_include
 	 * @param  string $regex_exclude
 	 */
-	public function set_regexes ($regex_include = "", $regex_exclude = "") {
+	public function set_regexes($regex_include = "", $regex_exclude = "")
+	{
 		$this->regex_include = $regex_include;
 		$this->regex_exclude = $regex_exclude;
 	}
@@ -242,9 +258,10 @@ class AXFR {
 	 * @method filter_results_include_regex
 	 * @return void
 	 */
-	private function filter_results_include_regex () {
-		if (strlen($this->regex_include)>0) {
-			foreach ($this->result["values"] as $k=>$rr) {
+	private function filter_results_include_regex()
+	{
+		if (strlen($this->regex_include) > 0) {
+			foreach ($this->result["values"] as $k => $rr) {
 				if (!preg_match($this->regex_include, $rr->name) && !preg_match($this->regex_include, $rr->address)) {
 					unset($this->result["values"][$k]);
 				}
@@ -257,9 +274,10 @@ class AXFR {
 	 * @method filter_results_include_regex
 	 * @return void
 	 */
-	private function filter_results_exclude_regex () {
-		if (strlen($this->regex_exclude)>0) {
-			foreach ($this->result["values"] as $k=>$rr) {
+	private function filter_results_exclude_regex()
+	{
+		if (strlen($this->regex_exclude) > 0) {
+			foreach ($this->result["values"] as $k => $rr) {
 				if (preg_match($this->regex_exclude, $rr->name) || preg_match($this->regex_exclude, $rr->address)) {
 					unset($this->result["values"][$k]);
 				}
@@ -272,7 +290,8 @@ class AXFR {
 	 * @method get_records
 	 * @return [type]
 	 */
-	public function get_records () {
+	public function get_records()
+	{
 		return $this->result;
 	}
 
@@ -280,17 +299,18 @@ class AXFR {
 
 
 
-	public function calculate_diffs ($zone_id = 0, $check_ip = 0) {
+	public function calculate_diffs($zone_id = 0, $check_ip = 0)
+	{
 		// save zoneid
 		$this->zone_id = $zone_id;
 		// get existing
-		$this->get_existing_zone_records ();
+		$this->get_existing_zone_records();
 		// axfr records
-		$this->get_diff_axfr_records ($check_ip);
+		$this->get_diff_axfr_records($check_ip);
 		// new records
-		$this->get_diff_new_records ();
+		$this->get_diff_new_records();
 		// existing records
-		$this->get_diff_old_records ();
+		$this->get_diff_old_records();
 	}
 
 	/**
@@ -298,7 +318,8 @@ class AXFR {
 	 * @method get_existing_zone_records
 	 * @return void
 	 */
-	private function get_existing_zone_records () {
+	private function get_existing_zone_records()
+	{
 		// get existing
 		try {
 			$records = $this->Database->getObjectsQuery("select hostname as name from hosts where z_id = ?", [$this->zone_id]);
@@ -306,7 +327,7 @@ class AXFR {
 		catch (exception $e) {
 		}
 		// save
-		if (sizeof($records)>0) {
+		if (sizeof($records) > 0) {
 			foreach ($records as $r) {
 				$this->records['old_records'][] = $r->name;
 			}
@@ -319,14 +340,15 @@ class AXFR {
 	 * @param  int $check_ip
 	 * @return void
 	 */
-	private function get_diff_axfr_records ($check_ip = 0) {
+	private function get_diff_axfr_records($check_ip = 0)
+	{
 		// AXFR received records
-		if (sizeof($this->result['values'])>0) {
-			foreach($this->result['values'] as $rr) {
+		if (sizeof($this->result['values']) > 0) {
+			foreach ($this->result['values'] as $rr) {
 				$this->records['axfr_records'][] = $rr->name;
 				$this->records['axfr_records'][] = $rr->cname;
-				if($check_ip=="1")
-				$this->records['axfr_records'][] = $rr->address;
+				if ($check_ip == "1")
+					$this->records['axfr_records'][] = $rr->address;
 			}
 		}
 		// make unique
@@ -338,10 +360,11 @@ class AXFR {
 	 * @method get_diff_new_records
 	 * @return void
 	 */
-	private function get_diff_new_records () {
+	private function get_diff_new_records()
+	{
 		// check for new ones
 		foreach ($this->records['axfr_records'] as $r) {
-			if(!in_array($r, $this->records['old_records'])) {
+			if (!in_array($r, $this->records['old_records'])) {
 				$this->records['new_records'][] = $r;
 			}
 		}
@@ -352,10 +375,11 @@ class AXFR {
 	 * @method get_diff_old_records
 	 * @return void
 	 */
-	private function get_diff_old_records () {
+	private function get_diff_old_records()
+	{
 		// check which to remove
 		foreach ($this->records['old_records'] as $r) {
-			if(!in_array($r, $this->records['axfr_records'])) {
+			if (!in_array($r, $this->records['axfr_records'])) {
 				$this->records['removed_records'][] = $r;
 			}
 		}
@@ -366,14 +390,19 @@ class AXFR {
 	 * @method create_new_records
 	 * @return void
 	 */
-	public function create_new_records () {
-		if (sizeof($this->records['new_records'])>0) {
+	public function create_new_records()
+	{
+		if (sizeof($this->records['new_records']) > 0) {
 			// pgid
-			$pgid = $this->get_pg_id ();
+			$pgid = $this->get_pg_id();
 			// loop
 			foreach ($this->records['new_records'] as $r) {
-				try { $this->Database->insertObject("hosts", ["z_id"=>$this->zone_id, "hostname"=>$r, "pg_id"=>$pgid, "last_change"=>date("Y-m-d H:i:s")]); }
-				catch (exception $e) { $this->Result->show("danger", $e->getMessage(), false, false, false); }
+				try {
+					$this->Database->insertObject("hosts", ["z_id" => $this->zone_id, "hostname" => $r, "pg_id" => $pgid, "last_change" => date("Y-m-d H:i:s")]);
+				}
+				catch (exception $e) {
+					$this->Result->show("danger", $e->getMessage(), false, false, false);
+				}
 			}
 		}
 	}
@@ -383,11 +412,16 @@ class AXFR {
 	 * @method delete_records
 	 * @return void
 	 */
-	public function delete_records () {
-		if (sizeof($this->records['removed_records'])>0) {
+	public function delete_records()
+	{
+		if (sizeof($this->records['removed_records']) > 0) {
 			foreach ($this->records['removed_records'] as $r) {
-				try { $this->Database->runQuery("delete from hosts where z_id = ? and hostname = ? collate utf8_general_ci", [$this->zone_id, $r]); }
-				catch (exception $e) { $this->Result->show("danger", $e->getMessage(), false, false, false); }
+				try {
+					$this->Database->runQuery("delete from hosts where z_id = ? and hostname = ? collate utf8_general_ci", [$this->zone_id, $r]);
+				}
+				catch (exception $e) {
+					$this->Result->show("danger", $e->getMessage(), false, false, false);
+				}
 			}
 		}
 	}
@@ -397,11 +431,13 @@ class AXFR {
 	 * @method get_pg_id
 	 * @return [type]
 	 */
-	private function get_pg_id () {
+	private function get_pg_id()
+	{
 		try {
 			$pg = $this->Database->getObjectQuery("select pg.id from zones as z, ssl_port_groups as pg where z.id = ? and z.t_id = pg.t_id and pg.name = 'pg_ssl'", [$this->zone_id]);
 		}
-		catch (exception $e) {}
+		catch (exception $e) {
+		}
 		// return port-group
 		return $pg->id;
 	}

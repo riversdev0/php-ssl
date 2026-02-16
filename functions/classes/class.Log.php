@@ -268,10 +268,12 @@ class Log extends Common {
 	 */
 	public function truncate_logs ($tenant_ids = []) {
 		try {
+			$placeholders = array_map(function() { return '?'; }, $tenant_ids);
+			$params = array_values($tenant_ids);
 			// delete
-			$this->Database->getObjectQuery("delete from logs where object_t_id in (".implode(",", $tenant_ids).") ");
+			$this->Database->runQuery("delete from logs where object_t_id in (".implode(",", $placeholders).")", $params);
 			// update user id's
-			$this->Database->getObjectQuery("update users set notif_id = 0 where t_id in (".implode(",", $tenant_ids).") ");
+			$this->Database->runQuery("update users set notif_id = 0 where t_id in (".implode(",", $placeholders).")", $params);
 			// return
 			return true;
 

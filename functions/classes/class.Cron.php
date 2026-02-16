@@ -5,18 +5,19 @@
  * Class to handle cron entries
  *
  */
-class Cron extends Common {
+class Cron extends Common
+{
 
 	/**
 	 * Valid scripts
 	 * @var array
 	 */
 	private $valid_cronjob_scripts = [
-									"update_certificates"  => "update_certificates",
-									"axfr_transfer"        => "axfr_transfer",
-									"remove_orphaned"      => "remove_orphaned",
-									"expired_certificates" => "expired_certificates"
-									];
+		"update_certificates" => "update_certificates",
+		"axfr_transfer" => "axfr_transfer",
+		"remove_orphaned" => "remove_orphaned",
+		"expired_certificates" => "expired_certificates"
+	];
 
 	/**
 	 * All crnjobs
@@ -53,11 +54,12 @@ class Cron extends Common {
 	 * @param  Database_PDO $Database
 	 * @param  object $user
 	 */
-	public function __construct (Database_PDO $Database, $user = NULL) {
+	public function __construct(Database_PDO $Database, $user = NULL)
+	{
 		// Save database object
 		$this->Database = $Database;
 		// user
-		if(is_object($user)) {
+		if (is_object($user)) {
 			$this->user = $user;
 		}
 	}
@@ -67,13 +69,15 @@ class Cron extends Common {
 	 * @method fetch_cronjobs
 	 * @return array
 	 */
-	public function fetch_cronjobs () {
+	public function fetch_cronjobs()
+	{
 		// Fetch all cronjobs
 		try {
 			$this->cronjobs = $this->Database->getObjectsQuery("select * from cron;");
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->errors[] = "Unable to fetch cron jobs";
-			$this->result_die ();
+			$this->result_die();
 		}
 		// result
 		return $this->cronjobs;
@@ -86,14 +90,16 @@ class Cron extends Common {
 	 * @param  string $script
 	 * @return bool|object
 	 */
-	public function fetch_cronjob ($tenant_id= 0, $script = "") {
+	public function fetch_cronjob($tenant_id = 0, $script = "")
+	{
 		try {
-			if (!$this->validate_script ($script)) {
-				throw new Exception ("Invalid script");
+			if (!$this->validate_script($script)) {
+				throw new Exception("Invalid script");
 			}
 			return $this->Database->getObjectQuery("select * from cron where t_id = ? and script = ? order by hour,minute asc", [$tenant_id, $script]);
 
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->errors[] = $e->getMessage();
 			return false;
 		}
@@ -105,18 +111,20 @@ class Cron extends Common {
 	 * @param  bool $reindex
 	 * @return array
 	 */
-	public function fetch_tenant_cronjobs ($reindex = false) {
+	public function fetch_tenant_cronjobs($reindex = false)
+	{
 		// Fetch all cronjobs
 		try {
-			if($this->user->admin=="1") {
+			if ($this->user->admin == "1") {
 				$cronjobs = $this->Database->getObjectsQuery("select * from cron order by hour,minute asc");
 			}
 			else {
 				$cronjobs = $this->Database->getObjectsQuery("select * from cron where t_id = ? order by hour,minute asc", [$this->user->t_id]);
 			}
-		} catch (Exception $e) {
-			$this->errors[] = "Unable to fetch cron jobs [".$e->getMessage()."]";
-			$this->result_die ();
+		}
+		catch (Exception $e) {
+			$this->errors[] = "Unable to fetch cron jobs [" . $e->getMessage() . "]";
+			$this->result_die();
 		}
 		// reindex
 		if ($reindex) {
@@ -135,7 +143,8 @@ class Cron extends Common {
 	 * @method get_valid_scripts
 	 * @return [type]
 	 */
-	public function get_valid_scripts () {
+	public function get_valid_scripts()
+	{
 		return $this->valid_cronjob_scripts;
 	}
 
@@ -143,38 +152,39 @@ class Cron extends Common {
 	 * Add names to scripts
 	 * @method name_script
 	 * @param  string $name
-	 * @return void
+	 * @return array
 	 */
-	public function name_script ($name = "") {
-		if ($name=="update_certificates") {
+	public function name_script($name = "")
+	{
+		if ($name == "update_certificates") {
 			return [
 				"name" => "Update SSL certificates",
 				"desc" => "This script will check for new certificates from all tenant hosts from all available zones and will send mail if certificate change occurs"
-				];
+			];
 		}
-		elseif ($name=="axfr_transfer") {
+		elseif ($name == "axfr_transfer") {
 			return [
 				"name" => "Zone transfers",
 				"desc" => "This script will sync all hosts for AXFR zones from DNS server (AXFR transfer) and add / remove new hosts to local database if needed"
-				];
+			];
 		}
-		elseif ($name=="remove_orphaned") {
+		elseif ($name == "remove_orphaned") {
 			return [
 				"name" => "Remove orhaned certificates",
 				"desc" => "This script removes all orphaned certificates that are no longer attached to any host"
-				];
+			];
 		}
-		elseif ($name=="expired_certificates") {
+		elseif ($name == "expired_certificates") {
 			return [
 				"name" => "Notify about expired certificates",
 				"desc" => "This script will check any certificates that are about to expire or have expired and email notification to owners and administrators"
-				];
+			];
 		}
 		else {
 			return [
 				"name" => $name,
 				"desc" => ""
-				];
+			];
 		}
 	}
 
@@ -185,19 +195,20 @@ class Cron extends Common {
 	 * @param  array $cli_arguments
 	 * @return void
 	 */
-	public function execute_cronjobs ($execution_time,  $cli_arguments = []) {
+	public function execute_cronjobs($execution_time, $cli_arguments = [])
+	{
 
 		// save time
 		$this->exec_time = $execution_time;
 
-		if(sizeof($this->cronjobs)>0) {
+		if (sizeof($this->cronjobs) > 0) {
 			foreach ($this->cronjobs as $j) {
 				// does it need to be executed?
 				if ($this->needs_execution($j, $cli_arguments)) {
 					// update time
-					$this->update_crontime_execution ($j->id,);
+					$this->update_crontime_execution($j->id);
 					// execute script
-					include(dirname(__FILE__)."/../cron/{$j->script}.php");
+					include(dirname(__FILE__) . "/../cron/{$j->script}.php");
 				}
 			}
 		}
@@ -209,10 +220,12 @@ class Cron extends Common {
 	 * @param  int $cron_id
 	 * @return void
 	 */
-	private function update_crontime_execution ($cron_id = 0) {
+	private function update_crontime_execution($cron_id = 0)
+	{
 		try {
 			$this->Database->runQuery("update cron set last_executed = ? where id = ?", [$this->exec_time, $cron_id]);
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->errors[] = "Unable to update cron execution time";
 		}
 	}
@@ -220,21 +233,21 @@ class Cron extends Common {
 	/**
 	 * Checks if cronjob needs to be executed
 	 * @method needs_execution
-	 * @param  [type] $crontab_entry ('15 * * 1 *')
-	 * @param  [type] $j
+	 * @param  object] $crontab_entry ('15 * * 1 *')
 	 * @param  array $cli_arguments
-	 * @return [type]
+	 * @return bool
 	 */
-	private function needs_execution ($crontab_entry = "", $cli_arguments = []) {
+	private function needs_execution($crontab_entry = "", $cli_arguments = [])
+	{
 		// cli overrides
 		if (isset($cli_arguments[1]) && isset($cli_arguments[2])) {
-			if($crontab_entry->t_id == $cli_arguments[1] && $this->validate_script($crontab_entry->script) && $crontab_entry->script==$cli_arguments[2] ) {
+			if ($crontab_entry->t_id == $cli_arguments[1] && $this->validate_script($crontab_entry->script) && $crontab_entry->script == $cli_arguments[2]) {
 				return true;
 			}
 		}
 		// validate script
 		if (!$this->validate_script($crontab_entry->script)) {
-			 return false;
+			return false;
 		}
 
 		// current time
@@ -243,25 +256,26 @@ class Cron extends Common {
 		$crontab = explode(' ', "{$crontab_entry->minute} {$crontab_entry->hour} {$crontab_entry->day} {$crontab_entry->month} {$crontab_entry->weekday}");
 
 		// check each value
-		foreach ($crontab as $k=>&$v){
+		foreach ($crontab as $k => &$v) {
 			$time[$k] = intval($time[$k]);
 			$v = explode(',', $v);
 			foreach ($v as &$v1) {
-				$v1 = preg_replace(array('/^\*$/', '/^\d+$/', '/^(\d+)\-(\d+)$/', '/^\*\/(\d+)$/'),array('true', $time[$k].'===\0', '(\1<='.$time[$k].' and '.$time[$k].'<=\2)', $time[$k].'%\1===0'),$v1);
+				$v1 = preg_replace(array('/^\*$/', '/^\d+$/', '/^(\d+)\-(\d+)$/', '/^\*\/(\d+)$/'), array('true', $time[$k] . '===\0', '(\1<=' . $time[$k] . ' and ' . $time[$k] . '<=\2)', $time[$k] . '%\1===0'), $v1);
 			}
-			$v='('.implode(' or ', $v).')';
+			$v = '(' . implode(' or ', $v) . ')';
 		}
 		$crontab = implode(' and ', $crontab);
-		return eval('return '.$crontab.';');
+		return eval('return ' . $crontab . ';');
 	}
 
 	/**
 	 * Script validator
 	 * @method validate_script
 	 * @param  string $script
-	 * @return [type]
+	 * @return bool
 	 */
-	private function validate_script ($script = "") {
+	private function validate_script($script = "")
+	{
 		return in_array($script, $this->valid_cronjob_scripts) ? true : false;
 	}
 
@@ -273,12 +287,13 @@ class Cron extends Common {
 	 * @param  int $step
 	 * @return numeric
 	 */
-	public function rand ($min = 0, $max = 60, $step = 5) {
-	    // Generate a random number between 0 and 12
-	    $randomNumber = rand($min, ($max-$step)/$step);
-	    // multiply by step
-	    $randomNumber *= $step;
-	    // return
-	    return $randomNumber;
+	public function rand($min = 0, $max = 60, $step = 5)
+	{
+		// Generate a random number between 0 and 12
+		$randomNumber = rand($min, ($max - $step) / $step);
+		// multiply by step
+		$randomNumber *= $step;
+		// return
+		return $randomNumber;
 	}
 }

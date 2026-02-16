@@ -18,7 +18,7 @@ $_POST = $User->strip_input_tags ($_POST);
 # authenticate
 if( !empty($_POST['username']) && !empty($_POST['password']) )  {
 	# all good, try to authentucate user
-	$User->authenticate ($_POST['username'], $_POST['password']);
+	$User->authenticate ($_POST['username'], $_POST['password'], $_POST['domain']);
 }
 # Username / pass not provided
 else {

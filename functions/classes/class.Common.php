@@ -5,29 +5,32 @@
  * Class for common functions
  *
  */
-class Common extends Validate {
+class Common extends Validate
+{
 
 	/**
 	 * Check if config exists
 	 * @method config_exists
 	 * @return bool
 	 */
-	public function config_exists () {
-		return file_exists(dirname(__FILE__)."/../../config.php") ? true : false;
+	public function config_exists()
+	{
+		return file_exists(dirname(__FILE__) . "/../../config.php") ? true : false;
 	}
 
 	/**
 	 * Creates permalink
 	 * @method create_permalink
-	 * @param  [type] $title
-	 * @return [type]
+	 * @param  string $title
+	 * @return string
 	 */
-	public function create_permalink ($title) {
+	public function create_permalink($title, $context = '')
+	{
 
 		//replace slovenian characters
-		$title = str_replace(array("č","Č"), "c", $title);
-		$title = str_replace(array("š","Š"), "s", $title);
-		$title = str_replace(array("ž","Ž"), "z", $title);
+		$title = str_replace(array("č", "Č"), "c", $title);
+		$title = str_replace(array("š", "Š"), "s", $title);
+		$title = str_replace(array("ž", "Ž"), "z", $title);
 
 		$title = strip_tags($title);
 		// Preserve escaped octets.
@@ -37,18 +40,18 @@ class Common extends Validate {
 		// Restore octets.
 		$title = preg_replace('|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $title);
 
-		$title = strtolower($title);
+		$title = mb_strtolower($title);
 		//$title = utf8_uri_encode($title, 200);
 
 		$title = preg_replace('/&.+?;/', '', $title); // kill entities
 		$title = str_replace('.', '-', $title);
 
-		if ( 'save' == $context ) {
+		if ('save' == $context) {
 			// Convert nbsp, ndash and mdash to hyphens
-			$title = str_replace( array( '%c2%a0', '%e2%80%93', '%e2%80%94' ), '-', $title );
+			$title = str_replace(array('%c2%a0', '%e2%80%93', '%e2%80%94'), '-', $title);
 
 			// Strip these characters entirely
-			$title = str_replace( array(
+			$title = str_replace(array(
 				// iexcl and iquest
 				'%c2%a1', '%c2%bf',
 				// angle quotes
@@ -60,10 +63,10 @@ class Common extends Validate {
 				'%c2%a9', '%c2%ae', '%c2%b0', '%e2%80%a6', '%e2%84%a2',
 				// grave accent, acute accent, macron, caron
 				'%cc%80', '%cc%81', '%cc%84', '%cc%8c',
-			), '', $title );
+			), '', $title);
 
 			// Convert times to x
-			$title = str_replace( '%c3%97', 'x', $title );
+			$title = str_replace('%c3%97', 'x', $title);
 		}
 
 		$title = preg_replace('/[^%a-z0-9 _-]/', '', $title);
@@ -97,32 +100,32 @@ class Common extends Validate {
  * @param  mixed $required_functions
  * @return string|bool
  */
-function php_feature_missing($required_extensions = null, $required_functions = null) {
+function php_feature_missing($required_extensions = null, $required_functions = null)
+{
+	if (is_array($required_extensions)) {
+		foreach ($required_extensions as $ext) {
+			if (extension_loaded($ext))
+				continue;
 
-    if (is_array($required_extensions)) {
-        foreach ($required_extensions as $ext) {
-	        if (extension_loaded($ext))
-	                continue;
+			return _('Required PHP extension not installed: ') . $ext;
+		}
+	}
 
-	        return _('Required PHP extension not installed: ').$ext;
-        }
-    }
+	if (is_array($required_functions)) {
+		foreach ($required_functions as $function) {
+			if (function_exists($function))
+				continue;
 
-    if (is_array($required_functions)) {
-        foreach ($required_functions as $function) {
-            if (function_exists($function))
-                continue;
+			$ini_path = trim(php_ini_loaded_file());
+			$disabled_functions = ini_get('disable_functions');
+			if (is_string($disabled_functions) && in_array($function, explode(';', $disabled_functions)))
+				return _('Required function disabled') . " : $ini_path, disable_functions=$function";
 
-            $ini_path = trim( php_ini_loaded_file() );
-            $disabled_functions = ini_get('disable_functions');
-            if (is_string($disabled_functions) && in_array($function, explode(';',$disabled_functions)))
-                return _('Required function disabled')." : $ini_path, disable_functions=$function";
+			return _('Required function not found: ') . $function . '()';
+		}
+	}
 
-            return _('Required function not found: ').$function.'()';
-        }
-    }
-
-    return false;
+	return false;
 }
 
 
@@ -135,24 +138,25 @@ function php_feature_missing($required_extensions = null, $required_functions = 
  * @param  int $tenant_id
  * @return void
  */
-function scan_host ($host, $execution_time, $tenant_id) {
+function scan_host($host, $execution_time, $tenant_id)
+{
 	# load classes
-	$Database = new Database_PDO ();
-	$SSL       = new SSL ($Database);
+	$Database = new Database_PDO();
+	$SSL = new SSL($Database);
 
 	// try to fetch cert
-	$host_certificate = $SSL->fetch_website_certificate ($host, $execution_time, $tenant_id);
+	$host_certificate = $SSL->fetch_website_certificate($host, $execution_time, $tenant_id);
 
 	// update cert if fopund
-	if ($host_certificate!==false) {
-		$cert_id = $SSL->update_db_certificate ($host_certificate, $host->t_id, $host->z_id, $execution_time);
+	if ($host_certificate !== false) {
+		$cert_id = $SSL->update_db_certificate($host_certificate, $host->t_id, $host->z_id, $execution_time);
 		// get IP if not set from remote agent
 		$ip = !isset($host_certificate['ip']) ? $SSL->resolve_ip($host->hostname) : $host_certificate['ip'];
 		// get new cert
-		$certificate = $Database->getObject ("certificates", $cert_id);
+		$certificate = $Database->getObject("certificates", $cert_id);
 		// if Id of certificate changed
-		if($host->c_id!=$cert_id) {
-			$SSL->assign_host_certificate ($host, $ip, $host_certificate['port'], $certificate, $host_certificate['tls_proto'], $execution_time, null);
+		if ($host->c_id != $cert_id) {
+			$SSL->assign_host_certificate($host, $ip, $host_certificate['port'], $certificate, $host_certificate['tls_proto'], $execution_time, null);
 		}
 	}
 	// dummy return

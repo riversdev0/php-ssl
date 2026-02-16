@@ -206,6 +206,27 @@ CREATE TABLE `tenants` (
 
 
 
+# Dump of table domains
+# ------------------------------------------------------------
+CREATE TABLE `domains` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) DEFAULT NULL,
+  `type` enum('AD','local') DEFAULT 'local',
+  `account_suffix` varchar(256) DEFAULT '@domain.local',
+  `base_dn` varchar(256) DEFAULT 'CN=Users,CN=Company,DC=domain,DC=local',
+  `domain_controllers` varchar(256) DEFAULT 'dc1.domain.local;dc2.domain.local',
+  `use_ssl` tinyint(1) DEFAULT 0,
+  `use_tls` tinyint(1) DEFAULT 0,
+  `port` int(5) DEFAULT 389,
+  `adminUsername` varchar(255) DEFAULT NULL,
+  `adminPassword` varchar(256) DEFAULT NULL,
+  `autocreateGroup` varchar(255) DEFAULT NULL,
+  `active` set('Yes','No') DEFAULT 'No',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+
 # Dump of table users
 # ------------------------------------------------------------
 

@@ -5,7 +5,8 @@
  *
  * @abstract
  */
-abstract class DB {
+abstract class DB
+{
     /**
      * Debugging flag
      *
@@ -64,7 +65,7 @@ abstract class DB {
      * @var string
      * @access public
      */
-    public $dbname = '';        // needed for DB check
+    public $dbname = ''; // needed for DB check
 
     /**
      * hosnamr
@@ -109,10 +110,14 @@ abstract class DB {
      * @param mixed $charset (default: null)
      * @param mixed $ssl (default: null)
      */
-    public function __construct($username = null, $password = null, $charset = null, $ssl = null) {
-        if (isset($username)) $this->username = $username;
-        if (isset($password)) $this->password = $password;
-        if (isset($charset))  $this->charset = $charset;
+    public function __construct($username = null, $password = null, $charset = null, $ssl = null)
+    {
+        if (isset($username))
+            $this->username = $username;
+        if (isset($password))
+            $this->password = $password;
+        if (isset($charset))
+            $this->charset = $charset;
         # ssl
         if ($ssl) {
             $this->ssl = $ssl;
@@ -125,14 +130,17 @@ abstract class DB {
      * @access public
      * @static
      * @param mixed $date (default: null)
-     * @return void
+     * @return string
      */
-    public static function toDate($date = null) {
+    public static function toDate($date = null)
+    {
         if (is_int($date)) {
             return date('Y-m-d H:i:s', $date);
-        } else if (is_string($date)) {
+        }
+        else if (is_string($date)) {
             return date('Y-m-d H:i:s', strtotime($date));
-        } else {
+        }
+        else {
             return date('Y-m-d H:i:s');
         }
     }
@@ -144,7 +152,8 @@ abstract class DB {
      * @access public
      * @return void
      */
-    public function connect() {
+    public function connect()
+    {
         $dsn = $this->makeDsn();
 
         try {
@@ -158,8 +167,9 @@ abstract class DB {
 
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-        } catch (\PDOException $e) {
-            throw new Exception ("Could not connect to database! ".$e->getMessage());
+        }
+        catch (\PDOException $e) {
+            throw new Exception("Could not connect to database! " . $e->getMessage());
         }
 
         @$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
@@ -169,9 +179,10 @@ abstract class DB {
      * makeDsn function.
      *
      * @access protected
-     * @return void
+     * @return string
      */
-    protected function makeDsn() {
+    protected function makeDsn()
+    {
         return ':charset=' . $this->charset;
     }
 
@@ -181,7 +192,8 @@ abstract class DB {
      * @access public
      * @return void
      */
-    public function resetConn() {
+    public function resetConn()
+    {
         unset($this->pdo);
     }
 
@@ -192,11 +204,12 @@ abstract class DB {
      * @param mixed $query
      * @return void
      */
-    private function log_query ($query) {
-        if($this->debug) {
+    private function log_query($query)
+    {
+        if ($this->debug) {
             $myFile = "/tmp/queries.txt";
             $fh = fopen($myFile, 'a') or die("can't open file");
-            fwrite($fh, $query->queryString."\n");
+            fwrite($fh, $query->queryString . "\n");
             fclose($fh);
         }
     }
@@ -207,20 +220,24 @@ abstract class DB {
      * @access public
      * @static
      * @param mixed $str
-     * @return void
+     * @return string
      */
-    public static function unquote_outer($str) {
+    public static function unquote_outer($str)
+    {
         $len = strlen($str);
 
-        if ($len>1) {
-            if ($str[0] == "'" && $str[$len-1] == "'") {
+        if ($len > 1) {
+            if ($str[0] == "'" && $str[$len - 1] == "'") {
                 return substr($str, 1, -1);
-            } else if ($str[0] == "'") {
+            }
+            else if ($str[0] == "'") {
                 return substr($str, 1);
-            } else if ($str[$len-1] == "'") {
+            }
+            else if ($str[$len - 1] == "'") {
                 return substr($str, 0, -1);
             }
-        } else if ($len>0) {
+        }
+        else if ($len > 0) {
             if ($str[0] == "'") {
                 return '';
             }
@@ -233,9 +250,10 @@ abstract class DB {
      * Are we currently connected to the database
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function isConnected() {
+    public function isConnected()
+    {
         return ($this->pdo !== null);
     }
 
@@ -243,9 +261,10 @@ abstract class DB {
      * Returns last insert ID
      *
      * @access public
-     * @return void
+     * @return int
      */
-    public function lastInsertId() {
+    public function lastInsertId()
+    {
         return $this->pdo->lastInsertId();
     }
 
@@ -256,14 +275,16 @@ abstract class DB {
      * @access public
      * @param mixed $query
      * @param array $values (default: array())
-     * @return void
+     * @return bool
      */
-    public function runQuery($query, $values = array()) {
-        if (!$this->isConnected()) $this->connect();
+    public function runQuery($query, $values = array())
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $statement = $this->pdo->prepare($query);
         //debuq
-        $this->log_query ($statement);
+        $this->log_query($statement);
         return $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
     }
 
@@ -273,10 +294,12 @@ abstract class DB {
      *
      * @access public
      * @param mixed $str
-     * @return void
+     * @return string
      */
-    public function escape($str) {
-        if (!$this->isConnected()) $this->connect();
+    public function escape($str)
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         return $this->unquote_outer($this->pdo->quote((string)$str));
     }
@@ -286,16 +309,18 @@ abstract class DB {
      *
      * @access public
      * @param mixed $tableName
-     * @return void
+     * @return int
      */
-    public function numObjects($tableName) {
-        if (!$this->isConnected()) $this->connect();
+    public function numObjects($tableName)
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $tableName = $this->escape($tableName);
-        $statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'`;');
+        $statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `' . $tableName . '`;');
 
         //debuq
-        $this->log_query ($statement);
+        $this->log_query($statement);
         $statement->execute();
 
         return $statement->fetchColumn();
@@ -309,18 +334,20 @@ abstract class DB {
      * @param mixed $method
      * @param boolean $like (default: false)
      * @param mixed $value
-     * @return void
+     * @return int
      */
-    public function numObjectsFilter($tableName, $method, $value, $like = false) {
-        if (!$this->isConnected()) $this->connect();
+    public function numObjectsFilter($tableName, $method, $value, $like = false)
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $like === true ? $operator = "LIKE" : $operator = "=";
 
         $tableName = $this->escape($tableName);
-        $statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'` '.$operator.' ?;');
+        $statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `' . $tableName . '` where `' . $method . '` ' . $operator . ' ?;');
 
         //debuq
-        $this->log_query ($statement);
+        $this->log_query($statement);
         $statement->execute(array($value));
 
         return $statement->fetchColumn();
@@ -335,11 +362,13 @@ abstract class DB {
      * @param mixed $tableName
      * @param mixed $obj
      * @param string $primarykey (default: 'id')
-     * @param mixed $primarykey2 (default: null)
-     * @return void
+     * @param mixed $primarykey2 (default: null)    
+     * @return bool
      */
-    public function updateObject($tableName, $obj, $primarykey = 'id', $primarykey2 = null) {
-        if (!$this->isConnected()) $this->connect();
+    public function updateObject($tableName, $obj, $primarykey = 'id', $primarykey2 = null)
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $obj = (array)$obj;
 
@@ -355,9 +384,9 @@ abstract class DB {
         unset($obj[$primarykey]);
 
         //secondary primary key?
-        if(!is_null($primarykey2)) {
-        $objId[] = $obj[$primarykey2];
-        unset($obj[$primarykey2]);
+        if (!is_null($primarykey2)) {
+            $objId[] = $obj[$primarykey2];
+            unset($obj[$primarykey2]);
         }
 
         //TODO: validate given object parameters with that of the table (this validates parameters names)
@@ -373,16 +402,16 @@ abstract class DB {
         $preparedParamStr = implode(',', $preparedParamArr);
 
         //primary key 2?
-        if(!is_null($primarykey2))
-        $statement = $this->pdo->prepare('UPDATE `' . $tableName . '` SET ' . $preparedParamStr . ' WHERE `' . $primarykey . '`=? AND `' . $primarykey2 . '`=?;');
+        if (!is_null($primarykey2))
+            $statement = $this->pdo->prepare('UPDATE `' . $tableName . '` SET ' . $preparedParamStr . ' WHERE `' . $primarykey . '`=? AND `' . $primarykey2 . '`=?;');
         else
-        $statement = $this->pdo->prepare('UPDATE `' . $tableName . '` SET ' . $preparedParamStr . ' WHERE `' . $primarykey . '`=?;');
+            $statement = $this->pdo->prepare('UPDATE `' . $tableName . '` SET ' . $preparedParamStr . ' WHERE `' . $primarykey . '`=?;');
 
         //merge the parameters and values
         $paramValues = array_merge(array_values($obj), $objId);
 
         //debuq
-        $this->log_query ($statement);
+        $this->log_query($statement);
         //run the update on the object
         return $statement->execute($paramValues);
     }
@@ -394,9 +423,10 @@ abstract class DB {
      * @param string $tableName
      * @param array $ids
      * @param array $values
-     * @return void
+     * @return bool
      */
-    public function updateMultipleObjects($tableName, $ids, $values) {
+    public function updateMultipleObjects($tableName, $ids, $values)
+    {
         $tableName = $this->escape($tableName);
         //set ids
         $num = count($ids);
@@ -408,9 +438,9 @@ abstract class DB {
             $preparedParamArr[] = '`' . $this->escape($objParam) . '`=?';
         }
         //set values
-        $all_values = array_merge(array_values($values),$ids);
+        $all_values = array_merge(array_values($values), $ids);
         //execute
-        return $this->runQuery('UPDATE `'.$tableName.'` SET '.implode(',', $preparedParamArr).'  WHERE '.implode(' OR ', $idParts), $all_values);
+        return $this->runQuery('UPDATE `' . $tableName . '` SET ' . implode(',', $preparedParamArr) . '  WHERE ' . implode(' OR ', $idParts), $all_values);
     }
 
     /**
@@ -422,10 +452,12 @@ abstract class DB {
      * @param object|array $obj
      * @param bool $raw (default: false)
      * @param bool $replace (default: false)
-     * @return void
+     * @return bool
      */
-    public function insertObject($tableName, $obj, $raw = false, $replace = false) {
-        if (!$this->isConnected()) $this->connect();
+    public function insertObject($tableName, $obj, $raw = false, $replace = false)
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $obj = (array)$obj;
 
@@ -435,7 +467,7 @@ abstract class DB {
             unset($obj['id']);
         }
 
-        if (count($obj)<1) {
+        if (count($obj) < 1) {
             return true;
         }
 
@@ -452,7 +484,8 @@ abstract class DB {
 
         if ($replace) {
             $statement = $this->pdo->prepare('REPLACE INTO `' . $tableName . '` (' . $preparedParamsStr . ') VALUES (' . $preparedValuesStr . ');');
-        } else {
+        }
+        else {
             $statement = $this->pdo->prepare('INSERT INTO `' . $tableName . '` (' . $preparedParamsStr . ') VALUES (' . $preparedValuesStr . ');');
         }
 
@@ -476,9 +509,10 @@ abstract class DB {
      * @param string $query (default: null)
      * @param array $values (default: array())
      * @param mixed $id (default: null)
-     * @return void
+     * @return bool
      */
-    public function objectExists($tableName, $query = null, $values = array(), $id = null) {
+    public function objectExists($tableName, $query = null, $values = array(), $id = null)
+    {
         return is_object($this->getObject($tableName, $id));
     }
 
@@ -492,10 +526,12 @@ abstract class DB {
      * @param mixed $numRecords (default: null)
      * @param int $offset (default: 0)
      * @param string $class (default: 'stdClass')
-     * @return void
+     * @return array
      */
-    public function getObjects($tableName, $sortField = 'id', $sortAsc = true, $numRecords = null, $offset = 0, $class = 'stdClass') {
-        if (!$this->isConnected()) $this->connect();
+    public function getObjects($tableName, $sortField = 'id', $sortAsc = true, $numRecords = null, $offset = 0, $class = 'stdClass')
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $sortStr = '';
         if (!$sortAsc) {
@@ -508,10 +544,11 @@ abstract class DB {
 
         if ($numRecords === null) {
             //get all (no limit)
-            $statement = $this->pdo->query('SELECT * FROM `'.$tableName.'` ORDER BY `'.$sortField.'` '.$sortStr.';');
-        } else {
+            $statement = $this->pdo->query('SELECT * FROM `' . $tableName . '` ORDER BY `' . $sortField . '` ' . $sortStr . ';');
+        }
+        else {
             //get a limited range of objects
-            $statement = $this->pdo->query('SELECT * FROM `'.$tableName.'` ORDER BY `'.$sortField.'` '.$sortStr.' LIMIT '.$numRecords.' OFFSET '.$offset.';');
+            $statement = $this->pdo->query('SELECT * FROM `' . $tableName . '` ORDER BY `' . $sortField . '` ' . $sortStr . ' LIMIT ' . $numRecords . ' OFFSET ' . $offset . ';');
         }
 
         $results = array();
@@ -533,21 +570,23 @@ abstract class DB {
      * @param mixed $query (default: null)
      * @param array $values (default: array())
      * @param mixed $callback (default: null)
-     * @return void
+     * @return bool
      */
-    public function getObjectsQueryIncremental($query = null, $values = array(), $callback = null) {
-        if (!$this->isConnected()) $this->connect();
+    public function getObjectsQueryIncremental($query = null, $values = array(), $callback = null)
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $statement = $this->pdo->prepare($query);
 
         //debuq
-        $this->log_query ($statement);
+        $this->log_query($statement);
         $statement->execute((array)$values);
 
         if (is_object($statement)) {
             if ($callback) {
                 while ($newObj = $statement->fetchObject('stdClass')) {
-                    if ($callback($newObj)===false) {
+                    if ($callback($newObj) === false) {
                         return false;
                     }
                 }
@@ -565,15 +604,17 @@ abstract class DB {
      * @param mixed $query (default: null)
      * @param array $values (default: array())
      * @param string $class (default: 'stdClass')
-     * @return void
+     * @return array
      */
-    public function getObjectsQuery($query = null, $values = array(), $class = 'stdClass') {
-        if (!$this->isConnected()) $this->connect();
+    public function getObjectsQuery($query = null, $values = array(), $class = 'stdClass')
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $statement = $this->pdo->prepare($query);
 
         //debug
-        $this->log_query ($statement);
+        $this->log_query($statement);
         $statement->execute((array)$values);
 
         $results = array();
@@ -594,10 +635,12 @@ abstract class DB {
      * @param mixed $tableName
      * @param mixed $id (default: null)
      * @param string $class (default: 'stdClass')
-     * @return void
+     * @return null|object
      */
-    public function getObject($tableName, $id = null, $class = 'stdClass') {
-        if (!$this->isConnected()) $this->connect();
+    public function getObject($tableName, $id = null, $class = 'stdClass')
+    {
+        if (!$this->isConnected())
+            $this->connect();
         $id = intval($id);
 
         //has a custom query been provided?
@@ -605,14 +648,15 @@ abstract class DB {
 
         //prepare a statement to get a single object from the database
         if ($id !== null) {
-            $statement = $this->pdo->prepare('SELECT * FROM `'.$tableName.'` WHERE `id`=? LIMIT 1;');
+            $statement = $this->pdo->prepare('SELECT * FROM `' . $tableName . '` WHERE `id`=? LIMIT 1;');
             $statement->bindParam(1, $id, \PDO::PARAM_INT);
-        } else {
-            $statement = $this->pdo->prepare('SELECT * FROM `'.$tableName.'` LIMIT 1;');
+        }
+        else {
+            $statement = $this->pdo->prepare('SELECT * FROM `' . $tableName . '` LIMIT 1;');
         }
 
         //debuq
-        $this->log_query ($statement);
+        $this->log_query($statement);
         $statement->execute();
 
         //we can then extract the single object (if we have a result)
@@ -620,7 +664,8 @@ abstract class DB {
 
         if ($resultObj === false) {
             return null;
-        } else {
+        }
+        else {
             return $resultObj;
         }
     }
@@ -632,21 +677,24 @@ abstract class DB {
      * @param mixed $query (default: null)
      * @param array $values (default: array())
      * @param string $class (default: 'stdClass')
-     * @return void
+     * @return object|null
      */
-    public function getObjectQuery($query = null, $values = array(), $class = 'stdClass') {
-        if (!$this->isConnected()) $this->connect();
+    public function getObjectQuery($query = null, $values = array(), $class = 'stdClass')
+    {
+        if (!$this->isConnected())
+            $this->connect();
 
         $statement = $this->pdo->prepare($query);
         //debuq
-        $this->log_query ($statement);
+        $this->log_query($statement);
         $statement->execute((array)$values);
 
         $resultObj = $statement->fetchObject($class);
 
         if ($resultObj === false) {
             return null;
-        } else {
+        }
+        else {
             return $resultObj;
         }
     }
@@ -660,13 +708,15 @@ abstract class DB {
      * @param string $class (default: 'stdClass')
      * @return void
      */
-    public function getValueQuery($query = null, $values = array(), $class = 'stdClass') {
+    public function getValueQuery($query = null, $values = array(), $class = 'stdClass')
+    {
         $obj = $this->getObjectQuery($query, $values, $class);
 
         if (is_object($obj)) {
             $obj = (array)$obj;
             return reset($obj);
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -682,17 +732,18 @@ abstract class DB {
      * @param bool $sortAsc (default: true)
      * @param bool $like (default: false)
      * @param bool $negate (default: false)
-     * @return void
+     * @return array
      */
-    public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $limit = false) {
+    public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $limit = false)
+    {
         $table = $this->escape($table);
         $field = $this->escape($field);
         $sortField = $this->escape($sortField);
         $like === true ? $operator = "LIKE" : $operator = "=";
         $negate === true ? $negate_operator = "NOT " : $negate_operator = "";
-        $limit===false ? $limit_q = "" : $limit_q = " limit ".$limit;
+        $limit === false ? $limit_q = "" : $limit_q = " limit " . $limit;
 
-        return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ' '.$limit_q.';', array($value));
+        return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `' . $field . '`' . $negate_operator . $operator . '? ORDER BY `' . $sortField . '` ' . ($sortAsc ? '' : 'DESC') . ' ' . $limit_q . ';', array($value));
     }
 
     /**
@@ -704,7 +755,8 @@ abstract class DB {
      * @param mixed $value
      * @return void
      */
-    public function findObject($table, $field, $value) {
+    public function findObject($table, $field, $value)
+    {
         $table = $this->escape($table);
         $field = $this->escape($field);
 
@@ -718,9 +770,10 @@ abstract class DB {
      * @param mixed $query (default: null)
      * @param array $values (default: array())
      * @param string $class (default: 'stdClass')
-     * @return void
+     * @return array
      */
-    public function getList($query = null, $values = array(), $class = 'stdClass') {
+    public function getList($query = null, $values = array(), $class = 'stdClass')
+    {
         $objs = $this->getObjectsQuery($query, $values, $class);
 
         $list = array();
@@ -741,15 +794,16 @@ abstract class DB {
      * @param bool $single (default: false)
      * @return null|object
      */
-    public function callProcedure ($procedure_name = false, $params = array(), $single=false) {
+    public function callProcedure($procedure_name = false, $params = array(), $single = false)
+    {
         // escape procedure
         $procedure_name = $this->escape($procedure_name);
         // to array
-        $params = (array) $params;
+        $params = (array)$params;
 
         // create placeholders
         $param_placeholdersArr = array();
-        foreach ($params as $key=>$value) {
+        foreach ($params as $key => $value) {
             $param_placeholdersArr[] = "?";
         }
         $param_placeholders = implode(", ", $param_placeholdersArr);
@@ -758,31 +812,33 @@ abstract class DB {
     }
 
     /**
-    * Delete an object from the database
-    *
-    * @param string table name
-    * @param int object id
-    * @return bool success
-    */
-    public function deleteObject($tableName, $id) {
+     * Delete an object from the database
+     *
+     * @param string table name
+     * @param int object id
+     * @return bool success
+     */
+    public function deleteObject($tableName, $id)
+    {
         $tableName = $this->escape($tableName);
 
-        return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `id`=?;', array($id));
+        return $this->runQuery('DELETE FROM `' . $tableName . '` WHERE `id`=?;', array($id));
     }
 
     /**
-    * Delete a list of objects from the database
-    *
-    * @param string table name
-    * @param array list of ids
-    * @return bool success
-    */
-    public function deleteObjects($tableName, $ids) {
+     * Delete a list of objects from the database
+     *
+     * @param string table name
+     * @param array list of ids
+     * @return bool success
+     */
+    public function deleteObjects($tableName, $ids)
+    {
         $tableName = $this->escape($tableName);
         $num = count($ids);
         $idParts = array_fill(0, $num, '`id`=?');
 
-        return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE ' . implode(' OR ', $idParts), $ids);
+        return $this->runQuery('DELETE FROM `' . $tableName . '` WHERE ' . implode(' OR ', $idParts), $ids);
     }
 
     /**
@@ -792,17 +848,18 @@ abstract class DB {
      * @param string $tableName
      * @param string $field
      * @param string $value
-     * @return void
+     * @return bool
      */
-    public function deleteRow($tableName, $field, $value, $field2=null, $value2 = null) {
+    public function deleteRow($tableName, $field, $value, $field2 = null, $value2 = null)
+    {
         $tableName = $this->escape($tableName);
         $field = $this->escape($field);
 
         //multiple
-        if(!is_null($field2))
-        return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=? and `'.$field2.'`=?;', array($value, $value2));
+        if (!is_null($field2))
+            return $this->runQuery('DELETE FROM `' . $tableName . '` WHERE `' . $field . '`=? and `' . $field2 . '`=?;', array($value, $value2));
         else
-        return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=?;', array($value));
+            return $this->runQuery('DELETE FROM `' . $tableName . '` WHERE `' . $field . '`=?;', array($value));
     }
 
     /**
@@ -810,13 +867,14 @@ abstract class DB {
      *
      * @access public
      * @param string $tableName
-     * @return void
+     * @return bool
      */
-    public function emptyTable($tableName) {
+    public function emptyTable($tableName)
+    {
         //escape talbe name
         $tableName = $this->escape($tableName);
         //execute
-        return $this->runQuery('TRUNCATE TABLE `'.$tableName.'`;');
+        return $this->runQuery('TRUNCATE TABLE `' . $tableName . '`;');
     }
 
     /**
@@ -824,13 +882,14 @@ abstract class DB {
      *
      * @access public
      * @param mixed $tableName
-     * @return void
+     * @return array
      */
-    public function getTableDefinition($tableName) {
+    public function getTableDefinition($tableName)
+    {
         //escape talbe name
         $tableName = $this->escape($tableName);
         //execute
-        return $this->getObjectsQuery('show full columns from `'.$tableName.'`;');
+        return $this->getObjectsQuery('show full columns from `' . $tableName . '`;');
     }
 
     /**
@@ -839,7 +898,8 @@ abstract class DB {
      * @access public
      * @return bool
      */
-    public function beginTransaction() {
+    public function beginTransaction()
+    {
         return $this->pdo->beginTransaction();
     }
 
@@ -849,7 +909,8 @@ abstract class DB {
      * @access public
      * @return bool
      */
-    public function commit() {
+    public function commit()
+    {
         return $this->pdo->commit();
     }
 
@@ -859,14 +920,15 @@ abstract class DB {
      * @access public
      * @return bool
      */
-    public function rollBack() {
+    public function rollBack()
+    {
         return $this->pdo->rollBack();
     }
 
 
 
 
-   /**
+    /**
      *    @general fetch methods
      *    --------------------------------
      */
@@ -879,13 +941,17 @@ abstract class DB {
      * @param mixed $sortField (default:id)
      * @param mixed bool (default:true)
      */
-    public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
+    public function fetch_all_objects($table = null, $sortField = "id", $sortAsc = true)
+    {
         # null table
-        if(is_null($table)||strlen($table)==0) return false;
+        if (is_null($table) || strlen($table) == 0)
+            return false;
         # fetch
-        try { $res = $this->getObjects($table, $sortField, $sortAsc); }
+        try {
+            $res = $this->getObjects($table, $sortField, $sortAsc);
+        }
         catch (Exception $e) {
-            $this->Result->show_danger (_("Error: ").$e->getMessage());
+            $this->Result->show_danger(_("Error: ") . $e->getMessage());
             return false;
         }
         # result
@@ -899,23 +965,30 @@ abstract class DB {
      * @param mixed $table
      * @param mixed $method (default: null)
      * @param mixed $value
-     * @return void
+     * @return object|false
      */
-    public function fetch_object ($table=null, $method=null, $value) {
+    public function fetch_object($table = null, $method = null, $value)
+    {
         # null table
-        if(is_null($table)||strlen($table)==0) return false;
+        if (is_null($table) || strlen($table) == 0)
+            return false;
 
         // checks
-        if(is_null($table))         return false;
-        if(strlen($table)==0)       return false;
-        if(is_null($value))         return false;
+        if (is_null($table))
+            return false;
+        if (strlen($table) == 0)
+            return false;
+        if (is_null($value))
+            return false;
 
         # null method
         $method = is_null($method) ? "id" : $this->escape($method);
 
-        try { $res = $this->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
+        try {
+            $res = $this->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value));
+        }
         catch (Exception $e) {
-            $this->Result->show_danger (_("Error: ").$e->getMessage());
+            $this->Result->show_danger(_("Error: ") . $e->getMessage());
             return false;
         }
         return $res;
@@ -933,15 +1006,19 @@ abstract class DB {
      * @param string $sortField (default: 'id')
      * @param bool $sortAsc (default: true)
      * @param bool $like (default: false)
-     * @return void
+     * @return array|false
      */
-    public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false) {
+    public function fetch_multiple_objects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false)
+    {
         # null table
-        if(is_null($table)||strlen($table)==0) return false;
+        if (is_null($table) || strlen($table) == 0)
+            return false;
         else {
-            try { $res = $this->findObjects($table, $field, $value, $sortField, $sortAsc, $like); }
+            try {
+                $res = $this->findObjects($table, $field, $value, $sortField, $sortAsc, $like);
+            }
             catch (Exception $e) {
-                $this->Result->show_danger (_("Error: ").$e->getMessage());
+                $this->Result->show("danger", _("Error: ") . $e->getMessage());
                 return false;
             }
             # result
@@ -955,16 +1032,19 @@ abstract class DB {
      * @access public
      * @param mixed $table
      * @param mixed $field
-     * @return void
+     * @return array|false
      */
-    public function fetch_unique_items ($table, $field) {
+    public function fetch_unique_items($table, $field)
+    {
         # escape $table
         $table = $this->escape($table);
         $field = $this->escape($field);
 
-        try { $res = $this->getObjectsQuery("select distinct(`$field`) from `$table`;", array()); }
+        try {
+            $res = $this->getObjectsQuery("select distinct(`$field`) from `$table`;", array());
+        }
         catch (Exception $e) {
-            $this->Result->show_danger (_("Error: ").$e->getMessage());
+            $this->Result->show_danger(_("Error: ") . $e->getMessage());
             return false;
         }
         # result
@@ -977,25 +1057,31 @@ abstract class DB {
      * @access public
      * @param mixed $table (default: null)
      * @param mixed $values
-     * @return void
+     * @return bool
      */
-    public function create_object ($table=null, $values) {
-         # null table
-        if(is_null($table)||strlen($table)==0) return false;
-        if(is_null($table))        return false;
-        if(strlen($table)==0)   return false;
+    public function create_object($table = null, $values)
+    {
+        # null table
+        if (is_null($table) || strlen($table) == 0)
+            return false;
+        if (is_null($table))
+            return false;
+        if (strlen($table) == 0)
+            return false;
 
         # prepare values
-        $fields = $this->get_table_definition ($table, false);
-        foreach ($values as $k=>$v) {
-            if (!in_array($k, $fields) || strlen($v)==0) {
+        $fields = $this->get_table_definition($table, false);
+        foreach ($values as $k => $v) {
+            if (!in_array($k, $fields) || strlen($v) == 0) {
                 unset($values[$k]);
             }
         }
         // execute
-        try { $res = $this->insertObject($table, $values); }
+        try {
+            $res = $this->insertObject($table, $values);
+        }
         catch (Exception $e) {
-            $this->Result->show_danger (_("Error: ").$e->getMessage());
+            $this->Result->show_danger(_("Error: ") . $e->getMessage());
             return false;
         }
         return true;
@@ -1007,27 +1093,35 @@ abstract class DB {
      * @access public
      * @param mixed $table (default: null)
      * @param mixed $values
-     * @return void
+     * @return bool
      */
-    public function update_object ($table=null, $values, $key="id") {
-         # null table
-        if(is_null($table)||strlen($table)==0) return false;
-        if(is_null($table))     return false;
-        if(strlen($table)==0)   return false;
-        if(sizeof($values)==0)  return false;
+    public function update_object($table = null, $values, $key = "id")
+    {
+        # null table
+        if (is_null($table) || strlen($table) == 0)
+            return false;
+        if (is_null($table))
+            return false;
+        if (strlen($table) == 0)
+            return false;
+        if (sizeof($values) == 0)
+            return false;
 
         # prepare values
-        $fields = $this->get_table_definition ($table, false);
-        foreach ($values as $k=>$v) {
-            if($v==NULL) {}
-            elseif (!in_array($k, $fields) || strlen($v)==0) {
+        $fields = $this->get_table_definition($table, false);
+        foreach ($values as $k => $v) {
+            if ($v == NULL) {
+            }
+            elseif (!in_array($k, $fields) || strlen($v) == 0) {
                 unset($values[$k]);
             }
         }
         // execute
-        try { $res = $this->updateObject($table, $values, $key); }
+        try {
+            $res = $this->updateObject($table, $values, $key);
+        }
         catch (Exception $e) {
-            $this->Result->show_danger (_("Error: ").$e->getMessage());
+            $this->Result->show_danger(_("Error: ") . $e->getMessage());
             return false;
         }
         return true;
@@ -1041,19 +1135,27 @@ abstract class DB {
      * @param mixed $id
      * @return void
      */
-    public function remove_object ($table=null, $id) {
+    public function remove_object($table = null, $id)
+    {
         # null table
-        if(is_null($table)||strlen($table)==0) return false;
+        if (is_null($table) || strlen($table) == 0)
+            return false;
 
         // checks
-        if(is_null($table))        return false;
-        if(strlen($table)==0)   return false;
-        if(is_null($id))        return false;
-        if($id==0)                return false;
+        if (is_null($table))
+            return false;
+        if (strlen($table) == 0)
+            return false;
+        if (is_null($id))
+            return false;
+        if ($id == 0)
+            return false;
         // execute
-        try { $res = $this->deleteObject($table, $id); }
+        try {
+            $res = $this->deleteObject($table, $id);
+        }
         catch (Exception $e) {
-            $this->Result->show_danger (_("Error: ").$e->getMessage());
+            $this->Result->show_danger(_("Error: ") . $e->getMessage());
             return false;
         }
         return true;
@@ -1069,11 +1171,14 @@ abstract class DB {
      * @param bool $like (default: false)
      * @return void
      */
-    public function count_database_objects ($table, $field, $val=null, $like = false) {
+    public function count_database_objects($table, $field, $val = null, $like = false)
+    {
         # if null
-        try { $cnt = $this->numObjectsFilter($table, $field, $val, $like); }
+        try {
+            $cnt = $this->numObjectsFilter($table, $field, $val, $like);
+        }
         catch (Exception $e) {
-            $this->Result->show_danger (_("Error: ").$e->getMessage());
+            $this->Result->show_danger(_("Error: ") . $e->getMessage());
             return false;
         }
         return $cnt;
@@ -1085,18 +1190,21 @@ abstract class DB {
      * @access public
      * @param mixed $table
      * @param bool $full
-     * @return void
+     * @return array|false
      */
-    public function get_table_definition ($table, $full=true) {
+    public function get_table_definition($table, $full = true)
+    {
         # if null
-        try { $definition = $this->getTableDefinition($table); }
+        try {
+            $definition = $this->getTableDefinition($table);
+        }
         catch (Exception $e) {
-            $this->Result->show_danger (_("Error: ").$e->getMessage());
+            $this->Result->show_danger(_("Error: ") . $e->getMessage());
             return false;
         }
 
         # full or array of names
-        if ($full===true) {
+        if ($full === true) {
             $out = array();
             foreach ($definition as $d) {
                 $out[$d->Field] = $d;
@@ -1115,12 +1223,13 @@ abstract class DB {
 
 
 /**
-*
-*    PDO class wrapper
-*        Database class
-*
-*/
-class Database_PDO extends DB {
+ *
+ *    PDO class wrapper
+ *        Database class
+ *
+ */
+class Database_PDO extends DB
+{
 
 
     /**
@@ -1131,7 +1240,7 @@ class Database_PDO extends DB {
      * @var array
      * @access protected
      */
-    protected $pdo_ssl_opts = array ();
+    protected $pdo_ssl_opts = array();
 
     /**
      * Debugging flag
@@ -1166,18 +1275,19 @@ class Database_PDO extends DB {
      * @param mixed $password (default: null)
      * @param mixed $charset (default: null)
      */
-    public function __construct($username=null, $password=null, $host=null, $port=null, $dbname=null, $charset=null) {
+    public function __construct($username = null, $password = null, $host = null, $port = null, $dbname = null, $charset = null)
+    {
         # set parameters
-        $this->set_db_params ();
+        $this->set_db_params();
         # rewrite user/pass if requested - for installation
-        $username==null ? : $this->username = $username;
-        $password==null ? : $this->password = $password;
-        $host==null     ? : $this->host = $host;
-        $port==null     ? : $this->port = $port;
-        $dbname==null     ? : $this->dbname = $dbname;
-        $dbname==null     ? : $this->charset = $charset;
+        $username == null ?: $this->username = $username;
+        $password == null ?: $this->password = $password;
+        $host == null ?: $this->host = $host;
+        $port == null ?: $this->port = $port;
+        $dbname == null ?: $this->dbname = $dbname;
+        $dbname == null ?: $this->charset = $charset;
 
-        $this->Result = new Result ;
+        $this->Result = new Result;
 
         # construct
         parent::__construct($this->username, $this->password, $this->charset, $this->ssl);
@@ -1190,23 +1300,24 @@ class Database_PDO extends DB {
      * @access private
      * @return void
      */
-    private function set_db_params () {
+    private function set_db_params()
+    {
         # use config file
-        require( dirname(__FILE__) . '/../../config.php' );
+        require(dirname(__FILE__) . '/../../config.php');
         # set
-        $this->host     = $db['host'];
-        $this->port     = $db['port'];
+        $this->host = $db['host'];
+        $this->port = $db['port'];
         $this->username = $db['user'];
         $this->password = $db['pass'];
-        $this->dbname     = $db['name'];
+        $this->dbname = $db['name'];
 
         $this->ssl = false;
-        if ($db['ssl']===true) {
+        if ($db['ssl'] === true) {
 
-            $this->pdo_ssl_opts = array (
-                'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
-                'ssl_cert'   => PDO::MYSQL_ATTR_SSL_CERT,
-                'ssl_ca'     => PDO::MYSQL_ATTR_SSL_CA,
+            $this->pdo_ssl_opts = array(
+                'ssl_key' => PDO::MYSQL_ATTR_SSL_KEY,
+                'ssl_cert' => PDO::MYSQL_ATTR_SSL_CERT,
+                'ssl_ca' => PDO::MYSQL_ATTR_SSL_CA,
                 'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
                 'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
             );
@@ -1229,9 +1340,10 @@ class Database_PDO extends DB {
      * @access public
      * @return void
      */
-    public function connect() {
+    public function connect()
+    {
         parent::connect();
-        //@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+    //@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
     }
 
     /**
@@ -1240,7 +1352,8 @@ class Database_PDO extends DB {
      * @access protected
      * @return void
      */
-    protected function makeDsn() {
+    protected function makeDsn()
+    {
         return 'mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname . ';charset=' . $this->charset;
     }
 
@@ -1250,7 +1363,8 @@ class Database_PDO extends DB {
      * @access public
      * @return void
      */
-    public function getColumnInfo() {
+    public function getColumnInfo()
+    {
         $columns = $this->getObjectsQuery("
             SELECT `table_name`, `column_name`, `column_default`, `is_nullable`, `data_type`,`column_key`, `extra`
             FROM `columns`
@@ -1275,7 +1389,8 @@ class Database_PDO extends DB {
      * @access public
      * @return void
      */
-    public function getForeignKeyInfo() {
+    public function getForeignKeyInfo()
+    {
         $foreignLinks = $this->getObjectsQuery("
             SELECT i.`table_name`, k.`column_name`, i.`constraint_type`, i.`constraint_name`, k.`referenced_table_name`, k.`referenced_column_name`
             FROM `table_constraints` i

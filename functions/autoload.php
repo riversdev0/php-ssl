@@ -28,6 +28,7 @@ include ("classes/class.Thread.php");
 include ("classes/class.AXFR.php");
 include ("classes/class.Agent.php");
 include ("classes/class.Log.php");
+include ("classes/class.ADsync.php");
 
 # load classes
 $Result       = new Result ();
