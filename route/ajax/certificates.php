@@ -38,9 +38,9 @@ try {
 	// get user days setting (user DB value > config > default)
 	$expire_days = isset($user->days) ? $user->days : (isset($expired_days) ? $expired_days : 30);
 
-	// formulate query - fetch certificate details
-	$query 	   .= "select c.id, c.serial, c.expires, c.z_id, c.t_id, c.certificate, z.name as zone_name, t.href as tenant_href from certificates c left join zones z on c.z_id = z.id left join tenants t on c.t_id = t.id where 1=1 ";
-	$query_all .= "select count(*) as cnt from certificates c left join zones z on c.z_id = z.id left join tenants t on c.t_id = t.id where 1=1 ";
+	// formulate query - fetch certificate details with hosts
+	$query 	   .= "select c.id, c.serial, c.expires, c.z_id, c.t_id, c.certificate, z.name as zone_name, t.href as tenant_href from certificates c left join zones z on c.z_id = z.id left join tenants t on c.t_id = t.id left join hosts h on c.id = h.c_id where 1=1 ";
+	$query_all .= "select count(distinct c.id) as cnt from certificates c left join zones z on c.z_id = z.id left join tenants t on c.t_id = t.id left join hosts h on c.id = h.c_id where 1=1 ";
 
 	// not admin ?
 	if($user->admin=="0") {
@@ -50,8 +50,8 @@ try {
 	}
 	// search ?
 	if(strlen($_POST['search'])>0) {
-		$query         .= " and (c.serial like :search or z.name like :search or c.expires like :search)";
-		$query_all     .= " and (c.serial like :search or z.name like :search or c.expires like :search)";
+		$query         .= " and (c.serial like :search or z.name like :search or c.expires like :search or h.hostname like :search or h.ip like :search)";
+		$query_all     .= " and (c.serial like :search or z.name like :search or c.expires like :search or h.hostname like :search or h.ip like :search)";
 		$vars['search']  = "%".$_POST['search']."%";
 	}
 
