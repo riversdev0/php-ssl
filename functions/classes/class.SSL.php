@@ -595,7 +595,7 @@ class SSL extends Common
 			if ($this->Log == false) {
 				$this->Log = new Log($this->Database);
 			}
-			$this->Log->write("hosts", $host->host_id, $host->t_id, $user_id, "refresh", true, "New certificate assigned to host " . $host->hostname, json_encode($host->c_id_old), json_encode($host->c_id));
+			$this->Log->write("hosts", $host->host_id, $host->t_id, $user_id, "refresh", true, "New certificate assigned to host " . $host->hostname. " with serial ".$certificate->serial, json_encode($host->c_id_old), json_encode($host->c_id));
 
 		}
 		catch (Exception $e) {
