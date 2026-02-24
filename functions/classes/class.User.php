@@ -34,7 +34,7 @@ class User extends Common
 	 * User details
 	 * @var bool
 	 */
-	private $user = false;
+	private $user = null;
 
 
 
@@ -317,10 +317,10 @@ class User extends Common
 	 * @param  bool $require_admin :: Refers to tenant logged in user belongs to must be admin.
 	 * @return void
 	 */
-	public function validate_session($require_admin = false, $is_popup = false, $is_popup_result = false)
+	public function validate_session ($require_admin = false, $is_popup = false, $is_popup_result = false)
 	{
 		// not logged in
-		if ($this->user === false) {
+		if ($this->user === null) {
 			if (!$is_popup) {
 				header("Location: /login/");
 				die();

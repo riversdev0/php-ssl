@@ -217,15 +217,18 @@ try {
 				'</div>
 			</span>';
 
+			// tenant (for search results)
+			$h->tenant = isset($h->tenant_name) && strlen($h->tenant_name)>0 ? $h->zone_name." / ".$h->tenant_name : "---";
+
 			// remove unneeded fields
 			unset($h->certificate);
 			unset($h->h_recipients);
 			unset($h->z_id);
 			unset($h->t_id);
 			unset($h->pg_id);
-
-			// tenant (for search results)
-			$h->tenant = "---";
+			unset($h->tenant_href);
+			unset($h->zone_name);
+			unset($h->tenant_name);
 		}
 	}
 
