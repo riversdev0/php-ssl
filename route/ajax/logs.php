@@ -56,18 +56,21 @@ try {
 	}
 	// object filter ?
 	if(strlen($_POST['object'])>0) {
-		$query        .= " and object = :object";
-		$query_all   .= " and object = :object";
+		// If serial is provided for certificates, also search in host logs
+		if($_POST['object'] === 'certificates' && strlen($_POST['serial']) > 0) {
+			$query        .= " and ((object = :object and object_id = :object_id) or text like :serial)";
+			$query_all   .= " and ((object = :object and object_id = :object_id) or text like :serial)";
+			$vars['serial'] = '%'.$_POST['serial'].'%';
+		} else {
+			$query        .= " and object = :object";
+			$query_all   .= " and object = :object";
+		}
 		$vars['object'] = $_POST['object'];
 	}
 	// object_id filter ?
 	if(is_numeric($_POST['object_id'])) {
-		// Check if serial is also provided for certificates - use OR
-		if($_POST['object'] === 'certificates' && strlen($_POST['serial']) > 0) {
-			$query        .= " and (object_id = :object_id or text like :serial)";
-			$query_all   .= " and (object_id = :object_id or text like :serial)";
-			$vars['serial'] = '%'.$_POST['serial'].'%';
-		} else {
+		// Skip object_id filter if serial is provided (already handled in object filter)
+		if(!($_POST['object'] === 'certificates' && strlen($_POST['serial']) > 0)) {
 			$query        .= " and object_id = :object_id";
 			$query_all   .= " and object_id = :object_id";
 		}
@@ -123,8 +126,8 @@ try {
 
 	// result
 	$result = [];
-	// $result['debug']  			= $query;
-	// $result['query']  			= $_POST;
+	$result['debug']  			= $query;
+	$result['query']  			= $_POST;
 	$result['total']            = $logs_all->cnt;
 	$result['totalNotFiltered'] = sizeof($logs);
 	$result['rows']             = (array) $logs;

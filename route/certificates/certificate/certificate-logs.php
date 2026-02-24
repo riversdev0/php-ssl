@@ -1,7 +1,6 @@
-
 <input type="hidden" id="log_object" value="certificates">
 <input type="hidden" id="log_object_id" value="<?php print $certificate->id; ?>">
-<input type="hidden" id="log_serial" value="<?php print isset($certificate_details['serial']) ? $certificate_details['serial'] : ''; ?>">
+<input type="hidden" id="log_serial" value="<?php print !empty($certificate->serial) ? $certificate->serial : ''; ?>">
 
 <table
 	class="table table-hover align-top table-md"
