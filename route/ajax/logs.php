@@ -38,7 +38,7 @@ try {
 	$vars      = [];
 
 	// formulate query
-	$query 	   .= "select `id`,`object_u_id` as `user`,`date`,`object`,`action`,`text`,`json_object_old`,`json_object_new`,`object_t_id` as tid from logs where 1=1 ";
+	$query 	   .= "select `id`,`object_id`,`object_u_id` as `user`,`date`,`object`,`action`,`text`,`json_object_old`,`json_object_new`,`object_t_id` as tid from logs where 1=1 ";
 	$query_all .= "select count(*) as cnt from logs where 1=1 ";
 
 	// not admin ?
@@ -126,8 +126,8 @@ try {
 
 	// result
 	$result = [];
-	$result['debug']  			= $query;
-	$result['query']  			= $_POST;
+	// $result['debug']  			= $query;
+	// $result['query']  			= $_POST;
 	$result['total']            = $logs_all->cnt;
 	$result['totalNotFiltered'] = sizeof($logs);
 	$result['rows']             = (array) $logs;

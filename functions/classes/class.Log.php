@@ -327,6 +327,8 @@ class Log extends Common
 	 */
 	public function format_log_entry($l, $user = null)
 	{
+		// content (must run before object/id are overwritten with HTML)
+		$l->text = $this->format_log_content($l->text, $l, $user->href ?? "");
 		// object
 		$l->object = $this->format_log_object($l->object, $user->href, $l->id);
 		// diff
@@ -339,8 +341,6 @@ class Log extends Common
 		$l->id = $this->format_log_id($l->id, $user->href, $is_unread);
 		// sate
 		$l->date = $this->format_log_date($l->date);
-		// content
-		$l->text = $this->format_log_content($l->text);
 
 		// return
 		return $l;
@@ -429,9 +429,95 @@ class Log extends Common
 		}
 	}
 
-	public function format_log_content($text = "")
+	public function format_log_content($text = "", $log = null, $user_href = "")
 	{
+		if ($log !== null && !empty($user_href) && !empty($text)) {
+			$text = $this->linkify_log_text($text, $log, $user_href);
+		}
 		return "<div class='text-truncate-xs'>" . $text . "</div>";
+	}
+
+	/**
+	 * Replace known log text patterns with clickable href links
+	 * @method linkify_log_text
+	 * @param  string $text
+	 * @param  object $log
+	 * @param  string $user_href
+	 * @return string
+	 */
+	private function linkify_log_text($text, $log, $user_href)
+	{
+		// New certificate assigned to host {hostname} with serial {serial}
+		if (preg_match('/^(New certificate assigned to host )(\S+)( with serial )((?:0x)?[a-fA-F0-9]+)$/', $text, $m)) {
+			$ctx = $this->get_zone_name_for_log($log);
+			if ($ctx) {
+				$h_link = "<a class='text-info' href='/" . $ctx['href'] . "/zones/" . rawurlencode($ctx['zone']) . "/" . rawurlencode($m[2]) . "/'>" . htmlspecialchars($m[2]) . "</a>";
+				$s_link = "<a class='text-info' href='/" . $ctx['href'] . "/certificates/" . rawurlencode($ctx['zone']) . "/" . $m[4] . "/'>" . htmlspecialchars($m[4]) . "</a>";
+				return $m[1] . $h_link . $m[3] . $s_link;
+			}
+		}
+		// New host {hostname} added to zone
+		elseif (preg_match('/^(New host )(\S+)( added to zone)$/', $text, $m)) {
+			$ctx = $this->get_zone_name_for_log($log);
+			if ($ctx) {
+				$h_link = "<a class='text-info' href='/" . $ctx['href'] . "/zones/" . rawurlencode($ctx['zone']) . "/" . rawurlencode($m[2]) . "/'>" . htmlspecialchars($m[2]) . "</a>";
+				return $m[1] . $h_link . $m[3];
+			}
+		}
+		// Host {hostname} SSL check changed
+		elseif (preg_match('/^(Host )(\S+)( SSL check changed)$/', $text, $m)) {
+			$ctx = $this->get_zone_name_for_log($log);
+			if ($ctx) {
+				$h_link = "<a class='text-info' href='/" . $ctx['href'] . "/zones/" . rawurlencode($ctx['zone']) . "/" . rawurlencode($m[2]) . "/'>" . htmlspecialchars($m[2]) . "</a>";
+				return $m[1] . $h_link . $m[3];
+			}
+		}
+		// Host {hostname} mute changed
+		elseif (preg_match('/^(Host )(\S+)( mute changed)$/', $text, $m)) {
+			$ctx = $this->get_zone_name_for_log($log);
+			if ($ctx) {
+				$h_link = "<a class='text-info' href='/" . $ctx['href'] . "/zones/" . rawurlencode($ctx['zone']) . "/" . rawurlencode($m[2]) . "/'>" . htmlspecialchars($m[2]) . "</a>";
+				return $m[1] . $h_link . $m[3];
+			}
+		}
+		// Portgroup changed for host {hostname} from {old} to {new}
+		elseif (preg_match('/^(Portgroup changed for host )(\S+)( from .+ to .+)$/', $text, $m)) {
+			$ctx = $this->get_zone_name_for_log($log);
+			if ($ctx) {
+				$h_link = "<a class='text-info' href='/" . $ctx['href'] . "/zones/" . rawurlencode($ctx['zone']) . "/" . rawurlencode($m[2]) . "/'>" . htmlspecialchars($m[2]) . "</a>";
+				return $m[1] . $h_link . $m[3];
+			}
+		}
+		// Recipients updated for host {hostname}
+		elseif (preg_match('/^(Recipients updated for host )(\S+)$/', $text, $m)) {
+			$ctx = $this->get_zone_name_for_log($log);
+			if ($ctx) {
+				$h_link = "<a class='text-info' href='/" . $ctx['href'] . "/zones/" . rawurlencode($ctx['zone']) . "/" . rawurlencode($m[2]) . "/'>" . htmlspecialchars($m[2]) . "</a>";
+				return $m[1] . $h_link;
+			}
+		}
+		return $text;
+	}
+
+	/**
+	 * Look up zone name and tenant href for a log entry (hosts object only)
+	 * @method get_zone_name_for_log
+	 * @param  object $log
+	 * @return array|null  ['zone' => string, 'href' => string]
+	 */
+	private function get_zone_name_for_log($log)
+	{
+		try {
+			if (($log->object ?? null) === 'hosts' && ($log->object_id ?? null)) {
+				$row = $this->Database->getObjectQuery(
+					"SELECT z.name AS zone_name, t.href AS tenant_href FROM hosts h JOIN zones z ON h.z_id = z.id JOIN tenants t ON z.t_id = t.id WHERE h.id = ?",
+					[$log->object_id]
+				);
+				return $row ? ['zone' => $row->zone_name, 'href' => $row->tenant_href] : null;
+			}
+		}
+		catch (Exception $e) { }
+		return null;
 	}
 
 
