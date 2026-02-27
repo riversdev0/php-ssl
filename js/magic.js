@@ -187,3 +187,53 @@ $(document).ready(function () {
 
     // end jQuery
 })
+
+
+/**
+ * Cron next-check countdown
+ * Requires later.js to be loaded on the page.
+ */
+function formatHMS(totalSeconds) {
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+
+    return (
+        String(h).padStart(2, '0') + ":" +
+        String(m).padStart(2, '0') + ":" +
+        String(s).padStart(2, '0')
+    );
+}
+
+function updateNextCheckSeconds() {
+    $("tr").each(function () {
+        var cronExpr = $(this).find("td.nextCheck").text().trim();
+        if (!cronExpr) {
+            $(this).find("td.lastCheckSec").html("<span class='badge text-red bg-info-lt' style='width:100%'>Never</span>");
+            return;
+        }
+
+        try {
+            var sched = later.parse.cron(cronExpr);
+            var next  = later.schedule(sched).next(1);
+
+            if (!next) {
+                $(this).find("td.lastCheckSec").html(" -- ");
+                return;
+            }
+
+            var now     = new Date();
+            var diffSec = Math.max(0, Math.floor((next - now) / 1000));
+
+            if (diffSec > 1800)
+                $(this).find("td.lastCheckSec").html("<span class='badge bg-info-lt' style='width:100%'>" + formatHMS(diffSec) + "</span>");
+            else if (diffSec > 900)
+                $(this).find("td.lastCheckSec").html("<span class='badge text-info bg-info-lt' style='width:100%'>" + formatHMS(diffSec) + "</span>");
+            else
+                $(this).find("td.lastCheckSec").html("<span class='badge text-green bg-info-lt' style='width:100%'>" + formatHMS(diffSec) + "</span>");
+
+        } catch (e) {
+            $(this).find("td.lastCheckSec").html("-");
+        }
+    });
+}
