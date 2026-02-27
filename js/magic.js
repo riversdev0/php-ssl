@@ -205,11 +205,11 @@ function formatHMS(totalSeconds) {
     );
 }
 
-function updateNextCheckSeconds() {
+function updateNextCheckSeconds(bg_info = "bg-info-lt") {
     $("tr").each(function () {
         var cronExpr = $(this).find("td.nextCheck").text().trim();
         if (!cronExpr) {
-            $(this).find("td.lastCheckSec").html("<span class='badge text-red bg-info-lt' style='width:100%'>Never</span>");
+            $(this).find("td.lastCheckSec").html("<span class='badge mono text-red "+bg_info+"' style='width:100%'>Never</span>");
             return;
         }
 
@@ -226,11 +226,11 @@ function updateNextCheckSeconds() {
             var diffSec = Math.max(0, Math.floor((next - now) / 1000));
 
             if (diffSec > 1800)
-                $(this).find("td.lastCheckSec").html("<span class='badge bg-info-lt' style='width:100%'>" + formatHMS(diffSec) + "</span>");
+                $(this).find("td.lastCheckSec").html("<span class='badge mono "+bg_info+"' style='width:100%'>" + formatHMS(diffSec) + "</span>");
             else if (diffSec > 900)
-                $(this).find("td.lastCheckSec").html("<span class='badge text-info bg-info-lt' style='width:100%'>" + formatHMS(diffSec) + "</span>");
+                $(this).find("td.lastCheckSec").html("<span class='badge mono text-info "+bg_info+"' style='width:100%'>" + formatHMS(diffSec) + "</span>");
             else
-                $(this).find("td.lastCheckSec").html("<span class='badge text-green bg-info-lt' style='width:100%'>" + formatHMS(diffSec) + "</span>");
+                $(this).find("td.lastCheckSec").html("<span class='badge mono text-green "+bg_info+"' style='width:100%'>" + formatHMS(diffSec) + "</span>");
 
         } catch (e) {
             $(this).find("td.lastCheckSec").html("-");

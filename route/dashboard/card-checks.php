@@ -25,7 +25,7 @@ if ($user->admin == "1") {
 
 ?>
 
-<table class="table table-borderless table-sm table-hover" style="margin:0">
+<table class="table table-borderless table-sm table-hover">
 	<thead>
 		<tr>
 			<?php if ($user->admin == "1"): ?>
@@ -33,8 +33,8 @@ if ($user->admin == "1") {
 			<?php else: ?>
 			<th class="text-secondary" style="padding-left:15px;"><?php print _("Script"); ?></th>
 			<?php endif; ?>
-			<th class="text-secondary text-center d-none d-lg-table-cell" style="width:80px"><?php print _("Next execution"); ?></th>
 			<th class="text-secondary text-end" style="padding-right:15px;width:80px;"><?php print _("Last execution"); ?></th>
+			<th class="text-secondary text-center d-none d-lg-table-cell" style="width:80px"><?php print _("Next execution"); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -47,7 +47,6 @@ if ($user->admin == "1") {
 					<?php print _("Update certificates"); ?>
 				<?php endif; ?>
 			</td>
-			<td class="text-muted text-center d-none d-lg-table-cell lastCheckSec" style="width:80px"></td>
 			<td class="text-end" style="padding-right:15px;white-space:nowrap">
 				<?php if ($job === null || $job->last_executed === null): ?>
 					<span class="badge bg-info-lt text-danger"><?php print _("Never"); ?></span>
@@ -57,12 +56,13 @@ if ($user->admin == "1") {
 				<?php endif; ?>
 			</td>
 			<td class="d-none nextCheck"><?php if ($job !== null && $job->minute !== null) { print htmlspecialchars("{$job->minute} {$job->hour} {$job->day} {$job->month} {$job->weekday}"); } ?></td>
+			<td class="text-muted text-center d-none d-lg-table-cell lastCheckSec" style="width:80px"></td>
 		</tr>
 	<?php endforeach; ?>
 	</tbody>
 </table>
 
 <script src="/js/later-1.2.0.min.js"></script>
-<script>updateNextCheckSeconds(); setInterval(updateNextCheckSeconds, 1000);</script>
+<script>updateNextCheckSeconds(""); setInterval(updateNextCheckSeconds, 1000, "");</script>
 
 </div>

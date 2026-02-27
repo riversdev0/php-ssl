@@ -7,17 +7,24 @@
 <div class="page-body">
 <div class="row dashboard">
 
+	<!-- stats -->
+	<div class="col-sm-12">
+	<div class="card">
+		<?php include("card-statistics.php"); ?>
+	</div>
+	</div>
+
 	<!-- links -->
-	<div class="col-sm-6">
+	<div class="col-sm-12 col-md-6">
 	<div class="card">
 		<?php include("card-links.php"); ?>
 	</div>
 	</div>
 
-	<!-- stats -->
-	<div class="col-sm-6">
+	<!-- Checks -->
+	<div class="col-sm-12 col-md-6">
 	<div class="card">
-		<?php include("card-statistics.php"); ?>
+		<?php include("card-checks.php"); ?>
 	</div>
 	</div>
 
@@ -43,14 +50,6 @@
 		?>
 	</div>
 	</div>
-
-	<!-- Checks -->
-	<div class="col-sm-6">
-	<div class="card">
-		<?php include("card-checks.php"); ?>
-	</div>
-	</div>
-
 
 </div>
 </div>

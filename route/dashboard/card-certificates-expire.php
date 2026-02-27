@@ -57,10 +57,10 @@ else {
 	print "	<th data-field='tenant'>"._("Tenant")."</th>";
 	print "	<th data-field='serial'>"._("Serial number")."</th>";
 	print "	<th data-field='status' style='width:20px;'>"._("Status")."</th>";
-	print "	<th data-field='issuer'>"._("Issuer")."</th>";
+	print "	<th data-field='issuer' class='d-none d-lg-table-cell'>"._("Issuer")."</th>";
 	print "	<th data-field='domain'>"._("Common name")."</th>";
-	print "	<th data-field='zone'>"._("Zone")."</th>";
-	print "	<th data-field='valid'  class='align-top d-none d-xl-table-cell' data-width='150' data-width-unit='px'>"._("Valid to")."</th>";
+	print "	<th data-field='zone' class='d-none d-lg-table-cell'>"._("Zone")."</th>";
+	print "	<th data-field='valid' class='align-top d-none d-lg-table-cell' data-width='150' data-width-unit='px'>"._("Valid to")."</th>";
 	print "</tr>";
 	print "</thead>";
 
@@ -84,10 +84,10 @@ else {
 		print "	<a href='/".$t->href."/certificates/".$t->zone_name."/".$cert_parsed['serialNumber']."/' style='color:var(--tblr-info)'>".$url_items["certificates"]['icon']." ".$cert_parsed['serialNumberHex']."</a>";
 		print "</td>";
 		print "	<td class='align-top'><span class='badge badge-outline text-$danger_class'>"._($textclass)."</span></td>";
-		print "	<td class='align-top text-muted'>".$cert_parsed['issuer']['O']."</span></td>";
+		print "	<td class='align-top text-muted d-none d-lg-table-cell'>".$cert_parsed['issuer']['O']."</span></td>";
 		print "	<td class='align-top'>".$cert_parsed['subject']['CN']."</td>";
-		print "	<td class='align-top'><a href='/".$t->href."/zones/".$t->zone_name."/' style='color:var(--tblr-info)'>".$t->zone_name."</td>";
-		print "	<td class='text-muted align-top d-none d-xl-table-cell'>".$cert_parsed['custom_validTo']." <span class='badge bg-orange-lt'>".$cert_parsed['custom_validDays']." "._("days")."</span></td>";
+		print "	<td class='align-top d-none d-lg-table-cell'><a href='/".$t->href."/zones/".$t->zone_name."/' style='color:var(--tblr-info)'>".$t->zone_name."</td>";
+		print "	<td class='text-muted align-top d-none d-lg-table-cell'>".$cert_parsed['custom_validTo']." <span class='badge bg-$danger_class-lt'>".$cert_parsed['custom_validDays']." "._("days")."</span></td>";
 		print "</tr>";
 	}
 

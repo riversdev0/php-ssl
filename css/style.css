@@ -108,12 +108,18 @@ a,a:hover {
 /*     color: var(--tblr-info); */
 }
 .badge-circle {
-    padding: 15px 10px;
+    padding: 25px 25px;
     border-radius: 400px;
-    width:45px;
-    background: transparent;
-    border: 1px solid var(--tblr-info);
+    width:65px;
+    background: var(--tblr-bg-forms);
+    border: 0px solid var(--tblr-info);
     color: var(--tblr-info);
+    color: var(--tblr-body-color);
+    font-size: 14px;
+}
+.mono {
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+
 }
 
 
