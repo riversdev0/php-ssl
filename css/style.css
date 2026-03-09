@@ -81,6 +81,9 @@ input:-webkit-autofill:active  {
 table.table-td-top tr td {
     vertical-align: top !important;
 }
+table.table-td-top-padded-0 tr td {
+    padding-top: 0px;
+}
 .table-zones-details tr.line td,
 .table-zones-details tr.line th {
     border-top: 1px solid var(--tblr-card-border-color)

@@ -151,6 +151,22 @@ class Validate extends Result
 		return filter_var($email, FILTER_VALIDATE_EMAIL) ? true : false;
 	}
 
+	/**
+	 * Validate password policy:
+	 * min 10 chars, at least one uppercase, one lowercase, one digit
+	 * @method validate_password
+	 * @param  string $password
+	 * @return bool
+	 */
+	public function validate_password($password = ""): bool
+	{
+		if (strlen($password) < 10)                { return false; }
+		if (!preg_match('/[A-Z]/', $password))     { return false; }
+		if (!preg_match('/[a-z]/', $password))     { return false; }
+		if (!preg_match('/[0-9]/', $password))     { return false; }
+		return true;
+	}
+
 	public function strip_input_tags($input)
 	{
 		if (is_array($input)) {
