@@ -54,6 +54,7 @@ else {
 
 	// import form
 	$content[] = "<form id='modal-form'>";
+	$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";
 	$content[] = "<table class='table table-condensed table-borderless align-middle table-sm table-zone-management'>";
 	// tenant - admin
 	if($user->admin === "1" && $_GET['action']=="add") {

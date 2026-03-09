@@ -10,6 +10,7 @@
 require('../../../functions/autoload.php');
 # validate user session
 $User->validate_session (false, true, true);
+$User->validate_csrf_token ();
 # validate permissions
 $User->validate_user_permissions (2, true);
 

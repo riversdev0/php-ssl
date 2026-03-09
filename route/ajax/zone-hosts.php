@@ -78,11 +78,11 @@ try {
 	}
 	// limit
 	if(is_numeric($_POST['limit'])) {
-		$query .= " limit ".$_POST['limit'];
+		$query .= " limit ".(int)$_POST['limit'];
 	}
 	// offset
 	if(is_numeric($_POST['offset'])) {
-		$query .= " offset  ".$_POST['offset'];
+		$query .= " offset  ".(int)$_POST['offset'];
 	}
 
 	// fetch
@@ -94,7 +94,7 @@ try {
 		$result['total']            = 0;
 		$result['totalNotFiltered'] = 0;
 		$result['rows']             = [];
-		$result['error']            = $e->getMessage(). " | Query: ".$query;
+		$result['error']            = $e->getMessage();
 		header('HTTP/1.1 200 OK');
 		print json_encode($result);
 		exit;

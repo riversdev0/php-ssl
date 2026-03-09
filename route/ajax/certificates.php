@@ -82,11 +82,11 @@ try {
 	}
 	// limit
 	if(is_numeric($_POST['limit'])) {
-		$query .= " limit ".$_POST['limit'];
+		$query .= " limit ".(int)$_POST['limit'];
 	}
 	// offset
 	if(is_numeric($_POST['offset'])) {
-		$query .= " offset  ".$_POST['offset'];
+		$query .= " offset  ".(int)$_POST['offset'];
 	}
 
 	// fetch
@@ -98,7 +98,7 @@ try {
 		$result['total']            = 0;
 		$result['totalNotFiltered'] = 0;
 		$result['rows']             = [];
-		$result['error']            = $e->getMessage(). " | Query: ".$query;
+		$result['error']            = $e->getMessage();
 		header('HTTP/1.1 200 OK');
 		print json_encode($result);
 		exit;
@@ -108,37 +108,16 @@ try {
 	$all_tenants = $Tenants->get_all ();
 	$all_zones = $Zones->get_all ();
 
-	// debug - add first tenant and zone to see structure
-	$debug_tenants = [];
-	foreach($all_tenants as $k=>$t) { $debug_tenants[$k] = $k.": ".$t->name; break; }
-	$debug_zones = [];
-	foreach($all_zones as $k=>$z) { $debug_zones[$k] = $k.": ".$z->name; break; }
-
 	// init Certificates class
 	$Certificates = new Certificates ($Database);
 
 	// we need to reformat now
 	$user_href = isset($_POST['href']) ? $_POST['href'] : "";
 
-	// debug first cert
-	$debug_cert = null;
-
 	if(sizeof($certificates)>0) {
 		foreach ($certificates as $c) {
 			// parse certificate
 			$cert_parsed = $Certificates->parse_cert ($c->certificate);
-
-			// debug first
-			if($debug_cert === null) {
-				$debug_cert = [
-					'cert_parsed_keys' => array_keys($cert_parsed),
-					'subject_CN' => isset($cert_parsed['subject']['CN']) ? $cert_parsed['subject']['CN'] : 'not set',
-					'issuer_O' => isset($cert_parsed['issuer']['O']) ? $cert_parsed['issuer']['O'] : 'not set',
-					'issuer_CN' => isset($cert_parsed['issuer']['CN']) ? $cert_parsed['issuer']['CN'] : 'not set',
-					'custom_validDays' => isset($cert_parsed['custom_validDays']) ? $cert_parsed['custom_validDays'] : 'not set',
-					'serialNumberHex' => isset($cert_parsed['serialNumberHex']) ? $cert_parsed['serialNumberHex'] : 'not set',
-				];
-			}
 
 			// get status
 			$status = $Certificates->get_status ($cert_parsed, true);
@@ -218,13 +197,6 @@ try {
 	$result['total']            = $certificates_all->cnt;
 	$result['totalNotFiltered'] = sizeof($certificates);
 	$result['rows']             = (array) $certificates;
-	$result['debug']           = [
-		'tenants' => $debug_tenants,
-		'zones' => $debug_zones,
-		'first_cert_t_id' => isset($certificates[0]->t_id) ? $certificates[0]->t_id : 'none',
-		'first_cert_z_id' => isset($certificates[0]->z_id) ? $certificates[0]->z_id : 'none',
-		'cert_parsed' => $debug_cert
-	];
 
 	header('HTTP/1.1 200 OK');
 	print json_encode($result);

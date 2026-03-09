@@ -8,13 +8,13 @@ class User extends Common
 
 	/**
 	 * Database holder
-	 * @var bool
+	 * @var false|Database_PDO
 	 */
 	private $Database = false;
 
 	/**
 	 * Result holder
-	 * @var bool
+	 * @var false|object
 	 */
 	private $Result = false;
 
@@ -32,7 +32,7 @@ class User extends Common
 
 	/**
 	 * User details
-	 * @var bool
+	 * @var null|object
 	 */
 	private $user = null;
 
@@ -65,6 +65,37 @@ class User extends Common
 		//register session
 		if (@$_SESSION === NULL) {
 			session_start();
+		}
+	}
+
+	/**
+	 * Returns the session CSRF token, creating it if it does not yet exist.
+	 * Embed the returned value in every form as a hidden input named csrf_token.
+	 * @method create_csrf_token
+	 * @return string
+	 */
+	public function create_csrf_token(): string
+	{
+		if (empty($_SESSION['csrf_token'])) {
+			$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+		}
+		return $_SESSION['csrf_token'];
+	}
+
+	/**
+	 * Validates the CSRF token submitted in $_POST against the session token.
+	 * Terminates the request with a danger alert on failure.
+	 * Call at the top of every modal *-submit.php handler.
+	 * @method validate_csrf_token
+	 * @return void
+	 */
+	public function validate_csrf_token(): void
+	{
+		$submitted = $_POST['csrf_token'] ?? '';
+		$expected  = $_SESSION['csrf_token'] ?? '';
+
+		if (empty($expected) || !hash_equals($expected, $submitted)) {
+			$this->Result->show("danger", _("Invalid or missing CSRF token."), true);
 		}
 	}
 
@@ -203,6 +234,8 @@ class User extends Common
 		$user = $this->fetch_user_details($email);
 		// auth ok
 		if ($user->password == hash('sha512', $password)) {
+			// regenerate session ID to prevent session fixation
+			session_regenerate_id(true);
 			// save user
 			$_SESSION['username'] = $user->email;
 			// redirect ?

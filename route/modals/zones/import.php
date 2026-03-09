@@ -40,6 +40,7 @@ else {
 
 	$content[] = "<p class='text-muted'>"._("Enter one hostname per line to import into zone")." <strong>".htmlspecialchars($zone->name)."</strong>.</p>";
 	$content[] = "<form id='modal-form'>";
+	$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";
 	$content[] = "<textarea class='form-control' id='import-hostnames' name='hostnames' rows='10' placeholder='hostname1&#10;hostname2&#10;hostname3' style='font-family:monospace;font-size:13px;'></textarea>";
 	$content[] = "<input type='hidden' id='import-tenant' value='".htmlspecialchars($_GET['tenant'])."'>";
 	$content[] = "<input type='hidden' id='import-zone-name' value='".htmlspecialchars($_GET['zone_name'])."'>";

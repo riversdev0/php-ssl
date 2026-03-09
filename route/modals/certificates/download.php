@@ -35,6 +35,7 @@ else {
 	$content = [];
 	// import form
 	$content[] = "<form id='modal-form'>";
+	$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";
 	$content[] = '<fieldset class="form-group">';
 	$content[] = '  <div class="row">';
 	$content[] = '	  <input type="hidden" name="certificate" value="'.$_GET['certificate'].'">';

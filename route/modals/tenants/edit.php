@@ -59,6 +59,7 @@ else {
 
 	// import form
 	$content[] = "<form id='modal-form'>";
+	$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";
 	$content[] = "<table class='table table-condensed table-sm table-borderless align-middle table-zone-management'>";
 	// name
 	$content[] = "<tbody class='name'>";

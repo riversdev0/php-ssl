@@ -56,6 +56,16 @@ elseif ($_GET['action']!=="add" && is_null($issuer)) {
 	# btn
 	$btn_text = "";
 }
+# validate issuer belongs to tenant (IDOR)
+elseif ($_GET['action']!=="add" && $issuer->t_id !== $tenant->id) {
+	# content
+	$content      = [];
+	$content[]    = $Result->show("danger", _("Access denied"), false, false, true);
+	$header_class = "danger";
+
+	# btn
+	$btn_text = "";
+}
 else {
 	// content
 	$content = [];
@@ -67,6 +77,7 @@ else {
 
 	// import form
 	$content[] = "<form id='modal-form'>";
+	$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";
 	$content[] = "<table class='table table-condensed table-borderless align-middle table-zone-management table-sm'>";
 	// tenant - admin
 	if($user->admin === "1" && $_GET['action']=="add") {
@@ -80,11 +91,11 @@ else {
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Name")."</th>";
 	$content[] = "	<td>";
-	$content[] = "		<input type='text' class='form-control form-control-sm' name='name' value='".@$issuer->name."' $disabled>";
-	$content[] = "		<input type='hidden' name='t_id' value='".@$tenant->id."'>";
-	$content[] = "		<input type='hidden' name='action' value='".$_GET['action']."'>";
+	$content[] = "		<input type='text' class='form-control form-control-sm' name='name' value='".htmlspecialchars(@$issuer->name, ENT_QUOTES, 'UTF-8')."' $disabled>";
+	$content[] = "		<input type='hidden' name='t_id' value='".htmlspecialchars(@$tenant->id, ENT_QUOTES, 'UTF-8')."'>";
+	$content[] = "		<input type='hidden' name='action' value='".htmlspecialchars($_GET['action'], ENT_QUOTES, 'UTF-8')."'>";
 	if($user->admin !== "1" || $_GET['action']!=="add")
-	$content[] = "		<input type='hidden' name='id' value='".$_GET['id']."'>";
+	$content[] = "		<input type='hidden' name='id' value='".htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')."'>";
 	$content[] = "	</td>";
 	$content[] = "	<td>";
 	$content[] = "</tr>";
@@ -92,7 +103,7 @@ else {
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Key identifier")."</th>";
 	$content[] = "	<td>";
-	$content[] = "		<input type='text' class='form-control form-control-sm' name='ski' value='".@$issuer->ski."' $disabled>";
+	$content[] = "		<input type='text' class='form-control form-control-sm' name='ski' value='".htmlspecialchars(@$issuer->ski, ENT_QUOTES, 'UTF-8')."' $disabled>";
 	$content[] = "	</td>";
 	$content[] = "</tr>";
 	$content[] = "</tbody>";

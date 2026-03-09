@@ -35,7 +35,7 @@ $tenants = $Tenants->get_all ();
 	<form class='form-inline space-y' method="post">
 		<div class="col-xs-12">
 			<p style="margin-bottom:10px">Enter hostname or IP address:</p>
-			<input type="text" name="website" value="<?php print $_POST['website']; ?>" class="form-control" placeholder="<?php print _('https://google.com'); ?>" required>
+			<input type="text" name="website" value="<?php print htmlspecialchars($_POST['website'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" class="form-control" placeholder="<?php print _('https://google.com'); ?>" required>
 		</div>
 
 		<div class="col-xs-12">

@@ -9,6 +9,7 @@
 require('../../../functions/autoload.php');
 # validate user session
 $User->validate_session(true, true, true);
+$User->validate_csrf_token ();
 # validate permissions
 $User->validate_user_permissions(3, true);
 

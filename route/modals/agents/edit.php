@@ -53,6 +53,15 @@ elseif ($_GET['action']!=="add" && is_null($agent)) {
 	# btn
 	$btn_text = "";
 }
+# validate agent belongs to tenant (IDOR)
+elseif ($_GET['action']!=="add" && $agent->t_id !== $tenant->id) {
+	# content
+	$content      = [];
+	$content[]    = $Result->show("danger", _("Access denied"), false, false, true);
+	$header_class = "danger";
+	# btn
+	$btn_text = "";
+}
 else {
 
 	$header_class = $_GET['action']=="delete" ? "danger" : "success";
@@ -65,17 +74,18 @@ else {
 
 	// import form
 	$content[] = "<form id='modal-form'>";
+	$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";
 	$content[] = "<table class='table table-condensed table-borderless align-middle table-zone-management table-md'>";
 	// name
 	$content[] = "<tbody class='name'>";
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Agent name")."</th>";
 	$content[] = "	<td>";
-	$content[] = "		<input type='text' class='form-control form-control-sm' name='name' value='".@$agent->name."' $disabled>";
-	$content[] = "		<input type='hidden' class='form-control form-control-sm' name='t_id' value='".@$tenant->id."' $disabled>";
-	$content[] = "		<input type='hidden' name='action' value='".$_GET['action']."'>";
+	$content[] = "		<input type='text' class='form-control form-control-sm' name='name' value='".htmlspecialchars(@$agent->name, ENT_QUOTES, 'UTF-8')."' $disabled>";
+	$content[] = "		<input type='hidden' class='form-control form-control-sm' name='t_id' value='".htmlspecialchars(@$tenant->id, ENT_QUOTES, 'UTF-8')."' $disabled>";
+	$content[] = "		<input type='hidden' name='action' value='".htmlspecialchars($_GET['action'], ENT_QUOTES, 'UTF-8')."'>";
 	if($user->admin !== "1" || $_GET['action']!=="add")
-	$content[] = "		<input type='hidden' name='id' value='".$_GET['id']."'>";
+	$content[] = "		<input type='hidden' name='id' value='".htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')."'>";
 	$content[] = "	</td>";
 	$content[] = "	<td>";
 	$content[] = "</tr>";
@@ -83,14 +93,14 @@ else {
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("URL")."</th>";
 	$content[] = "	<td>";
-	$content[] = "		<input type='text' class='form-control form-control-sm' name='url' value='".@$agent->url."' $disabled>";
+	$content[] = "		<input type='text' class='form-control form-control-sm' name='url' value='".htmlspecialchars(@$agent->url, ENT_QUOTES, 'UTF-8')."' $disabled>";
 	$content[] = "	</td>";
 	$content[] = "</tr>";
 	// description
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Description")."</th>";
 	$content[] = "	<td>";
-	$content[] = "		<input type='text' class='form-control form-control-sm' name='comment' value='".@$agent->comment."' $disabled>";
+	$content[] = "		<input type='text' class='form-control form-control-sm' name='comment' value='".htmlspecialchars(@$agent->comment, ENT_QUOTES, 'UTF-8')."' $disabled>";
 	$content[] = "	</td>";
 	$content[] = "	<td>";
 	$content[] = "</tr>";
