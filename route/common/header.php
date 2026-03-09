@@ -82,18 +82,27 @@
 	    <!-- user menu -->
 	    <div class="nav-item dropdown">
 	      <a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown" aria-label="Open user menu">
-	        <span class="avatar avatar-sm">
+	        <span class="avatar avatar-sm" style="<?php print isset($_SESSION['impersonate_original']) ? 'background-color:var(--tblr-warning);color:#000;' : ''; ?>">
 	        	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg>
 	        </span>
 	        <div class="d-non1e d-xl-block ps-2">
-	          <div><?php print $user->name; ?></div>
-	          <div class="mt-1 small text-secondary"><?php print $user->t_name; ?></div>
+	          <div><?php print htmlspecialchars($user->name); ?></div>
+	          <div class="mt-1 small text-secondary"><?php print htmlspecialchars($user->t_name); ?></div>
 	        </div>
 	      </a>
 	      <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-	        <a href="/<?php print $user->href; ?>/user/profile/" class="dropdown-item"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg>Profile</a>
+	        <?php if(isset($_SESSION['impersonate_original'])): ?>
+	        <div class="px-3 py-2 small text-muted"><?php print _("Acting as"); ?>: <strong><?php print htmlspecialchars($user->name); ?></strong></div>
+	        <a href="/<?php print htmlspecialchars($user->href); ?>/user/impersonate/stop/" class="dropdown-item text-warning">
+	          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-switch-3"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17h5l1.67 -2.386m3.66 -5.227l1.67 -2.387h6" /><path d="M18 4l3 3l-3 3" /><path d="M3 7h5l7 10h6" /><path d="M18 20l3 -3l-3 -3" /></svg>
+	          <?php print _("Switch back to admin"); ?>
+	        </a>
 	        <div class="dropdown-divider"></div>
-	        <a href="/logout/" class="dropdown-item"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>Logout</a>
+	        <?php else: ?>
+	        <a href="/<?php print htmlspecialchars($user->href); ?>/user/profile/" class="dropdown-item"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg><?php print _("Profile"); ?></a>
+	        <div class="dropdown-divider"></div>
+	        <?php endif; ?>
+	        <a href="/logout/" class="dropdown-item"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg><?php print _("Logout"); ?></a>
 	      </div>
 	    </div>
 	  </div>
