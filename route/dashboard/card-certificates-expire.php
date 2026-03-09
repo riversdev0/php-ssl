@@ -53,14 +53,11 @@ else {
 
 	print "<thead>";
 	print "<tr>";
-	if($user->admin=="1")
-	print "	<th data-field='tenant'>"._("Tenant")."</th>";
+	print "	<th data-field='status' style='width:20px;'>"._("Expires")." / Valid</th>";
 	print "	<th data-field='serial'>"._("Serial number")."</th>";
-	print "	<th data-field='status' style='width:20px;'>"._("Status")."</th>";
-	print "	<th data-field='issuer' class='d-none d-lg-table-cell'>"._("Issuer")."</th>";
-	print "	<th data-field='domain'>"._("Common name")."</th>";
+	print "	<th data-field='issuer' class='d-none d-lg-table-cell'>"._("Issuer")." / "._("CNAME")."</th>";
 	print "	<th data-field='zone' class='d-none d-lg-table-cell'>"._("Zone")."</th>";
-	print "	<th data-field='valid' class='align-top d-none d-lg-table-cell' data-width='150' data-width-unit='px'>"._("Valid to")."</th>";
+	print "	<th data-field='hosts'>"._("Hosts")."</th>";
 	print "</tr>";
 	print "</thead>";
 
@@ -77,17 +74,30 @@ else {
 		if($status['code']==2)	{ $textclass='Expire soon'; $danger_class = "orange";  }
 		else					{ $textclass='Expired';  	$danger_class = "red"; }
 
+		// today ?
+		if ($cert_parsed['custom_validDays']==0) {
+			$cert_parsed['custom_validDays'] =  date("d", strtotime($cert_parsed['custom_validTo'])) == date("d") ? "Today" : "Tomorrow";
+			$danger_class = "red";
+		}
+		else {
+			$cert_parsed['custom_validDays'] .= " "._("days");
+		}
+
+
 		print "<tr>";
-		if($user->admin=="1")
-		print "	<td><a href='/".$user->href."/tenants/".$tenants[$t->t_id]->href."/' style='color:var(--tblr-body-color)'>".$tenants[$t->t_id]->name."</a></td>";
+		print "	<td class='text-muted align-top d-none d-lg-table-cell'><span  class='w-100 badge text-$danger_class'>".$cert_parsed['custom_validDays']."</span><br>".date("d. M H:i", strtotime($cert_parsed['custom_validTo']))."</td>";
 		print "<td class='align-top'>";
 		print "	<a href='/".$t->href."/certificates/".$t->zone_name."/".$cert_parsed['serialNumber']."/' style='color:var(--tblr-info)'>".$url_items["certificates"]['icon']." ".$cert_parsed['serialNumberHex']."</a>";
+		if($user->admin=="1")
+		print "	<br><a href='/".$user->href."/tenants/".$tenants[$t->t_id]->href."/' style='color:var(--tblr-body-color)'>".$tenants[$t->t_id]->name."</a>";
 		print "</td>";
-		print "	<td class='align-top'><span class='badge badge-outline text-$danger_class'>"._($textclass)."</span></td>";
-		print "	<td class='align-top text-muted d-none d-lg-table-cell'>".$cert_parsed['issuer']['O']."</span></td>";
-		print "	<td class='align-top'>".$cert_parsed['subject']['CN']."</td>";
+		print "	<td class='align-top text-muted d-none d-lg-table-cell'>".$cert_parsed['issuer']['CN']."<br>".$cert_parsed['subject']['CN']."</span></td>";
 		print "	<td class='align-top d-none d-lg-table-cell'><a href='/".$t->href."/zones/".$t->zone_name."/' style='color:var(--tblr-info)'>".$t->zone_name."</td>";
-		print "	<td class='text-muted align-top d-none d-lg-table-cell'>".$cert_parsed['custom_validTo']." <span class='badge bg-$danger_class-lt'>".$cert_parsed['custom_validDays']." "._("days")."</span></td>";
+		print "	<td class='align-top'>";
+		foreach ($t->hosts as $h) {
+			print "<a href='/".$t->href."/zones/".$t->zone_name."/".$h->hostname."/' style='color:var(--tblr-secondary)' target='_blank'>".$h->hostname."</a><br>";
+		}
+		print "</td>";
 		print "</tr>";
 	}
 

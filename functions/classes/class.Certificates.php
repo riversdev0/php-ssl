@@ -119,11 +119,15 @@ class Certificates extends Common
 			$this->errors[] = $e->getMessage();
 			$this->result_die();
 		}
-		// reindex
+		// reindex, collecting all hosts per cert
 		if (sizeof($certs) > 0) {
 			$certs_new = [];
 			foreach ($certs as $t) {
-				$certs_new[$t->id] = $t;
+				if (!isset($certs_new[$t->id])) {
+					$certs_new[$t->id] = $t;
+					$certs_new[$t->id]->hosts = [];
+				}
+				$certs_new[$t->id]->hosts[] = (object)['hostname' => $t->hostname, 'port' => $t->port];
 			}
 			$certs = $certs_new;
 		}
@@ -269,6 +273,7 @@ class Certificates extends Common
 			}
 		}
 
+		// return
 		return $certificate_parsed;
 	}
 
