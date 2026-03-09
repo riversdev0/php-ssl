@@ -45,7 +45,7 @@ try {
 				<span class='badge bg-light-lt text-muted'><?php print _("Not in any tenant recipients"); ?></span>
 				<?php else: ?>
 				<?php foreach ($tenant_recipient_of as $t_recip): ?>
-				<div><span class='badge bg-green-lt text-green'><?php print htmlspecialchars($t_recip->name); ?></span></div>
+				<div><span class='badge bg-green-lt' style='margin-top:2px'><?php print htmlspecialchars($t_recip->name); ?></span></div>
 				<?php endforeach; ?>
 				<?php endif; ?>
 			</td>

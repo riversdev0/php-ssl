@@ -80,8 +80,8 @@ if($_POST['action']!=="delete") {
 	}
 }
 
-# cannot delete your own account
-if($_POST['action']==="delete" && $edit_user->id === $user->id)
+# self-deletion only permitted for permission=3 (admin-level) users
+if($_POST['action']==="delete" && $edit_user->id === $user->id && $user->permission != 3)
 $Result->show("danger", _("You cannot delete your own account").".", true, false, false, false);
 
 # build update array

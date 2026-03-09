@@ -79,8 +79,10 @@ else {
 	$content[] = "<input type='hidden' name='tenant' value='".htmlspecialchars($_GET['tenant'], ENT_QUOTES, 'UTF-8')."'>";
 	if($_GET['action']!=="add")
 	$content[] = "<input type='hidden' name='id' value='".htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')."'>";
-	if($_GET['action']=="delete")
-	$content[] = "<input type='hidden' id='target' name='target' value='/".$user->href."/users/'>";
+	if($_GET['action']=="delete") {
+		$delete_target = isset($_GET['target']) ? $_GET['target'] : "/".$user->href."/users/";
+		$content[] = "<input type='hidden' id='target' name='target' value='".htmlspecialchars($delete_target, ENT_QUOTES, 'UTF-8')."'>";
+	}
 
 	$content[] = "<table class='table table-condensed table-borderless table-zone-management table-sm table-td-top table-td-top-padded-0'>";
 	$content[] = "<tbody>";

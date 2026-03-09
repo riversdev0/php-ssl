@@ -20,6 +20,11 @@ if (@$_params['app']=="theme") {
 	}
 }
 
+// profile
+elseif (@$_params['app']=="profile" || !isset($_params['app'])) {
+	include("profile/index.php");
+}
+
 // impersonate
 elseif (@$_params['app']=="impersonate") {
 
