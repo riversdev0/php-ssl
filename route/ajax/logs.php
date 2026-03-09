@@ -76,6 +76,12 @@ try {
 		}
 		$vars['object_id'] = $_POST['object_id'];
 	}
+	// user_id filter (logs created by a specific user)
+	if(is_numeric($_POST['user_id'])) {
+		$query        .= " and object_u_id = :user_id";
+		$query_all    .= " and object_u_id = :user_id";
+		$vars['user_id'] = (int)$_POST['user_id'];
+	}
 	// order, sort
 	if (strlen($_POST['sort'])>0 && in_array($_POST['sort'], ['id','user','object','date','text'])) {
 		$query .= " order by ".$_POST['sort']." ";
@@ -86,11 +92,11 @@ try {
 	}
 	// limit
 	if(is_numeric($_POST['limit'])) {
-		$query .= " limit ".$_POST['limit'];
+		$query .= " limit ".(int)$_POST['limit'];
 	}
 	// offset
 	if(is_numeric($_POST['offset'])) {
-		$query .= " offset  ".$_POST['offset'];
+		$query .= " offset  ".(int)$_POST['offset'];
 	}
 
 	// fetch
@@ -108,8 +114,16 @@ try {
 		foreach ($logs as $l) {
 			// all
 			$l = $Log->format_log_entry ($l, $user);
-			// add user
-			$l->user = isset($users[$l->user]) ? $users[$l->user]->name : "System";
+			// add user with link to user detail page
+			if(isset($users[$l->user])) {
+				$u_obj = $users[$l->user];
+				$u_tenant_href = isset($all_tenants[$u_obj->t_id]) ? $all_tenants[$u_obj->t_id]->href : null;
+				$l->user = $u_tenant_href
+					? "<a href='/".$u_tenant_href."/users/".(int)$u_obj->id."/'>" . htmlspecialchars($u_obj->name, ENT_QUOTES, 'UTF-8') . "</a>"
+					: htmlspecialchars($u_obj->name, ENT_QUOTES, 'UTF-8');
+			} else {
+				$l->user = "System";
+			}
 
 			// remove diffs
 			unset($l->json_object_old);
