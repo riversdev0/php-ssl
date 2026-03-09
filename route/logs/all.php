@@ -1,6 +1,8 @@
 <?php
 # validate user session
 $User->validate_session ();
+# purge expired logs based on each tenant's retention period
+$Log->purge_old_logs();
 ?>
 
 

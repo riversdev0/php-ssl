@@ -134,6 +134,14 @@ else {
 	$content[] = "	</td>";
 	$content[] = "	<td>";
 	$content[] = "</tr>";
+	// log retention
+	$content[] = "<tr>";
+	$content[] = "	<th style='width:100px;'>"._("Log retention")."</th>";
+	$content[] = "	<td>";
+	$content[] = "		<input type='number' class='form-control form-control-sm' name='log_retention' value='".htmlspecialchars((string)(@$tenant->log_retention ?? 30), ENT_QUOTES, 'UTF-8')."' min='1' max='3650' style='width:100px;display:inline-block' $disabled> <span class='text-muted' style='font-size:11px'>"._("days (logs older than this are deleted automatically)")."</span>";
+	$content[] = "	</td>";
+	$content[] = "	<td>";
+	$content[] = "</tr>";
 	$content[] = "</tbody>";
 
 	$content[] = "</table>";

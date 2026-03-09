@@ -296,6 +296,30 @@ class Log extends Common
 	}
 
 	/**
+	 * Deletes log entries older than each tenant's log_retention days.
+	 * Only affects logs scoped to a tenant (object_t_id > 0).
+	 * Called automatically when the logs page is opened.
+	 * @method purge_old_logs
+	 * @return int  number of rows deleted
+	 */
+	public function purge_old_logs(): int
+	{
+		try {
+			$this->Database->runQuery(
+				"DELETE l FROM logs l
+				 INNER JOIN tenants t ON l.object_t_id = t.id
+				 WHERE l.date < DATE_SUB(NOW(), INTERVAL t.log_retention DAY)",
+				[]
+			);
+			return 1;
+		}
+		catch (Exception $e) {
+			$this->errors[] = $e->getMessage();
+			return 0;
+		}
+	}
+
+	/**
 	 * Truncate logs for specific tenants
 	 * @method truncate_logs
 	 * @param  array $tenant_ids

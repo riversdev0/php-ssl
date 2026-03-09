@@ -52,6 +52,10 @@ if ($_POST['action']!="delete") {
 		}
 	}
 	$_POST['recipients'] = implode(";", $recipients);
+
+	// validate log_retention
+	if(!is_numeric($_POST['log_retention']) || (int)$_POST['log_retention'] < 1 || (int)$_POST['log_retention'] > 3650)
+	$Result->show("danger", _("Invalid log retention value. Must be between 1 and 3650 days").".", true, false, false, false);
 }
 
 // general update parameters
@@ -62,7 +66,8 @@ $update = [
 	"active"          => $_POST['active'],
 	"remove_orphaned" => $_POST['remove_orphaned'],
 	"mail_style"	  => $_POST['mail_style'],
-	"recipients"      => $_POST['recipients']
+	"recipients"      => $_POST['recipients'],
+	"log_retention"   => (int)$_POST['log_retention']
 ];
 
 // edit,delete - add key
