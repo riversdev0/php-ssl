@@ -3,7 +3,6 @@
 # session
 ob_start();
 
-
 # check for config file
 if (!file_exists(dirname(__FILE__) . "/config.php") && $_SERVER['REQUEST_URI']!="/install/")
 {
@@ -59,6 +58,13 @@ if(!isset($_SESSION['theme'])) { $_SESSION['theme'] = "dark"; }
 
 	<!-- title -->
 	<title><?php print $title; ?></title>
+
+	<!-- favicon -->
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
 	<!-- css -->
 	<link href="/css/tabler.1.4.0.min.css" rel="stylesheet">

@@ -7,10 +7,12 @@ if (@$_params['app']=="theme") {
 		$_SESSION['theme'] = $_params['id1'];
 
 		if(isset($_SESSION['url'])) {
-			header('Location: '.$_SESSION['url']);
+			header('Location: /'.$_SESSION['url']);
+			die();
 		}
 		else {
 			header('Location: /');
+			die();
 		}
 	}
 	else {
