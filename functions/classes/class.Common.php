@@ -29,28 +29,44 @@ class Common extends Validate
 	 */
 	public function print_system_warnings(): void
 	{
-		global $installed, $user;
+		global $installed, $user, $Migration;
 
 		$warnings = [];
 
 		// Check $installed flag
 		if (!isset($installed) || $installed !== true) {
-			$warnings[] = 'Application is not marked as installed. Open <code>config.php</code> and set <code>$installed = true;</code>';
+			$warnings[] = ['text' => 'Application is not marked as installed. Open <code>config.php</code> and set <code>$installed = true;</code>'];
 		}
 
 		// Check for default password (admin/admin — sha512 hash)
 		if (isset($user->password) && $user->password === hash('sha512', 'admin')) {
-			$warnings[] = 'You are using the <strong>default password</strong>. Please change it immediately in <a href="/' . htmlspecialchars($user->href ?? '', ENT_QUOTES) . '/user/profile/">your profile</a>.';
+			$warnings[] = ['text' => 'You are using the <strong>default password</strong>. Please change it immediately in <a href="/' . htmlspecialchars($user->href ?? '', ENT_QUOTES) . '/user/profile/">your profile</a>.'];
+		}
+
+		// Check for pending database migrations (admins only)
+		if (isset($Migration) && isset($user->admin) && $user->admin === '1') {
+			$pending = $Migration->get_pending();
+			if (!empty($pending)) {
+				$count   = count($pending);
+				$current = $Migration->get_current_version();
+				$latest  = $Migration->get_latest_version();
+				$label   = "DB schema out of date (version {$current} → {$latest}), {$count} change(s) pending -";
+				$btn     = "{$label} <button class='btn btn-sm btn-warning ms-2' id='btn-apply-migrations'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>'."Upgrade database</button>";
+				$js      = "<script>document.getElementById('btn-apply-migrations').addEventListener('click',function(){this.disabled=true;this.textContent='Applying...';fetch('/route/ajax/apply-migrations.php',{method:'POST',headers:{'X-Requested-With':'XMLHttpRequest'}}).then(r=>r.json()).then(d=>{location.reload();}).catch(()=>{this.textContent='Error — check console';});});</script>";
+				$warnings[] = ['text' => $btn . $js];
+			}
 		}
 
 		if (empty($warnings)) {
 			return;
 		}
 
+		$icon = "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon alert-icon'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 9v4' /><path d='M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.871l-8.106 -13.534a1.914 1.914 0 0 0 -3.274 0z' /></svg>";
+
 		foreach ($warnings as $warning) {
 			print "<div class='alert alert-warning container-fluid mt-2 mb-0' role='alert'>";
-			print "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon alert-icon'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 9v4' /><path d='M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.871l-8.106 -13.534a1.914 1.914 0 0 0 -3.274 0z' /></svg>";
-			print "<div>{$warning}</div>";
+			print $icon;
+			print "<div>{$warning['text']}</div>";
 			print "</div>\n";
 		}
 	}

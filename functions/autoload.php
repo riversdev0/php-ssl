@@ -9,6 +9,9 @@
 # config
 include (dirname(__FILE__)."/../config.php");
 
+# version
+include (dirname(__FILE__)."/../version.php");
+
 # include classes
 include ("classes/class.PDO.php");
 include ("classes/class.Result.php");
@@ -29,6 +32,7 @@ include ("classes/class.AXFR.php");
 include ("classes/class.Agent.php");
 include ("classes/class.Log.php");
 include ("classes/class.ADsync.php");
+include ("classes/class.Migration.php");
 
 # required extensions
 $required_extensions = ['curl', 'openssl', 'pcntl', 'posix', 'pdo', 'pdo_mysql', 'session', 'hash'];
@@ -78,6 +82,7 @@ else
 		$Zones        = new Zones ($Database, $User->get_current_user());
 		$Certificates = new Certificates ($Database, $User->get_current_user());
 		$Log 		  = new Log ($Database);
+		$Migration    = new Migrations ($Database);
 
 		# save user to local var
 		$user = $User->get_current_user();
