@@ -146,6 +146,20 @@ else {
 	$content[] = "	</td>";
 	$content[] = "</tr>";
 
+	// changePass — only on edit, not add or delete
+	if ($_GET['action'] === "edit") {
+		$cp_checked = !empty($edit_user->changePass) ? "checked" : "";
+		$content[] = "<tr>";
+		$content[] = "	<th>"._("Force password change")."</th>";
+		$content[] = "	<td>";
+		$content[] = "		<label class='form-check'>";
+		$content[] = "			<input type='checkbox' class='form-check-input' name='changePass' value='1' {$cp_checked}>";
+		$content[] = "			<span class='form-check-label text-muted' style='font-size:11px'>"._("User must change password on next login")."</span>";
+		$content[] = "		</label>";
+		$content[] = "	</td>";
+		$content[] = "</tr>";
+	}
+
 	$content[] = "</tbody>";
 	$content[] = "</table>";
 	$content[] = "</form>";

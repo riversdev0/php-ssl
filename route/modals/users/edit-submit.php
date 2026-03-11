@@ -96,6 +96,10 @@ if($_POST['action']!=="delete") {
 	if(strlen($_POST['password']) > 0) {
 		$update['password'] = hash('sha512', $_POST['password']);
 	}
+	# changePass checkbox (edit only; providing a new password always clears it)
+	if($_POST['action'] === "edit") {
+		$update['changePass'] = (!empty($_POST['changePass']) && strlen($_POST['password']) === 0) ? 1 : 0;
+	}
 }
 
 # add - set t_id
@@ -111,7 +115,7 @@ if($_POST['action']!=="add") {
 # edit: check for actual changes
 if($_POST['action']==="edit") {
 	$is_change = false;
-	foreach(['name', 'email', 'permission', 'days', 'days_expired'] as $k) {
+	foreach(['name', 'email', 'permission', 'days', 'days_expired', 'changePass'] as $k) {
 		if(isset($update[$k]) && $edit_user->$k != $update[$k]) {
 			$is_change = true;
 			break;

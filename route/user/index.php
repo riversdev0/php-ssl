@@ -22,6 +22,11 @@ if (@$_params['app']=="theme") {
 	}
 }
 
+// force password change
+elseif (@$_params['app']=="changepass") {
+	include("changepass/index.php");
+}
+
 // profile
 elseif (@$_params['app']=="profile" || !isset($_params['app'])) {
 	include("profile/index.php");

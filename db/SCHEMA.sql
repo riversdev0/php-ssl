@@ -231,6 +231,7 @@ CREATE TABLE `users` (
   `days` int(4) NOT NULL DEFAULT 30,
   `days_expired` int(4) NOT NULL DEFAULT 30,
   `notif_id` int(11) unsigned DEFAULT 0,
+  `changePass` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `u_tenants` (`t_id`),
   CONSTRAINT `u_tenants` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
