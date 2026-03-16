@@ -39,10 +39,12 @@ else {
 		$fetched_cert = $Agent->get_result ();
 	}
 
+
+
 	// check result - local
-	if($fetched_cert===false && $agent->atype=="local") {
-		print "<div class='container-fluid main'>";
-		print "<div class='alert alert-danger alert-block'>"._("Failed to obtain certificate")." :: ".end($SSL->errors);
+	if($fetched_cert->success===false && $agent->atype=="local") {
+		print "<div class='main' style='margin-top:30px'>";
+		print "<div class='alert alert-danger alert-block' style='display:block'>"._("Failed to obtain certificate")." :: ".end($SSL->errors);
 		print "<hr>";
 		print "Errors:";
 		print "<ul><li class='text-muted'>".implode("</li><li class='text-muted'>",$SSL->errors)."</ul>";
@@ -50,9 +52,9 @@ else {
 		print "</div>";
 	}
 	// check result - agent
-	elseif ($fetched_cert===false || is_null($fetched_cert)) {
-		print "<div class='container-fluid main'>";
-		print "<div class='alert alert-danger alert-block'>"._("Failed to obtain certificate");
+	elseif ($fetched_cert->success===false || is_null($fetched_cert)) {
+		print "<div class='main' style='margin-top:30px'>";
+		print "<div class='alert alert-danger alert-block' style='display:block'>"._("Failed to obtain certificate");
 		print "<hr>";
 		print "Errors:";
 		print "<ul><li class='text-muted'>".implode("</li><li class='text-muted'>",$Agent->errors)."</ul>";
