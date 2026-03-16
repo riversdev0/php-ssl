@@ -20,7 +20,7 @@ $User->validate_user_permissions (3, true);
 if($user->admin=="1")
 $domains = $Database->getObjectsQuery("select * from domains where type != 'local'");
 else
-$domains = $Database->getObjectsQuery("select * from domains where type != 'local' t_id = ?", [$user->t_id]);
+$domains = $Database->getObjectsQuery("select * from domains where type != 'local' AND t_id = ?", [$user->t_id]);
 
 # tenants
 $tenants = $Tenants->get_all ();
