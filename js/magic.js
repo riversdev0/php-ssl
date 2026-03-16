@@ -206,8 +206,16 @@ function formatHMS(totalSeconds) {
 }
 
 function updateNextCheckSeconds(bg_info = "bg-info-lt") {
+    var forceIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-asterisk"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 8.5v7" /><path d="M9 10l6 4" /><path d="M9 14l6 -4" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /></svg>';
     $("tr").each(function () {
-        var cronExpr = $(this).find("td.nextCheck").text().trim();
+        var $nextTd  = $(this).find("td.nextCheck");
+        var forceRun = $nextTd.data("force") == 1;
+        var cronExpr = $nextTd.text().trim();
+
+        if (forceRun) {
+            $(this).find("td.lastCheckSec").html("<span class='badge mono text-orange 111bg-orange-lt' style='width:100%'>" + forceIcon + "</span>");
+            return;
+        }
         if (!cronExpr) {
             $(this).find("td.lastCheckSec").html("<span class='badge mono text-red "+bg_info+"' style='width:100%'>Never</span>");
             return;

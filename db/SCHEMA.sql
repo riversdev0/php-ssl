@@ -104,6 +104,7 @@ CREATE TABLE `cron` (
   `weekday` varchar(6) NOT NULL DEFAULT '*',
   `script` varchar(255) NOT NULL DEFAULT '',
   `last_executed` timestamp NULL DEFAULT NULL,
+  `force` tinyint(1) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `cront_tenant` (`t_id`),
   CONSTRAINT `cront_tenant` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE

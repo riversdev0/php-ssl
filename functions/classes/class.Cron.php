@@ -67,7 +67,7 @@ class Cron extends Common
 	/**
 	 * Fetch all cronjobs
 	 * @method fetch_cronjobs
-	 * @return array
+	 * @return false|array
 	 */
 	public function fetch_cronjobs()
 	{
@@ -215,7 +215,7 @@ class Cron extends Common
 	}
 
 	/**
-	 * Update last execution time for specific script
+	 * Update last execution time for specific script and reset force flag
 	 * @method update_crontime_execution
 	 * @param  int $cron_id
 	 * @return void
@@ -223,10 +223,29 @@ class Cron extends Common
 	private function update_crontime_execution($cron_id = 0)
 	{
 		try {
-			$this->Database->runQuery("update cron set last_executed = ? where id = ?", [$this->exec_time, $cron_id]);
+			$this->Database->runQuery("update cron set last_executed = ?, `force` = 0 where id = ?", [$this->exec_time, $cron_id]);
 		}
 		catch (Exception $e) {
 			$this->errors[] = "Unable to update cron execution time";
+		}
+	}
+
+	/**
+	 * Set or clear force execution flag for a cronjob
+	 * @method set_force_execution
+	 * @param  int $cron_id
+	 * @param  int $force  1 to force, 0 to clear
+	 * @return bool
+	 */
+	public function set_force_execution($cron_id = 0, $force = 1)
+	{
+		try {
+			$this->Database->runQuery("update cron set `force` = ? where id = ?", [intval($force), $cron_id]);
+			return true;
+		}
+		catch (Exception $e) {
+			$this->errors[] = "Unable to set force execution";
+			return false;
 		}
 	}
 
@@ -248,6 +267,11 @@ class Cron extends Common
 		// validate script
 		if (!$this->validate_script($crontab_entry->script)) {
 			return false;
+		}
+
+		// force execution flag
+		if (!empty($crontab_entry->force)) {
+			return true;
 		}
 
 		// current time

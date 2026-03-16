@@ -55,7 +55,8 @@ if ($user->admin == "1") {
 				?>
 				<?php endif; ?>
 			</td>
-			<td class="d-none nextCheck"><?php if ($job !== null && $job->minute !== null) { print htmlspecialchars("{$job->minute} {$job->hour} {$job->day} {$job->month} {$job->weekday}"); } ?></td>
+			<?php $force_val = ($job !== null && isset($job->force)) ? intval($job->force) : 0; ?>
+		<td class="d-none nextCheck" data-force="<?php print $force_val; ?>"><?php if ($job !== null && $job->minute !== null) { print htmlspecialchars("{$job->minute} {$job->hour} {$job->day} {$job->month} {$job->weekday}"); } ?></td>
 			<td class="text-muted text-center d-none d-lg-table-cell lastCheckSec" style="width:80px"></td>
 		</tr>
 	<?php endforeach; ?>

@@ -67,7 +67,7 @@ else {
 	print "	<th data-width='50' data-width-unit='px' data-field='weekday' class='text-center d-none d-lg-table-cell'>"._("WKD")."</th>";
 	print "	<th data-width='150' data-width-unit='px' data-field='check' class='text-center d-none d-lg-table-cell' style='width:150px;'>"._("Last executed")."</th>";
 	print "	<th data-width='50' data-width-unit='px' data-field='next' class='text-center d-none'></th>";
-	print "	<th data-width='30' data-width-unit='px' data-field='actions' class='text-center'></th>";
+	print "	<th data-width='60' data-width-unit='px' data-field='actions' class='text-center'></th>";
 	print "</tr>";
 	print "</thead>";
 
@@ -120,13 +120,21 @@ else {
 			print "	<td class='text-muted text-center d-none d-lg-table-cell lastCheck'>".$t->weekday."</td>";
 			print "	<td class='text-muted'>".$t->last_executed."</span></td>";
 			// minutes
+			$force_val = (is_object($t) && isset($t->force)) ? intval($t->force) : 0;
 			if($t->minute!="-")
-			print "	<td class='d-none nextCheck'>{$t->minute} {$t->hour} {$t->day} {$t->month} {$t->weekday}</span></td>";
+			print "	<td class='d-none nextCheck' data-force='{$force_val}'>{$t->minute} {$t->hour} {$t->day} {$t->month} {$t->weekday}</td>";
 			else
-			print "	<td class='d-none nextCheck'></span></td>";
+			print "	<td class='d-none nextCheck' data-force='0'></td>";
 			// actions
 			print "	<td class='text-muted text-center d-none d-lg-table-cell' style='width:20px;'>";
+			print '<div class="btn-group">';
 			print '<span class="badge text-info"><a href="/route/modals/cron/edit.php?tenant='.$tenant_id.'&script='.$t->script.'" data-bs-toggle="modal" data-bs-target="#modal1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg></a></span>';
+			// force button (only for existing cron entries)
+			if(is_object($t) && isset($t->id)) {
+				$force_class = ($t->force == 1) ? "text-warning" : "text-secondary";
+				print '<span class="badge '.$force_class.' cron-force-btn" data-cron-id="'.$t->id.'" style="cursor:pointer" title="'._("Force next execution").'"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-asterisk"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 8.5v7" /><path d="M9 10l6 4" /><path d="M9 14l6 -4" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /></svg></span>';
+			}
+			print "</div>";
 			print "</td>";
 
 			print "</tr>";
@@ -143,3 +151,30 @@ else {
 
 <script src="https://cdn.jsdelivr.net/npm/later@1.2.0/later.min.js"></script>
 <script>updateNextCheckSeconds(); setInterval(updateNextCheckSeconds, 1000);</script>
+
+<script>
+$(document).on("click", ".cron-force-btn", function () {
+	var $btn = $(this);
+	var cronId = $btn.data("cron-id");
+	$.ajax({
+		url: "/route/ajax/cron-force.php",
+		method: "POST",
+		data: { id: cronId },
+		headers: { "X-Requested-With": "XMLHttpRequest" },
+		dataType: "json",
+		success: function (resp) {
+			if (resp.success) {
+				var $nextTd = $btn.closest("tr").find("td.nextCheck");
+				if (resp.force == 1) {
+					$btn.removeClass("text-secondary").addClass("text-warning");
+					$nextTd.data("force", 1);
+				} else {
+					$btn.removeClass("text-warning").addClass("text-secondary");
+					$nextTd.data("force", 0);
+				}
+				updateNextCheckSeconds();
+			}
+		}
+	});
+});
+</script>
