@@ -108,6 +108,7 @@ try {
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>2,   "day"=>"*", "weekday"=>"*", "script"=>"remove_orphaned"]);
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>8,   "day"=>"*", "weekday"=>"*", "script"=>"expired_certificates"]);
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>3,   "day"=>"*", "weekday"=>"*", "script"=>"axfr_transfer"]);
+		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>1,   "day"=>"*", "weekday"=>"*", "script"=>"backup"]);
 
 		// add default ports
 		$Database->insertObject("ssl_port_groups", ["t_id"=>$new_tenant_id, "name"=>"pg_ssl", "ports"=>"443"]);

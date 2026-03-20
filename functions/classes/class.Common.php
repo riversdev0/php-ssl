@@ -301,6 +301,40 @@ class Common extends Validate
 	}
 
 	/**
+	 * Checks whether the backup script can write to db/bkp/.
+	 * Prints a Tabler warning alert and returns false if the directory is not writable
+	 * (or cannot be created). Returns true silently when everything is fine.
+	 *
+	 * @method validate_backup_directory
+	 * @return bool  true = writable, false = not writable (alert already printed)
+	 */
+	public function validate_backup_directory(): bool
+	{
+		$bkp_dir    = realpath(dirname(__FILE__) . "/../../db") . "/bkp";
+		$bkp_parent = dirname($bkp_dir);
+
+		if (is_dir($bkp_dir)) {
+			$writable = is_writable($bkp_dir);
+			$detail   = "directory <code>db/bkp/</code> exists but is not writable by the web server process";
+		} else {
+			$writable = is_writable($bkp_parent);
+			$detail   = "directory <code>db/bkp/</code> does not exist and <code>db/</code> is not writable — backup script cannot create it";
+		}
+
+		if ($writable) {
+			return true;
+		}
+
+		$icon = "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon alert-icon'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 9v4' /><path d='M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.871l-8.106 -13.534a1.914 1.914 0 0 0 -3.274 0z' /><path d='M12 16h.01' /></svg>";
+		print "<div class='alert alert-warning container-fluid mt-2 mb-2' role='alert' style='display:block'>";
+		print $icon;
+		print "<div><strong>" . _("Backup script: missing write permission") . "</strong> — " . $detail . ".</div>";
+		print "</div>\n";
+
+		return false;
+	}
+
+	/**
 	 * Prints a Tabler breadcrumb nav based on the current $_params.
 	 * Last (active) item is not clickable; all preceding items are linked.
 	 *

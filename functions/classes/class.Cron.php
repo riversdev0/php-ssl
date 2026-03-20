@@ -16,7 +16,8 @@ class Cron extends Common
 		"update_certificates"  => "update_certificates",
 		"axfr_transfer"        => "axfr_transfer",
 		"remove_orphaned"      => "remove_orphaned",
-		"expired_certificates" => "expired_certificates"
+		"expired_certificates" => "expired_certificates",
+		"backup"               => "backup"
 	];
 
 	/**
@@ -178,6 +179,12 @@ class Cron extends Common
 			return [
 				"name" => "Notify about expired certificates",
 				"desc" => "This script will check any certificates that are about to expire or have expired and email notification to owners and administrators"
+			];
+		}
+		elseif ($name == "backup") {
+			return [
+				"name" => "SQL backup",
+				"desc" => "This script will backup SQL database for specific user"
 			];
 		}
 		else {

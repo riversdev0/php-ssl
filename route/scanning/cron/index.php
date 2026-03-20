@@ -19,6 +19,9 @@ print '<div class="btn-group" role="group">';
 print '<a href="/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> '._("Back").'</a>';
 print '</div><br><br>';
 
+# check write permission for the backup script's output directory
+$Common->validate_backup_directory();
+
 # text
 print "<p class='text-secondary'>"._('List of scheduled cronjobs').".</p>";
 
@@ -108,6 +111,7 @@ else {
 			elseif($t->script=="axfr_transfer")			{ $script_name = "Zone transfers"; }
 			elseif($t->script=="remove_orphaned")		{ $script_name = "Remove orhaned certificates"; }
 			elseif($t->script=="expired_certificates")	{ $script_name = "Notify about expired certificates"; }
+			elseif($t->script=="backup")				{ $script_name = "Database backup"; }
 			else										{ $script_name = "Unknown"; }
 
 			print "<tr class='$trclass'>";
@@ -149,7 +153,7 @@ else {
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/later@1.2.0/later.min.js"></script>
+<script src="/js/later-1.2.0.min.js"></script>
 <script>updateNextCheckSeconds(); setInterval(updateNextCheckSeconds, 1000);</script>
 
 <script>

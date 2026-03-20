@@ -68,6 +68,15 @@ $expired_after_days = 7;
 $log_object = true;
 
 /**
+ * Number of days to retain database backups.
+ *
+ * Backups older than this value will be removed by the backup cronjob.
+ *
+ * @var int
+ */
+$backup_retention_period = 30;
+
+/**
  * Mail sending parameters - move to database later !
  *
  * @var StdClass
