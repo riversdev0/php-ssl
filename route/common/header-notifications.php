@@ -1,7 +1,7 @@
 <?php
 
 // fetch logs
-$logs = $Log->get_logs($user, true, true, 10);
+$logs = $Log->get_logs($user, false, true, 10);
 // all users
 $all_users = $User->get_all ();
 

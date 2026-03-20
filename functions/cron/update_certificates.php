@@ -135,6 +135,9 @@ try {
 				$content[$email] = $use_list ? $header_list : $header_table;
 			}
 
+			// separate log content capturing all rows regardless of recipient config or private zones
+			$log_content_rows = $header_list;
+
 			// track private zone creator emails so we don't BCC tenant recipients to their notifications
 			$private_zone_emails = [];
 
@@ -192,6 +195,9 @@ try {
 	                if (strlen($cert_parsed['extensions']['subjectAltName'])>0)
 	                $list_rows[] = "<tr><td style='$td_style'>".$Mail->font_norm._("Altnames").":<br><span style='padding:2px;padding-left:15px;'>".str_replace(",","</span><br><span style='padding:0px;padding:2px;padding-left:15px;'>",$cert_parsed['extensions']['subjectAltName'])."</span></font></td></tr>";
 
+	                // always add to log content rows (all hosts, regardless of private zone)
+	                array_push($log_content_rows, ...$list_rows);
+
 	                // private zone: only notify the zone creator, not tenant recipients
 	                if (!empty($c->private_zone_uid)) {
 	                	$creator = $Database->getObject("users", $c->private_zone_uid);
@@ -232,14 +238,18 @@ try {
 					$rows[] = "<br><br>".$Mail->font_norm."Visit <a href='".$mail_sender_settings->www."' style='color:#003551;'>".$mail_sender_settings->www."</a></font>";
 				}
 				unset($rows);
+				// close log content
+				$log_content_rows[] = "</table>";
+				$log_content_rows[] = "<br><br>".$Mail->font_norm."Visit <a href='".$mail_sender_settings->www."' style='color:#003551;'>".$mail_sender_settings->www."</a></font>";
 
 				// send to tenant recipients together
-				$Mail->send ("Telemach php-ssl :: changed certificates [".$tenant->name."]", $email_to_tenant_recipents, [], [], implode("\n", $content[$email_to_tenant_recipents[0]]), false);
+				if (!empty($email_to_tenant_recipents)) {
+					$Mail->send ("Telemach php-ssl :: changed certificates [".$tenant->name."]", $email_to_tenant_recipents, [], [], implode("\n", $content[$email_to_tenant_recipents[0]]), false);
+				}
 
 		        // Log
 		        $Log = new Log ($Database);
-		        // Log
-		        $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate change notification email sent to all tenant admins for certificate change", json_encode($email_to_tenant_recipents), json_encode(["title"=>"Telemach php-ssl :: changed certificates [".$tenant->name."]", "data"=>$content[$email_to_tenant_recipents[0]]]), false);
+		        $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate change notification email sent to all tenant admins for certificate change", json_encode($email_to_tenant_recipents), json_encode(["title"=>"Telemach php-ssl :: changed certificates [".$tenant->name."]", "data"=>$log_content_rows]), false);
 
 				// send to per-host recipients individually; private zone creators get no BCC to tenant recipients
 		        foreach ($content as $email => $rows) {
