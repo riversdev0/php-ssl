@@ -8,6 +8,9 @@ $User->validate_tenant ();
 # fetch zone
 $zone = $Zones->get_zone ($_params['tenant'], $_params['app']);
 
+# private zone — deny access if not the creator, or if inside an impersonation session
+if ($zone !== NULL && !empty($zone->private_zone_uid) && ($zone->private_zone_uid != $user->id || isset($_SESSION['impersonate_original'])))
+$zone = NULL;
 
 # not existing ?
 if ($zone==NULL) {

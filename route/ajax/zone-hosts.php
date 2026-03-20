@@ -58,6 +58,17 @@ try {
 		$query_all    .= " and z.t_id = :t_id";
 		$vars['t_id'] = $user->t_id;
 	}
+	// exclude hosts in private zones the current user cannot access
+	$impersonating = isset($_SESSION['impersonate_original']);
+	if ($impersonating) {
+		$query     .= " and z.private_zone_uid is null";
+		$query_all .= " and z.private_zone_uid is null";
+	}
+	else {
+		$query     .= " and (z.private_zone_uid is null or z.private_zone_uid = :pz_uid)";
+		$query_all .= " and (z.private_zone_uid is null or z.private_zone_uid = :pz_uid)";
+		$vars['pz_uid'] = $user->id;
+	}
 	// search ?
 	if(strlen($_POST['search'])>0) {
 		$query         .= " and (h.hostname like :search or h.ip like :search or ifnull(c.serial,'') like :search)";

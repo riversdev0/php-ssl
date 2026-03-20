@@ -48,6 +48,17 @@ try {
 		$query_all    .= " and c.t_id = :t_id";
 		$vars['t_id'] = $user->t_id;
 	}
+	// exclude certificates in private zones the current user cannot access
+	$impersonating = isset($_SESSION['impersonate_original']);
+	if ($impersonating) {
+		$query     .= " and z.private_zone_uid is null";
+		$query_all .= " and z.private_zone_uid is null";
+	}
+	else {
+		$query     .= " and (z.private_zone_uid is null or z.private_zone_uid = :pz_uid)";
+		$query_all .= " and (z.private_zone_uid is null or z.private_zone_uid = :pz_uid)";
+		$vars['pz_uid'] = $user->id;
+	}
 	// search ?
 	if(strlen($_POST['search'])>0) {
 		$query         .= " and (c.serial like :search or z.name like :search or c.expires like :search or h.hostname like :search or h.ip like :search)";

@@ -44,6 +44,17 @@ print '<a href="/route/modals/zones/edit.php?action=add&tenant='.$user->href.'" 
 print '</div>';
 print '<br><br>';
 
+// note for admins: private zones exist that are not visible
+if ($user->admin == "1") {
+	$private_zones_count = $Database->getObjectQuery("select count(*) as cnt from zones where private_zone_uid is not null and private_zone_uid != ?", [$user->id]);
+	if ($private_zones_count && $private_zones_count->cnt > 0) {
+		print '<div class="alert alert-info " style="display:block" role="alert">';
+		print '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg> ';
+		print sprintf(_("There %s <strong>%d private zone(s)</strong> in the system that are not visible here."), $private_zones_count->cnt == 1 ? "is" : "are", $private_zones_count->cnt);
+		print '</div>';
+	}
+}
+
 print '<div style="padding:5px">';
 print '<div class="row">';
 print '<div class="card" style="padding:0px">';
@@ -100,6 +111,7 @@ else {
 		foreach ($group as $t) {
 
 			$status            = $t->ignore == 0 ? "" : "<span class='badge bg-danger'>"._("Not checked")."</span>";
+		$private_badge     = !empty($t->private_zone_uid) ? " <span class='badge bg-info-lt text-purple ms-1'>"._("Private")."</span>" : "";
 			$hosts             = $Database->count_database_objects("hosts", "z_id", $t->id);
 			$certs             = $Zones->count_zone_certs ($t->id);
 			$last_check        = $Zones->get_last_check ($t->id);
@@ -119,7 +131,7 @@ else {
 			$aicon 			   = $t->atype=="local" ? "L" : "R";
 
 			print "<tr>";
-			print "	<td><span class='$icon_color' style='color:#ccc;padding:0px 5px;'>".$url_items["zones"]['icon']." <strong><a href='/".$t->href."/zones/".$t->name."/' style='color:var(--tblr-info);'>".$t->name." $status</td>";
+			print "	<td><span class='$icon_color' style='color:#ccc;padding:0px 5px;'>".$url_items["zones"]['icon']." <strong><a href='/".$t->href."/zones/".$t->name."/' style='color:var(--tblr-info);'>".$t->name."</a></strong>".$private_badge." $status</td>";
 			print "	<td><span class='badge bg-azure-lt $t->type'>".$t->type."</span></td>";
 			print "	<td class='text-muted d-none d-lg-table-cell'>".$t->description."</td>";
 			print "	<td class='text-muted d-none d-lg-table-cell'><span class='badge'>$aicon</span> ".$t->agname."</td>";

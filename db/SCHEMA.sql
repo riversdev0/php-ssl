@@ -288,12 +288,15 @@ CREATE TABLE `zones` (
   `is_domain` tinyint(1) NOT NULL DEFAULT 1,
   `regex_include` text DEFAULT NULL,
   `regex_exclude` text DEFAULT NULL,
+  `private_zone_uid` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_id` (`t_id`,`name`),
   KEY `name` (`name`),
   KEY `d_agent` (`agent_id`),
+  KEY `fk_zone_private_uid` (`private_zone_uid`),
   CONSTRAINT `d_agent` FOREIGN KEY (`agent_id`) REFERENCES `agents` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `d_tenant` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `d_tenant` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_zone_private_uid` FOREIGN KEY (`private_zone_uid`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

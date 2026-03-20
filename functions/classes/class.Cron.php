@@ -13,9 +13,9 @@ class Cron extends Common
 	 * @var array
 	 */
 	private $valid_cronjob_scripts = [
-		"update_certificates" => "update_certificates",
-		"axfr_transfer" => "axfr_transfer",
-		"remove_orphaned" => "remove_orphaned",
+		"update_certificates"  => "update_certificates",
+		"axfr_transfer"        => "axfr_transfer",
+		"remove_orphaned"      => "remove_orphaned",
 		"expired_certificates" => "expired_certificates"
 	];
 

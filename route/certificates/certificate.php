@@ -7,6 +7,9 @@ $User->validate_tenant ();
 if(!isset($is_from_fetch)) {
 	// validate zone
 	$zone_check = $Zones->get_zone ($_params['tenant'], $_params['app']);
+	// private zone — deny access if not the creator, or if inside an impersonation session
+	if (!is_null($zone_check) && !empty($zone_check->private_zone_uid) && ($zone_check->private_zone_uid != $user->id || isset($_SESSION['impersonate_original'])))
+	$zone_check = null;
 	// fetch cert
 	if(!is_null($zone_check)) {
 		$certificate = $Certificates->get_certificate_from_zone ($_params['id1'], $_params['tenant'], $zone_check->id);

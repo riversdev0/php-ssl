@@ -36,8 +36,8 @@ $config = $Config->get_config($j->t_id);
 # execute
 #
 try {
-    // fetch hosts
-	$hosts = $Database->getObjectsQuery("select *,h.id as host_id,z.t_id as t_id from `hosts` as h, `zones` as z, agents as a where h.`z_id` = z.id and z.agent_id = a.id and z.`t_id` = ? and h.ignore = 0", [$tenant_id]);
+    // fetch hosts (including private_zone_uid so we can route notifications correctly)
+	$hosts = $Database->getObjectsQuery("select *,h.id as host_id,z.t_id as t_id,z.private_zone_uid as private_zone_uid from `hosts` as h, `zones` as z, agents as a where h.`z_id` = z.id and z.agent_id = a.id and z.`t_id` = ? and h.ignore = 0", [$tenant_id]);
 
 	// if some are found execute
 	if (sizeof($hosts)>0) {
@@ -135,6 +135,9 @@ try {
 				$content[$email] = $use_list ? $header_list : $header_table;
 			}
 
+			// track private zone creator emails so we don't BCC tenant recipients to their notifications
+			$private_zone_emails = [];
+
 			foreach ($changed_hosts as $c) {
 
             	// parse cert
@@ -189,19 +192,30 @@ try {
 	                if (strlen($cert_parsed['extensions']['subjectAltName'])>0)
 	                $list_rows[] = "<tr><td style='$td_style'>".$Mail->font_norm._("Altnames").":<br><span style='padding:2px;padding-left:15px;'>".str_replace(",","</span><br><span style='padding:0px;padding:2px;padding-left:15px;'>",$cert_parsed['extensions']['subjectAltName'])."</span></font></td></tr>";
 
-	                // add to tenant recipients
-	                $host_rows = $use_list ? $list_rows : $table_rows;
-	                foreach ($email_to_tenant_recipents as $email) {
-	                	array_push($content[$email], ...$host_rows);
+	                // private zone: only notify the zone creator, not tenant recipients
+	                if (!empty($c->private_zone_uid)) {
+	                	$creator = $Database->getObject("users", $c->private_zone_uid);
+	                	if ($creator && $Common->validate_mail($creator->email)) {
+	                		if (!isset($content[$creator->email])) { $content[$creator->email] = $header_list; }
+	                		array_push($content[$creator->email], ...$list_rows);
+	                		$private_zone_emails[$creator->email] = true;
+	                	}
 	                }
+	                else {
+		                // add to tenant recipients
+		                $host_rows = $use_list ? $list_rows : $table_rows;
+		                foreach ($email_to_tenant_recipents as $email) {
+		                	array_push($content[$email], ...$host_rows);
+		                }
 
-	                // add to per-host recipients (always list style)
-	                foreach (explode(";", $c->h_recipients) as $r) {
-	                    $r = trim($r);
-	                    if ($Common->validate_mail($r)) {
-	                        if (!isset($content[$r])) { $content[$r] = $header_list; }
-	                        array_push($content[$r], ...$list_rows);
-	                    }
+		                // add to per-host recipients (always list style)
+		                foreach (explode(";", $c->h_recipients) as $r) {
+		                    $r = trim($r);
+		                    if ($Common->validate_mail($r)) {
+		                        if (!isset($content[$r])) { $content[$r] = $header_list; }
+		                        array_push($content[$r], ...$list_rows);
+		                    }
+		                }
 	                }
 
                 	$processed++;
@@ -227,13 +241,13 @@ try {
 		        // Log
 		        $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate change notification email sent to all tenant admins for certificate change", json_encode($email_to_tenant_recipents), json_encode(["title"=>"Telemach php-ssl :: changed certificates [".$tenant->name."]", "data"=>$content[$email_to_tenant_recipents[0]]]), false);
 
-				// send to per-host recipients individually, with tenant recipients CC'd
+				// send to per-host recipients individually; private zone creators get no BCC to tenant recipients
 		        foreach ($content as $email => $rows) {
 		        	if (!in_array($email, $email_to_tenant_recipents)) {
-		                // $Mail->send ("Telemach php-ssl :: changed certificates [".$tenant->name."]", [$email], $email_to_tenant_recipents, [], implode("\n", $rows), false);
-		                $Mail->send ("Telemach php-ssl :: changed certificates", [$email], [], $email_to_tenant_recipents, implode("\n", $rows), false);
+		        		$bcc = isset($private_zone_emails[$email]) ? [] : $email_to_tenant_recipents;
+		                $Mail->send ("Telemach php-ssl :: changed certificates", [$email], [], $bcc, implode("\n", $rows), false);
 		                // Log
-		                $Log->write ("users", $all_users[$email]->id, $tenant->id, null, "notification", true, "Certificate change notification email sent to user ".$all_users[$email]->name." (".$email.")", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: changed certificates", "data"=>$rows]), false);
+		                $Log->write ("users", $all_users[$email]->id ?? null, $tenant->id, null, "notification", true, "Certificate change notification email sent to user ".(isset($all_users[$email]) ? $all_users[$email]->name : $email)." (".$email.")", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: changed certificates", "data"=>$rows]), false);
 		        	}
 		        }
 	    	}

@@ -359,7 +359,7 @@ class Log extends Common
 		// content (must run before object/id are overwritten with HTML)
 		$l->text = $this->format_log_content($l->text, $l, $user->href ?? "");
 		// object
-		$l->object = $this->format_log_object($l->object, $user->href, $l->id);
+		$l->object = $this->format_log_object($l->object, $user->href, $l->object_id, $l->text);
 		// diff
 		$l->diff = $this->format_log_diff($l->json_object_old, $l->json_object_new, $l->id, $l->action);
 		// action
@@ -397,9 +397,10 @@ class Log extends Common
 	 * @param  int $logid
 	 * @return string
 	 */
-	public function format_log_object($object = "", $href = "", $logid = 0)
+	public function format_log_object($object = "", $href = "", $object_id = 0, $text = "")
 	{
-		return "<a class='btn btn-sm' target='_blank' href='/" . $href . "/logs/" . $logid . "/'>" . ucwords($object) . " :: " . $logid . "</a>";
+		// default
+		return strlen($object_id)>1 ? "<span class='btn btn-sm' style='cursor:default!important'>" . ucwords($object) . ":: ".$object_id."</span>" : "<span class='btn btn-sm' style='cursor:default!important'>" . ucwords($object) . "</span>";
 	}
 
 	/**

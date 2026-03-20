@@ -107,15 +107,25 @@ try {
 					$content[] = "<br><hr style='border-bottom:none;border-top:1px solid #ccc;'>";
 				}
 
-				// recipients
-				$to = explode(";", str_replace(",",";",$tenant->recipients));
-				$to = ["miha.petkovsek@telemach.si"];
-
 				// footer
 				$content[] = "<br><br>".$Mail->font_norm."Visit <a href='".$mail_sender_settings->www."' style='color:#003551;'>".$mail_sender_settings->www."</a></font>";
 
-				// send
-				$Mail->send ("Telemach php-ssl :: DNS changed hosts [".$tenant->name."]", $to, [], [], implode("\n", $content), false);
+				// private zone: only notify the creator, not tenant recipients
+				if (!empty($zone->private_zone_uid)) {
+					$creator = $Database->getObject("users", $zone->private_zone_uid);
+					if ($creator && filter_var($creator->email, FILTER_VALIDATE_EMAIL)) {
+						$Mail->send ("Telemach php-ssl :: DNS changed hosts [".$zone->name."]", [$creator->email], [], [], implode("\n", $content), false);
+					}
+				}
+				else {
+					// recipients
+					$to = array_values(array_filter(
+						array_map('trim', explode(";", str_replace(",", ";", $tenant->recipients))),
+						fn($e) => filter_var($e, FILTER_VALIDATE_EMAIL)));
+
+					// send
+					$Mail->send ("Telemach php-ssl :: DNS changed hosts [".$tenant->name."]", $to, [], [], implode("\n", $content), false);
+				}
 			}
 
 		}

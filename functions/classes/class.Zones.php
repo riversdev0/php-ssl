@@ -62,12 +62,18 @@ class Zones extends Common
 	public function get_all()
 	{
 		// fetch
+		// when impersonating, private zones are never shown (privacy must survive impersonation)
+		$impersonating = isset($_SESSION['impersonate_original']);
 		try {
 			if ($this->user->admin == "1") {
-				$zones = $this->Database->getObjectsQuery("select *,t.name as tenant_name,z.name as name,z.id as id, z.description as description,z.t_id as t_id, a.name as agname from zones as z, tenants as t, agents as a where z.t_id = t.id and z.agent_id = a.id order by z.name asc");
+				$zones = $impersonating
+					? $this->Database->getObjectsQuery("select *,t.name as tenant_name,z.name as name,z.id as id, z.description as description,z.t_id as t_id, a.name as agname from zones as z, tenants as t, agents as a where z.t_id = t.id and z.agent_id = a.id and z.private_zone_uid IS NULL order by z.name asc")
+					: $this->Database->getObjectsQuery("select *,t.name as tenant_name,z.name as name,z.id as id, z.description as description,z.t_id as t_id, a.name as agname from zones as z, tenants as t, agents as a where z.t_id = t.id and z.agent_id = a.id and (z.private_zone_uid IS NULL OR z.private_zone_uid = ?) order by z.name asc", [$this->user->id]);
 			}
 			else {
-				$zones = $this->Database->getObjectsQuery("select *,t.name as tenant_name,z.name as name,z.id as id, z.description as description,z.t_id as t_id, a.name as agname from zones as z, tenants as t, agents as a where z.t_id = t.id and z.agent_id = a.id and z.t_id = ? order by z.name asc", $this->user->t_id);
+				$zones = $impersonating
+					? $this->Database->getObjectsQuery("select *,t.name as tenant_name,z.name as name,z.id as id, z.description as description,z.t_id as t_id, a.name as agname from zones as z, tenants as t, agents as a where z.t_id = t.id and z.agent_id = a.id and z.t_id = ? and z.private_zone_uid IS NULL order by z.name asc", [$this->user->t_id])
+					: $this->Database->getObjectsQuery("select *,t.name as tenant_name,z.name as name,z.id as id, z.description as description,z.t_id as t_id, a.name as agname from zones as z, tenants as t, agents as a where z.t_id = t.id and z.agent_id = a.id and z.t_id = ? and (z.private_zone_uid IS NULL OR z.private_zone_uid = ?) order by z.name asc", [$this->user->t_id, $this->user->id]);
 			}
 		}
 		catch (Exception $e) {
@@ -115,16 +121,19 @@ class Zones extends Common
 	public function search_zone_hosts($search_string = "")
 	{
 		// fetch
+		$impersonating = isset($_SESSION['impersonate_original']);
 		try {
 			if ($this->user->admin == "1") {
+				$pz_clause = $impersonating ? "and z.private_zone_uid is null" : "and (z.private_zone_uid is null or z.private_zone_uid = ".(int)$this->user->id.")";
 				$hosts = $this->Database->getObjectsQuery("select *,h.id as id,z.name as zone_name from zones as z, hosts as h, tenants as t
-				                                          	where h.z_id = z.id and z.t_id = t.id
+				                                          	where h.z_id = z.id and z.t_id = t.id $pz_clause
 				                                          	and (h.hostname like '%" . $search_string . "%' or h.ip like '%" . $search_string . "%')
 				                                          	order by h.hostname asc");
 			}
 			else {
+				$pz_clause = $impersonating ? "and z.private_zone_uid is null" : "and (z.private_zone_uid is null or z.private_zone_uid = ".(int)$this->user->id.")";
 				$hosts = $this->Database->getObjectsQuery("select *,h.id as id,z.name as zone_name from zones as z, hosts as h, tenants as t
-				                                          	where h.z_id = z.id and z.t_id = t.id and z.href = ?
+				                                          	where h.z_id = z.id and z.t_id = t.id and z.href = ? $pz_clause
 				                                          	and (h.hostname like '%" . $search_string . "%' or h.ip like '%" . $search_string . "%')
 				                                          	order by h.hostname asc", [$this->user->t_id]);
 			}

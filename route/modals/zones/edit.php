@@ -141,6 +141,26 @@ else {
 	$content[] = "	</td>";
 	$content[] = "	<td>";
 	$content[] = "</tr>";
+	// private zone - checkbox on add, info label on edit
+	if ($_GET['action'] == "add") {
+		$content[] = "<tr>";
+		$content[] = "	<th style='width:100px;'>"._("Private zone")."</th>";
+		$content[] = "	<td>";
+		$content[] = "		<label class='form-check'>";
+		$content[] = "			<input type='checkbox' name='private_zone' class='form-check-input' value='1'>";
+		$content[] = "			<span class='form-check-label text-muted'>"._("Only visible to you — not even admins can see it")."</span>";
+		$content[] = "		</label>";
+		$content[] = "	</td>";
+		$content[] = "	<td>";
+		$content[] = "</tr>";
+	}
+	elseif (!empty($zone->private_zone_uid)) {
+		$content[] = "<tr>";
+		$content[] = "	<th style='width:100px;'>"._("Private zone")."</th>";
+		$content[] = "	<td><span class='badge text-purple'>"._("Private")."</span> <span class='text-muted small'>"._("Only visible to you")."</span></td>";
+		$content[] = "	<td>";
+		$content[] = "</tr>";
+	}
 	$content[] = "</tbody>";
 
 	//

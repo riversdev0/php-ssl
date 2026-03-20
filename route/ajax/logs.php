@@ -47,6 +47,31 @@ try {
 		$query_all    .= " and object_t_id = :t_id";
 		$vars['t_id'] = $user->t_id;
 	}
+	// exclude log entries for private zones (and their hosts/certificates) the current user cannot access
+	$impersonating = isset($_SESSION['impersonate_original']);
+	if ($impersonating) {
+		$pz_filter  = " and not (";
+		$pz_filter .= "   (object = 'zones'        and object_id in (select id from zones where private_zone_uid is not null))";
+		$pz_filter .= "or (object = 'hosts'        and (object_id in (select id from hosts where z_id in (select id from zones where private_zone_uid is not null))";
+		$pz_filter .= "                                  or (json_object_old is not null and JSON_EXTRACT(json_object_old, '$.hosts.0.z_id') in (select id from zones where private_zone_uid is not null))))";
+		$pz_filter .= "or (object = 'certificates' and (object_id in (select id from certificates where z_id in (select id from zones where private_zone_uid is not null))";
+		$pz_filter .= "                                  or (json_object_old is not null and JSON_EXTRACT(json_object_old, '$.certificates.0.z_id') in (select id from zones where private_zone_uid is not null))))";
+		$pz_filter .= ")";
+		$query     .= $pz_filter;
+		$query_all .= $pz_filter;
+	}
+	else {
+		$log_uid = (int)$user->id;
+		$pz_filter  = " and not (";
+		$pz_filter .= "   (object = 'zones'        and object_id in (select id from zones where private_zone_uid is not null and private_zone_uid != $log_uid))";
+		$pz_filter .= "or (object = 'hosts'        and (object_id in (select id from hosts where z_id in (select id from zones where private_zone_uid is not null and private_zone_uid != $log_uid))";
+		$pz_filter .= "                                  or (json_object_old is not null and JSON_EXTRACT(json_object_old, '$.hosts.0.z_id') in (select id from zones where private_zone_uid is not null and private_zone_uid != $log_uid))))";
+		$pz_filter .= "or (object = 'certificates' and (object_id in (select id from certificates where z_id in (select id from zones where private_zone_uid is not null and private_zone_uid != $log_uid))";
+		$pz_filter .= "                                  or (json_object_old is not null and JSON_EXTRACT(json_object_old, '$.certificates.0.z_id') in (select id from zones where private_zone_uid is not null and private_zone_uid != $log_uid))))";
+		$pz_filter .= ")";
+		$query     .= $pz_filter;
+		$query_all .= $pz_filter;
+	}
 	// search ?
 	if(strlen($_POST['search'])>0) {
 		$query         .= " and (object = :search2 or text like :search or json_object_old like :search or json_object_new like :search or date like :search)";

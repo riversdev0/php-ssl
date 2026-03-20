@@ -28,6 +28,14 @@ print "	<th style='min-width:180px;width:220px;'>"._("Zone name")."</th>";
 print "	<td><b>".$zone->name."</b></td>";
 print "</tr>";
 
+// private zone notice — only shown to the owner (who is the only one who can reach this page)
+if (!empty($zone->private_zone_uid)) {
+	print "<tr>";
+	print "	<th>"._("Visibility")."</th>";
+	print "	<td><span class='badge text-purple'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon me-1'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M3 3l18 18' /><path d='M10.584 10.587a2 2 0 0 0 2.828 2.829' /><path d='M9.363 5.365a9.466 9.466 0 0 1 2.637 -.365c4 0 7.333 2.333 10 7c-.778 1.361 -1.612 2.524 -2.503 3.488m-1.536 1.531c-1.671 1.326 -3.532 1.981 -5.961 1.981c-4 0 -7.333 -2.333 -10 -7c1.369 -2.395 2.913 -4.175 4.632 -5.341' /></svg> "._("Private zone")."</span> <span class='text-muted small'>"._("Only visible to you")."</span></td>";
+	print "</tr>";
+}
+
 // tenants
 if($user->admin=="1") {
 	$tenant = $Database->getObject("tenants", $zone->t_id);

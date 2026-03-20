@@ -24,6 +24,10 @@ $_POST = $User->strip_input_tags ($_POST);
 # fetch zone
 if($_POST['action']!="add")
 $zone = $Zones->get_zone_raw ($_POST['zone_id']);
+
+// private zone access check — deny edit/delete if zone is private and user is not the creator, or if impersonating
+if ($_POST['action'] !== "add" && $zone !== null && !empty($zone->private_zone_uid) && ($zone->private_zone_uid != $user->id || isset($_SESSION['impersonate_original'])))
+$Result->show("danger", _("Access denied."), true, false, false, false);
 # fetch tentant
 $tenant = $Tenants->get_tenant_by_href ($_POST['tenant']);
 
@@ -65,6 +69,10 @@ $update = [
 // edit,delete - add key
 if($_POST['action']!="add")
 $update['id'] = $zone->id;
+
+// private zone - set uid on add if checkbox checked; preserve on edit (not in update array)
+if ($_POST['action'] == "add" && !empty($_POST['private_zone']) && $_POST['private_zone'] == "1")
+$update['private_zone_uid'] = $user->id;
 
 // axfr ?
 if ($_POST['type']=="axfr" && $_POST['action']!=="delete") {
