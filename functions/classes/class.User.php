@@ -483,14 +483,14 @@ class User extends Common
 				# init modal
 				$Modal = new Modal();
 				# set content
-				$content[] = $this->Result->show("danger", _("Insuffiecient permissions to access this site. Please contact administrators") . ".", false, false, true);
+				$content[] = $this->Result->show("danger", _("Insuffiecient permissions to access this function. Please contact administrators") . ".", false, false, true);
 				# print modal
 				$Modal->modal_print("Insufficient permissions", implode("\n", $content), "", "");
 				# die
 				die();
 			}
 			else {
-				$this->Result->show("danger", _("Insuffiecient permissions to access this site. Please contact administrators") . ".", true);
+				$this->Result->show("danger", _("Insuffiecient permissions to access this function. Please contact administrators") . ".", true);
 			}
 		}
 	}

@@ -243,7 +243,7 @@ try {
 
         // Log
         $Log = new Log ($Database);
-        $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate expire notification email sent to all tenant admins", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: certificate expiration [".$tenant->name."]", "data"=>$content[$email_to_tenant_recipents[0]]]), false);
+        $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate expire notification email sent to all tenant admins", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: certificate expiration [".$tenant->name."]", "data"=>implode("\n", $content[$email_to_tenant_recipents[0]])]), false);
 
         // send to per-cert recipients individually; private zone creators get no BCC to tenant recipients
         foreach ($content as $email => $rows) {

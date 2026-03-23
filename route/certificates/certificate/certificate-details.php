@@ -7,8 +7,19 @@ print "<table class='table table-cert-details table-borderless table-auto table-
 
 print "<tr>";
 print "	<td class='text-secondary' style='min-width:$td_min_width'>"._("Serial number")."</td>";
-print "	<td>".chunk_split($certificate_details['serialNumberHex'], 2, ' ')."</td>";
+print "	<td>".chunk_split($certificate_details['serialNumberHex'], 2, ' ');
+if(isset($certificate->is_manual) && $certificate->is_manual == "1") {
+	print " <span class='badge bg-azure-lt text-azure ms-1' title='"._("This certificate was manually imported")."'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9z' /><path d='M12 12l8 -4.5' /><path d='M12 12v9' /><path d='M12 12l-8 -4.5' /></svg> "._("Manual")."</span>";
+}
+print "</td>";
 print "</tr>";
+
+if(isset($certificate->is_manual) && $certificate->is_manual == "1") {
+print "<tr>";
+print "	<td class='text-secondary'>"._("Import type")."</td>";
+print "	<td><span class='badge bg-azure-lt text-azure'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9z' /><path d='M12 12l8 -4.5' /><path d='M12 12v9' /><path d='M12 12l-8 -4.5' /></svg> "._("Manually imported")."</span> <span class='text-muted small'>"._("This certificate was manually uploaded and will not be removed by orphaned-certificate cleanup.")."</span></td>";
+print "</tr>";
+}
 print "<tr>";
 print "	<td class='text-secondary'>"._("Key size")."</td>";
 print "	<td>".$key_details['bits']." kB</td>";

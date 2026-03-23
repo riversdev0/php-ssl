@@ -41,7 +41,7 @@ elseif (@$_params['app']=="impersonate") {
 			$original = $_SESSION['impersonate_original'];
 			unset($_SESSION['impersonate_original']);
 			$_SESSION['username'] = $original;
-			$Log->write("users", 0, 0, 0, "impersonate_stop", false, "Impersonation ended, restored to ".$original);
+			$Log->write("users", 0, 0, 0, "impersonate", false, "Impersonation ended, restored to ".$original);
 		}
 		header('Location: /');
 		die();
@@ -83,7 +83,7 @@ elseif (@$_params['app']=="impersonate") {
 		// store original and switch
 		$_SESSION['impersonate_original'] = $_SESSION['username'];
 		$_SESSION['username'] = $target->email;
-		$Log->write("users", $target->id, $target->t_id, $user->id, "impersonate_start", false, "Admin ".$_SESSION['impersonate_original']." impersonating ".$target->email);
+		$Log->write("users", $target->id, $target->t_id, $user->id, "impersonate", false, "Admin ".$_SESSION['impersonate_original']." impersonating ".$target->email);
 		header('Location: /');
 		die();
 	}

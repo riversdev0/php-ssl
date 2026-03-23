@@ -616,4 +616,37 @@ class SSL extends Common
 		return $ip == $hostname ? $hostname : $ip;
 	}
 
+	/**
+	 * Converts a PKCS#12 (PFX) binary blob to a PEM-encoded certificate string.
+	 * @method pfx_to_pem
+	 * @param  string $pfx_data   Raw binary content of the .pfx file
+	 * @param  string $passphrase Passphrase protecting the PFX (empty string if none)
+	 * @return string|false       PEM certificate string, or false on failure
+	 */
+	public function pfx_to_pem(string $pfx_data, string $passphrase = "")
+	{
+		$certs = [];
+		if (!openssl_pkcs12_read($pfx_data, $certs, $passphrase)) {
+			return false;
+		}
+		return $certs['cert'] ?? false;
+	}
+
+	/**
+	 * Converts a PEM-encoded certificate (and optional private key) to PKCS#12 (PFX) binary.
+	 * @method pem_to_pfx
+	 * @param  string $pem_cert   PEM-encoded certificate
+	 * @param  string $pem_key    PEM-encoded private key (empty string if not available)
+	 * @param  string $passphrase Passphrase to protect the PFX (empty string for none)
+	 * @return string|false       Raw PFX binary, or false on failure
+	 */
+	public function pem_to_pfx(string $pem_cert, string $pem_key = "", string $passphrase = "")
+	{
+		$pfx_data = "";
+		if (!openssl_pkcs12_export($pem_cert, $pfx_data, $pem_key ?: null, $passphrase)) {
+			return false;
+		}
+		return $pfx_data;
+	}
+
 }

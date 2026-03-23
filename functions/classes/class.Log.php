@@ -53,7 +53,8 @@ class Log extends Common
 		"truncate",
 		"rollback",
 		"sync",
-		"notification"
+		"notification",
+		"impersonate"
 	];
 
 	/**

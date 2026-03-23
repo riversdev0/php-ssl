@@ -30,7 +30,7 @@ $tenant_id = $j->t_id;
 #
 try {
 	# remove
-	$certificates = $Database->runQuery("delete FROM certificates WHERE `t_id` = ? and id NOT IN (SELECT c_id from hosts where c_id is not NULL)", [$tenant_id]);
+	$certificates = $Database->runQuery("delete FROM certificates WHERE `t_id` = ? and is_manual = 0 and id NOT IN (SELECT c_id from hosts where c_id is not NULL)", [$tenant_id]);
 } catch (Exception $e) {
     // print error
 	$Common->errors[] = $e->getMessage();

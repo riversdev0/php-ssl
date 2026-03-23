@@ -118,6 +118,9 @@ $url_items["certificates"] = [
 			],
 			"orphaned" => [
 				"title" => "Orphaned",
+			],
+			"imported" => [
+				"title" => "Imported",
 			]
 		]
 	];

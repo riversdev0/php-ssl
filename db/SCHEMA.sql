@@ -61,6 +61,7 @@ CREATE TABLE `certificates` (
   `chain` text DEFAULT NULL,
   `expires` datetime DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_manual` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_zone_serial` (`z_id`,`serial`),
   KEY `serial` (`serial`),

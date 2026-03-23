@@ -39,7 +39,7 @@ try {
 	$expire_days = isset($user->days) ? $user->days : (isset($expired_days) ? $expired_days : 30);
 
 	// formulate query - fetch certificate details with hosts
-	$query 	   .= "select c.id, c.serial, c.expires, c.z_id, c.t_id, c.certificate, z.name as zone_name, t.href as tenant_href from certificates c left join zones z on c.z_id = z.id left join tenants t on c.t_id = t.id left join hosts h on c.id = h.c_id where 1=1 ";
+	$query 	   .= "select c.id, c.serial, c.expires, c.z_id, c.t_id, c.certificate, c.is_manual, z.name as zone_name, t.href as tenant_href from certificates c left join zones z on c.z_id = z.id left join tenants t on c.t_id = t.id left join hosts h on c.id = h.c_id where 1=1 ";
 	$query_all .= "select count(distinct c.id) as cnt from certificates c left join zones z on c.z_id = z.id left join tenants t on c.t_id = t.id left join hosts h on c.id = h.c_id where 1=1 ";
 
 	// not admin ?
@@ -81,6 +81,10 @@ try {
 		# orphaned = certificate not linked to any host
 		$query         .= " and c.id not in (select distinct c_id from hosts where c_id is not null)";
 		$query_all     .= " and c.id not in (select distinct c_id from hosts where c_id is not null)";
+	}
+	elseif($filter=="imported") {
+		$query         .= " and c.is_manual = 1";
+		$query_all     .= " and c.is_manual = 1";
 	}
 
 	// order, sort
@@ -197,8 +201,8 @@ try {
 
 			// serial link
 			if($cert_parsed['serialNumberHex']!="/") {
-				$len = strlen($cert_parsed['serialNumberHex']);
-				$c->serial = "<a class='btn btn-sm text-info text-$danger_class' href='/".$tenant_href."/certificates/".$zone_name."/".$cert_parsed['serialNumber']."/'>".$cert_parsed['serialNumberHex']."</a>";
+				$manual_icon = $c->is_manual == "1" ? " <span class='badge bg-azure-lt text-azure' title='"._("Manually imported certificate")."'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9z' /><path d='M12 12l8 -4.5' /><path d='M12 12v9' /><path d='M12 12l-8 -4.5' /></svg> "._("Manual")."</span>" : "";
+				$c->serial = "<a class='btn btn-sm text-info text-$danger_class' href='/".$tenant_href."/certificates/".$zone_name."/".$cert_parsed['serialNumber']."/'>".$cert_parsed['serialNumberHex']."</a>".$manual_icon;
 			}
 		}
 	}
