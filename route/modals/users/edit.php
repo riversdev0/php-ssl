@@ -158,6 +158,18 @@ else {
 		$content[] = "		</label>";
 		$content[] = "	</td>";
 		$content[] = "</tr>";
+
+		// disabled — only on edit
+		$dis_checked = !empty($edit_user->disabled) ? "checked" : "";
+		$content[] = "<tr>";
+		$content[] = "	<th>"._("Disabled")."</th>";
+		$content[] = "	<td>";
+		$content[] = "		<label class='form-check'>";
+		$content[] = "			<input type='checkbox' class='form-check-input' name='disabled' value='1' {$dis_checked}>";
+		$content[] = "			<span class='form-check-label text-muted' style='font-size:11px'>"._("Account is disabled — user cannot log in")."</span>";
+		$content[] = "		</label>";
+		$content[] = "	</td>";
+		$content[] = "</tr>";
 	}
 
 	$content[] = "</tbody>";

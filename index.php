@@ -86,6 +86,10 @@ if(!isset($_SESSION['theme'])) { $_SESSION['theme'] = "dark"; }
 	elseif ($_params['tenant']=="install") {
 		include ("route/install/index.php");
 	}
+	// disabled account — render without header/sidebar
+	elseif (isset($user) && !empty($user->disabled)) {
+		include ("route/disabled/index.php");
+	}
 	// force password change — render without header/sidebar
 	elseif (isset($user) && !empty($user->changePass)) {
 		include ("route/user/changepass/index.php");
