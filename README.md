@@ -6,8 +6,6 @@ hostnames. It supports DNS zone transfers (AXFR) to automatically discover and t
 remote scanning agents for environments with restricted DNS resolution, and email notifications
 for certificate changes and upcoming expirations.
 
-**Current version:** 0.7
-
 ## Main features
 
 - **Multi-tenant** support with full tenant isolation
@@ -33,13 +31,18 @@ for certificate changes and upcoming expirations.
 <table>
   <tr>
     <td><img src="css/images/Dashboard.png"></td>
-    <td><img src="css/images/certificates.png"></td>
-    <td><img src="css/images/certificate.png"></td>
+    <td><img src="css/images/Tenants.png"></td>
+    <td><img src="css/images/Zones.png"></td>
   </tr>
   <tr>
-    <td><img src="css/images/cert_fetch.png"></td>
-    <td><img src="css/images/fetch.png"></td>
-    <td><img src="css/images/zone_axfr.png"></td>
+    <td><img src="css/images/Certificates.png"></td>
+    <td><img src="css/images/Certificate_details.png"></td>
+    <td><img src="css/images/Certificate_details_2.png"></td>
+  </tr>
+  <tr>
+    <td><img src="css/images/AXFR.png"></td>
+    <td><img src="css/images/AXFR-test.png"></td>
+    <td><img src="css/images/Agents.png"></td>
   </tr>
 </table>
 
