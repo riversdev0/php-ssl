@@ -1,0 +1,1824 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: php-ssl\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-03-24\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Zones"
+msgstr "Zonen"
+
+msgid "Certificates"
+msgstr "Zertifikate"
+
+msgid "Scanning"
+msgstr "Scannen"
+
+msgid "Logs"
+msgstr "Protokolle"
+
+msgid "Users"
+msgstr "Benutzer"
+
+msgid "Tenants"
+msgstr "Mandanten"
+
+msgid "All certificates"
+msgstr "Alle Zertifikate"
+
+msgid "Expire soon"
+msgstr "Läuft bald ab"
+
+msgid "Expired"
+msgstr "Abgelaufen"
+
+msgid "Orphaned"
+msgstr "Verwaist"
+
+msgid "Imported"
+msgstr "Importiert"
+
+msgid "Scan agents"
+msgstr "Scan-Agenten"
+
+msgid "Port groups"
+msgstr "Portgruppen"
+
+msgid "Cron jobs"
+msgstr "Cronjobs"
+
+msgid "Ignored issuers"
+msgstr "Ignorierte Aussteller"
+
+msgid "Search"
+msgstr "Suchen"
+
+msgid "My profile"
+msgstr "Mein Profil"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Fetch certificate"
+msgstr "Zertifikat abrufen"
+
+msgid "Transform certificate"
+msgstr "Zertifikat umwandeln"
+
+msgid "Tools"
+msgstr "Werkzeuge"
+
+msgid "Administration"
+msgstr "Verwaltung"
+
+msgid "DB validation"
+msgstr "DB-Validierung"
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "Logout"
+msgstr "Abmelden"
+
+msgid "Log out"
+msgstr "Abmelden"
+
+msgid "Sign in"
+msgstr "Anmelden"
+
+msgid "Username"
+msgstr "Benutzername"
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "Your E-Mail"
+msgstr "Ihre E-Mail"
+
+msgid "Your password"
+msgstr "Ihr Passwort"
+
+msgid "Please enter your email and password to login to system"
+msgstr "Bitte geben Sie Ihre E-Mail und Ihr Passwort ein, um sich anzumelden"
+
+msgid "Please enter your username and password"
+msgstr "Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein"
+
+msgid "Please log in."
+msgstr "Bitte melden Sie sich an."
+
+msgid "Login successful"
+msgstr "Anmeldung erfolgreich"
+
+msgid "Login successfull"
+msgstr "Anmeldung erfolgreich"
+
+msgid "Invalid username or password"
+msgstr "Ungültiger Benutzername oder Passwort"
+
+msgid "Session expired. Redirecting to login..."
+msgstr "Sitzung abgelaufen. Weiterleitung zur Anmeldung..."
+
+msgid "You have logged out"
+msgstr "Sie haben sich abgemeldet"
+
+msgid "Access denied."
+msgstr "Zugriff verweigert."
+
+msgid "Access denied"
+msgstr "Zugriff verweigert"
+
+msgid "Admin access required."
+msgstr "Administratorzugriff erforderlich."
+
+msgid "Admin privileges required"
+msgstr "Administratorrechte erforderlich"
+
+msgid "Admin user required"
+msgstr "Administratorbenutzer erforderlich"
+
+msgid "Administrative privileges required"
+msgstr "Administratorrechte erforderlich"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "E-Mail address"
+msgstr "E-Mail-Adresse"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Inactive"
+msgstr "Inaktiv"
+
+msgid "Enabled"
+msgstr "Aktiviert"
+
+msgid "Disabled"
+msgstr "Deaktiviert"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Actions"
+msgstr "Aktionen"
+
+msgid "Action"
+msgstr "Aktion"
+
+msgid "Add"
+msgstr "Hinzufügen"
+
+msgid "Edit"
+msgstr "Bearbeiten"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Close window"
+msgstr "Fenster schließen"
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Go back"
+msgstr "Zurück"
+
+msgid "Create"
+msgstr "Erstellen"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "Error: "
+msgstr "Fehler: "
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "Success"
+msgstr "Erfolg"
+
+msgid "Unknown"
+msgstr "Unbekannt"
+
+msgid "Never"
+msgstr "Niemals"
+
+msgid "Loading"
+msgstr "Laden..."
+
+msgid "No change"
+msgstr "Keine Änderung"
+
+msgid "Change"
+msgstr "Ändern"
+
+msgid "Updated"
+msgstr "Aktualisiert"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Day"
+msgstr "Tag"
+
+msgid "Days"
+msgstr "Tage"
+
+msgid "days"
+msgstr "Tage"
+
+msgid "Hour"
+msgstr "Stunde"
+
+msgid "Minute"
+msgstr "Minute"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "minutes"
+msgstr "Minuten"
+
+msgid "Month"
+msgstr "Monat"
+
+msgid "MON"
+msgstr "MO"
+
+msgid "WKD"
+msgstr "WT"
+
+msgid "weekday"
+msgstr "Wochentag"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Object"
+msgstr "Objekt"
+
+msgid "Old object"
+msgstr "Altes Objekt"
+
+msgid "New object"
+msgstr "Neues Objekt"
+
+msgid "Content"
+msgstr "Inhalt"
+
+msgid "Table"
+msgstr "Tabelle"
+
+msgid "Links"
+msgstr "Links"
+
+msgid "Export"
+msgstr "Exportieren"
+
+msgid "Download"
+msgstr "Herunterladen"
+
+msgid "Import"
+msgstr "Importieren"
+
+msgid "Import type"
+msgstr "Importtyp"
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Statistics"
+msgstr "Statistiken"
+
+msgid "Language"
+msgstr "Sprache"
+
+msgid "— System default (English) —"
+msgstr "— Systemstandard (Englisch) —"
+
+msgid "— Tenant default —"
+msgstr "— Mandantenstandard —"
+
+msgid "User interface language preference"
+msgstr "Spracheinstellung der Benutzeroberfläche"
+
+msgid "Zone"
+msgstr "Zone"
+
+msgid "zone"
+msgstr "Zone"
+
+msgid "Zone name"
+msgstr "Zonenname"
+
+msgid "Zone details"
+msgstr "Zonendetails"
+
+msgid "Zone statistics"
+msgstr "Zonenstatistiken"
+
+msgid "Zone hosts"
+msgstr "Zonenhosts"
+
+msgid "Zone sync"
+msgstr "Zonensynchronisierung"
+
+msgid "Zone AXFR sync results"
+msgstr "Zonen-AXFR-Synchronisierungsergebnisse"
+
+msgid "Zone created"
+msgstr "Zone erstellt"
+
+msgid "Zone updated"
+msgstr "Zone aktualisiert"
+
+msgid "Zone deleted"
+msgstr "Zone gelöscht"
+
+msgid "Zone does not exist."
+msgstr "Zone existiert nicht."
+
+msgid "Zone not found"
+msgstr "Zone nicht gefunden"
+
+msgid "Zone has no hosts"
+msgstr "Zone hat keine Hosts"
+
+msgid "Zone hosts removal"
+msgstr "Entfernung von Zonenhosts"
+
+msgid "No zones available"
+msgstr "Keine Zonen verfügbar"
+
+msgid "No zones available."
+msgstr "Keine Zonen verfügbar."
+
+msgid "Add zone"
+msgstr "Zone hinzufügen"
+
+msgid "New zone"
+msgstr "Neue Zone"
+
+msgid "Edit zone"
+msgstr "Zone bearbeiten"
+
+msgid "Delete zone"
+msgstr "Zone löschen"
+
+msgid "Create new zone"
+msgstr "Neue Zone erstellen"
+
+msgid "Manage zone"
+msgstr "Zone verwalten"
+
+msgid "Manage"
+msgstr "Verwalten"
+
+msgid "View and manage zones"
+msgstr "Zonen anzeigen und verwalten"
+
+msgid "List of all available DNS zones in the system"
+msgstr "Liste aller verfügbaren DNS-Zonen im System"
+
+msgid "Invalid zone"
+msgstr "Ungültige Zone"
+
+msgid "Invalid zone name"
+msgstr "Ungültiger Zonenname"
+
+msgid "Invalid zone type"
+msgstr "Ungültiger Zonentyp"
+
+msgid "Private zone"
+msgstr "Private Zone"
+
+msgid "Private"
+msgstr "Privat"
+
+msgid "Only visible to you — not even admins can see it"
+msgstr "Nur für Sie sichtbar – nicht einmal Admins können es sehen"
+
+msgid "Only visible to you"
+msgstr "Nur für Sie sichtbar"
+
+msgid "Visibility"
+msgstr "Sichtbarkeit"
+
+msgid "Sync zone"
+msgstr "Zone synchronisieren"
+
+msgid "Sync now"
+msgstr "Jetzt synchronisieren"
+
+msgid "Remove all hosts from zone"
+msgstr "Alle Hosts aus Zone entfernen"
+
+msgid "Remove all"
+msgstr "Alle entfernen"
+
+msgid "All hosts in zone removed"
+msgstr "Alle Hosts aus der Zone entfernt"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "host"
+msgstr "Host"
+
+msgid "Hosts"
+msgstr "Hosts"
+
+msgid "hosts"
+msgstr "Hosts"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Host details"
+msgstr "Hostdetails"
+
+msgid "Host logs"
+msgstr "Hostprotokolle"
+
+msgid "Host recipients"
+msgstr "Hostempfänger"
+
+msgid "Host removed"
+msgstr "Host entfernt"
+
+msgid "Host search results"
+msgstr "Hostsuchergebnisse"
+
+msgid "host to zone"
+msgstr "Host zur Zone"
+
+msgid "Add host"
+msgstr "Host hinzufügen"
+
+msgid "Delete host"
+msgstr "Host löschen"
+
+msgid "Import hosts"
+msgstr "Hosts importieren"
+
+msgid "Hosts created"
+msgstr "Hosts erstellt"
+
+msgid "Host does not exist in this zone."
+msgstr "Host existiert nicht in dieser Zone."
+
+msgid "Hostname not in zone"
+msgstr "Hostname nicht in der Zone"
+
+msgid "Invalid host"
+msgstr "Ungültiger Host"
+
+msgid "Invalid host or tenant"
+msgstr "Ungültiger Host oder Mandant"
+
+msgid "Invalid hostname"
+msgstr "Ungültiger Hostname"
+
+msgid "Mute host"
+msgstr "Host stummschalten"
+
+msgid "Mute notifications"
+msgstr "Benachrichtigungen stummschalten"
+
+msgid "Muted"
+msgstr "Stummgeschaltet"
+
+msgid "Unmute notifications"
+msgstr "Benachrichtigungen aktivieren"
+
+msgid "Enable scanning"
+msgstr "Scannen aktivieren"
+
+msgid "Disable SSL check"
+msgstr "SSL-Prüfung deaktivieren"
+
+msgid "Enable SSL check"
+msgstr "SSL-Prüfung aktivieren"
+
+msgid "Exclude from scan"
+msgstr "Vom Scan ausschließen"
+
+msgid "Ignore host check"
+msgstr "Hostprüfung ignorieren"
+
+msgid "Ignore scanning"
+msgstr "Scannen ignorieren"
+
+msgid "Per-host notifications"
+msgstr "Pro-Host-Benachrichtigungen"
+
+msgid "Receive notifications for all hosts in this tenant"
+msgstr "Benachrichtigungen für alle Hosts in diesem Mandanten erhalten"
+
+msgid "Receive notifications only for this host"
+msgstr "Benachrichtigungen nur für diesen Host erhalten"
+
+msgid "No host-specific recipients"
+msgstr "Keine hostspezifischen Empfänger"
+
+msgid "Enter one hostname per line to import into zone"
+msgstr ""
+"Geben Sie einen Hostnamen pro Zeile ein, um ihn in die Zone zu importieren"
+
+msgid "Please enter at least one hostname."
+msgstr "Bitte geben Sie mindestens einen Hostnamen ein."
+
+msgid "Certificate"
+msgstr "Zertifikat"
+
+msgid "certificate"
+msgstr "Zertifikat"
+
+msgid "Certificate details"
+msgstr "Zertifikatdetails"
+
+msgid "Certificate history"
+msgstr "Zertifikatsverlauf"
+
+msgid "Certificate chain"
+msgstr "Zertifikatskette"
+
+msgid "Certificate Chain"
+msgstr "Zertifikatskette"
+
+msgid "Certificate chain is Valid"
+msgstr "Zertifikatskette ist gültig"
+
+msgid "Certificate chain is Invalid"
+msgstr "Zertifikatskette ist ungültig"
+
+msgid "Certificate chain missing"
+msgstr "Zertifikatskette fehlt"
+
+msgid "Certificate expired"
+msgstr "Zertifikat abgelaufen"
+
+msgid "Certificate not found"
+msgstr "Zertifikat nicht gefunden"
+
+msgid "Certificate is required"
+msgstr "Zertifikat ist erforderlich"
+
+msgid "Certificate removed"
+msgstr "Zertifikat entfernt"
+
+msgid "Certificate fetched"
+msgstr "Zertifikat abgerufen"
+
+msgid "Certificate imported successfully."
+msgstr "Zertifikat erfolgreich importiert."
+
+msgid "Certificate assigned."
+msgstr "Zertifikat zugewiesen."
+
+msgid "Certificate search results"
+msgstr "Zertifikatssuchergebnisse"
+
+msgid "Certificate validity is more than 398 days"
+msgstr "Zertifikatsgültigkeit beträgt mehr als 398 Tage"
+
+msgid "Certificate not allowed to issue certificates"
+msgstr "Zertifikat darf keine Zertifikate ausstellen"
+
+msgid "Certificate not signed by parent"
+msgstr "Zertifikat nicht vom übergeordneten Zertifikat signiert"
+
+msgid "Child certificate is not allowed to issue certificates"
+msgstr "Untergeordnetes Zertifikat darf keine Zertifikate ausstellen"
+
+msgid "Parent certificate not allowed to issue certificates"
+msgstr "Übergeordnetes Zertifikat darf keine Zertifikate ausstellen"
+
+msgid "Cannot parse certificate"
+msgstr "Zertifikat kann nicht geparst werden"
+
+msgid "Failed to obtain certificate"
+msgstr "Zertifikat konnte nicht abgerufen werden"
+
+msgid "All certificates fetched"
+msgstr "Alle Zertifikate abgerufen"
+
+msgid "This certificate was manually imported"
+msgstr "Dieses Zertifikat wurde manuell importiert"
+
+msgid "Manually imported certificate"
+msgstr "Manuell importiertes Zertifikat"
+
+msgid "Manually imported"
+msgstr "Manuell importiert"
+
+msgid "Current certificate"
+msgstr "Aktuelles Zertifikat"
+
+msgid "Previous certificate"
+msgstr "Vorheriges Zertifikat"
+
+msgid "Previous certificate already removed from database."
+msgstr "Vorheriges Zertifikat bereits aus der Datenbank entfernt."
+
+msgid "Delete certificate"
+msgstr "Zertifikat löschen"
+
+msgid "Remove certificate"
+msgstr "Zertifikat entfernen"
+
+msgid "Refresh certificate"
+msgstr "Zertifikat aktualisieren"
+
+msgid "Assign certificate"
+msgstr "Zertifikat zuweisen"
+
+msgid "Reassign certificate"
+msgstr "Zertifikat neu zuweisen"
+
+msgid "Import certificate"
+msgstr "Zertifikat importieren"
+
+msgid "Show certificate details"
+msgstr "Zertifikatdetails anzeigen"
+
+msgid "Update host SSL certificate"
+msgstr "Host-SSL-Zertifikat aktualisieren"
+
+msgid "Refresh all host certificates"
+msgstr "Alle Host-Zertifikate aktualisieren"
+
+msgid "Rescan all hosts for new certificates"
+msgstr "Alle Hosts nach neuen Zertifikaten neu scannen"
+
+msgid "Rescan all"
+msgstr "Alle neu scannen"
+
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+msgid "Not assigned to any host"
+msgstr "Keinem Host zugewiesen"
+
+msgid "No certificates available for this tenant."
+msgstr "Keine Zertifikate für diesen Mandanten verfügbar."
+
+msgid "No certificate found."
+msgstr "Kein Zertifikat gefunden."
+
+msgid "List of all available certificates in system"
+msgstr "Liste aller verfügbaren Zertifikate im System"
+
+msgid "View and manage found certificates"
+msgstr "Gefundene Zertifikate anzeigen und verwalten"
+
+msgid "Not in any tenant recipients"
+msgstr "In keinen Mandantenempfängern"
+
+msgid "Invalid certificate"
+msgstr "Ungültiges Zertifikat"
+
+msgid "Invalid serial"
+msgstr "Ungültige Seriennummer"
+
+msgid "Changed host certificates"
+msgstr "Geänderte Host-Zertifikate"
+
+msgid "Checked / Changed"
+msgstr "Geprüft / Geändert"
+
+msgid "Subject"
+msgstr "Betreff"
+
+msgid "Issuer"
+msgstr "Aussteller"
+
+msgid "issuer"
+msgstr "Aussteller"
+
+msgid "Common name"
+msgstr "Common Name"
+
+msgid "Organisation name"
+msgstr "Organisationsname"
+
+msgid "Altnames"
+msgstr "Alternativnamen"
+
+msgid "SANs"
+msgstr "SANs"
+
+msgid "Valid from"
+msgstr "Gültig ab"
+
+msgid "Valid to"
+msgstr "Gültig bis"
+
+msgid "Valid from/to"
+msgstr "Gültig von/bis"
+
+msgid "Valid Until"
+msgstr "Gültig bis"
+
+msgid "Valid untill"
+msgstr "Gültig bis"
+
+msgid "Valid"
+msgstr "Gültig"
+
+msgid "Expires"
+msgstr "Läuft ab"
+
+msgid "Expires on"
+msgstr "Läuft ab am"
+
+msgid "Expires soon"
+msgstr "Läuft bald ab"
+
+msgid "Lifetime"
+msgstr "Laufzeit"
+
+msgid "days remaining"
+msgstr "Tage verbleibend"
+
+msgid "Serial"
+msgstr "Seriennummer"
+
+msgid "Serial number"
+msgstr "Seriennummer"
+
+msgid "Retrieved serial"
+msgstr "Abgerufene Seriennummer"
+
+msgid "Fingerprints"
+msgstr "Fingerabdrücke"
+
+msgid "SHA-1"
+msgstr "SHA-1"
+
+msgid "SHA-256"
+msgstr "SHA-256"
+
+msgid "SHA-512"
+msgstr "SHA-512"
+
+msgid "SHA-256 Fingerprint"
+msgstr "SHA-256-Fingerabdruck"
+
+msgid "Key size"
+msgstr "Schlüsselgröße"
+
+msgid "Key identifier"
+msgstr "Schlüsselkennung"
+
+msgid "Subject Key ID"
+msgstr "Subject-Key-ID"
+
+msgid "Subject Key Identifier"
+msgstr "Subject-Key-Kennung"
+
+msgid "Authority Key Identifier"
+msgstr "Authority-Key-Kennung"
+
+msgid "Extensions"
+msgstr "Erweiterungen"
+
+msgid "Purposes"
+msgstr "Verwendungszwecke"
+
+msgid "keyUsage"
+msgstr "Schlüsselverwendung"
+
+msgid "basicConstraints"
+msgstr "Grundlegende Einschränkungen"
+
+msgid "Is domain"
+msgstr "Ist Domain"
+
+msgid "Domain mismatch"
+msgstr "Domainabweichung"
+
+msgid "Issued by"
+msgstr "Ausgestellt von"
+
+msgid "Issued to"
+msgstr "Ausgestellt für"
+
+msgid "Valid for domains"
+msgstr "Gültig für Domains"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "County"
+msgstr "Landkreis"
+
+msgid "Locality"
+msgstr "Ort"
+
+msgid "TLS version"
+msgstr "TLS-Version"
+
+msgid "SSL scan"
+msgstr "SSL-Scan"
+
+msgid "Intermediate"
+msgstr "Zwischenzertifikat"
+
+msgid "Latest"
+msgstr "Aktuell"
+
+msgid "Existing"
+msgstr "Vorhanden"
+
+msgid "Missmatched"
+msgstr "Nicht übereinstimmend"
+
+msgid "Unresolved"
+msgstr "Ungelöst"
+
+msgid "Not checked"
+msgstr "Nicht geprüft"
+
+msgid "Not found"
+msgstr "Nicht gefunden"
+
+msgid "Discovered"
+msgstr "Entdeckt"
+
+msgid "PEM-encoded certificate (-----BEGIN CERTIFICATE----- block)"
+msgstr "PEM-kodiertes Zertifikat (-----BEGIN CERTIFICATE----- Block)"
+
+msgid "Select a .pem / .crt / .cer / .pfx file, or paste below"
+msgstr ""
+"Wählen Sie eine .pem / .crt / .cer / .pfx Datei oder fügen Sie unten ein"
+
+msgid "Choose file"
+msgstr "Datei auswählen"
+
+msgid "No file chosen"
+msgstr "Keine Datei ausgewählt"
+
+msgid "No file uploaded or upload error."
+msgstr "Keine Datei hochgeladen oder Upload-Fehler."
+
+msgid "Upload file"
+msgstr "Datei hochladen"
+
+msgid "PFX passphrase"
+msgstr "PFX-Passphrase"
+
+msgid "Leave empty if not protected"
+msgstr "Leer lassen, wenn nicht geschützt"
+
+msgid "Convert to PEM"
+msgstr "In PEM konvertieren"
+
+msgid "Converting..."
+msgstr "Konvertieren..."
+
+msgid "Conversion failed."
+msgstr "Konvertierung fehlgeschlagen."
+
+msgid "Fetch website certificate"
+msgstr "Website-Zertifikat abrufen"
+
+msgid "https://google.com"
+msgstr "https://google.com"
+
+msgid "Queried URL"
+msgstr "Abgefragte URL"
+
+msgid "HTTP code"
+msgstr "HTTP-Code"
+
+msgid "HTTP version"
+msgstr "HTTP-Version"
+
+msgid "Curl error"
+msgstr "Curl-Fehler"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "IP address"
+msgstr "IP-Adresse"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Add IP addresses"
+msgstr "IP-Adressen hinzufügen"
+
+msgid "CNAME"
+msgstr "CNAME"
+
+msgid "Tenant"
+msgstr "Mandant"
+
+msgid "tenant"
+msgstr "Mandant"
+
+msgid "Tenant name"
+msgstr "Mandantenname"
+
+msgid "Tenant created"
+msgstr "Mandant erstellt"
+
+msgid "Tenant updated"
+msgstr "Mandant aktualisiert"
+
+msgid "Tenant deleted"
+msgstr "Mandant gelöscht"
+
+msgid "Deleted tenant id"
+msgstr "Gelöschte Mandanten-ID"
+
+msgid "Add tenant"
+msgstr "Mandant hinzufügen"
+
+msgid "New tenant"
+msgstr "Neuer Mandant"
+
+msgid "Edit tenant"
+msgstr "Mandant bearbeiten"
+
+msgid "Delete tenant"
+msgstr "Mandant löschen"
+
+msgid "Create new tenant"
+msgstr "Neuen Mandanten erstellen"
+
+msgid "Invalid tenant"
+msgstr "Ungültiger Mandant"
+
+msgid "No tenants available"
+msgstr "Keine Mandanten verfügbar"
+
+msgid "List of all available tenants in the system"
+msgstr "Liste aller verfügbaren Mandanten im System"
+
+msgid "View and manage system tenants"
+msgstr "Systemmandanten anzeigen und verwalten"
+
+msgid "Tenant notifications"
+msgstr "Mandantenbenachrichtigungen"
+
+msgid "Tenant recipients"
+msgstr "Mandantenempfänger"
+
+msgid "Log retention"
+msgstr "Protokollaufbewahrung"
+
+msgid "days (logs older than this are deleted automatically)"
+msgstr "Tage (ältere Protokolle werden automatisch gelöscht)"
+
+msgid "Remove orphaned"
+msgstr "Verwaiste entfernen"
+
+msgid "Mail recipients"
+msgstr "E-Mail-Empfänger"
+
+msgid "Mail style"
+msgstr "E-Mail-Stil"
+
+msgid "Recipients"
+msgstr "Empfänger"
+
+msgid "Recipients updated"
+msgstr "Empfänger aktualisiert"
+
+msgid "Notification recipients"
+msgstr "Benachrichtigungsempfänger"
+
+msgid "Manage recipients"
+msgstr "Empfänger verwalten"
+
+msgid "Manage extra recipients"
+msgstr "Zusätzliche Empfänger verwalten"
+
+msgid "Href"
+msgstr "Href"
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "user"
+msgstr "Benutzer"
+
+msgid "User details"
+msgstr "Benutzerdetails"
+
+msgid "User logs"
+msgstr "Benutzerprotokolle"
+
+msgid "User created"
+msgstr "Benutzer erstellt"
+
+msgid "User updated"
+msgstr "Benutzer aktualisiert"
+
+msgid "User deleted"
+msgstr "Benutzer gelöscht"
+
+msgid "User does not exist."
+msgstr "Benutzer existiert nicht."
+
+msgid "Add user"
+msgstr "Benutzer hinzufügen"
+
+msgid "New user"
+msgstr "Neuer Benutzer"
+
+msgid "Edit user"
+msgstr "Benutzer bearbeiten"
+
+msgid "Delete user"
+msgstr "Benutzer löschen"
+
+msgid "Delete account"
+msgstr "Konto löschen"
+
+msgid "List of all available users"
+msgstr "Liste aller verfügbaren Benutzer"
+
+msgid "No users available"
+msgstr "Keine Benutzer verfügbar"
+
+msgid "Invalid user"
+msgstr "Ungültiger Benutzer"
+
+msgid "Invalid user ID"
+msgstr "Ungültige Benutzer-ID"
+
+msgid "You cannot delete your own account"
+msgstr "Sie können Ihr eigenes Konto nicht löschen"
+
+msgid "Permission"
+msgstr "Berechtigung"
+
+msgid "Invalid permission level"
+msgstr "Ungültige Berechtigungsstufe"
+
+msgid "Impersonate"
+msgstr "Imitieren"
+
+msgid "Acting as"
+msgstr "Handelt als"
+
+msgid "Switch back to admin"
+msgstr "Zurück zu Admin"
+
+msgid "Edit profile"
+msgstr "Profil bearbeiten"
+
+msgid "Change password"
+msgstr "Passwort ändern"
+
+msgid "Current password"
+msgstr "Aktuelles Passwort"
+
+msgid "New password"
+msgstr "Neues Passwort"
+
+msgid "Confirm new password"
+msgstr "Neues Passwort bestätigen"
+
+msgid "Current password is incorrect."
+msgstr "Aktuelles Passwort ist falsch."
+
+msgid "New password must be different from the current password."
+msgstr "Neues Passwort muss sich vom aktuellen unterscheiden."
+
+msgid "New passwords do not match."
+msgstr "Neue Passwörter stimmen nicht überein."
+
+msgid "Password changed successfully."
+msgstr "Passwort erfolgreich geändert."
+
+msgid "Failed to update password: "
+msgstr "Passwort konnte nicht aktualisiert werden: "
+
+msgid "Password is required"
+msgstr "Passwort ist erforderlich"
+
+msgid "Password change required"
+msgstr "Passwortänderung erforderlich"
+
+msgid "Force password change"
+msgstr "Passwortänderung erzwingen"
+
+msgid "You must set a new password before continuing."
+msgstr "Sie müssen ein neues Passwort festlegen, bevor Sie fortfahren."
+
+msgid "Min 10 characters, must include uppercase, lowercase and a number."
+msgstr ""
+"Mindestens 10 Zeichen, muss Groß-, Kleinbuchstaben und eine Zahl enthalten."
+
+msgid "Min 10 characters, must include uppercase, lowercase and a number"
+msgstr ""
+"Mindestens 10 Zeichen, muss Groß-, Kleinbuchstaben und eine Zahl enthalten"
+
+msgid "Leave blank to keep current"
+msgstr "Leer lassen, um aktuelles beizubehalten"
+
+msgid "User must change password on next login"
+msgstr "Benutzer muss das Passwort bei der nächsten Anmeldung ändern"
+
+msgid "Force next execution"
+msgstr "Nächste Ausführung erzwingen"
+
+msgid "Account is disabled — user cannot log in"
+msgstr "Konto ist deaktiviert – Benutzer kann sich nicht anmelden"
+
+msgid "Please wait for system administrator to enable your account."
+msgstr "Bitte warten Sie, bis der Systemadministrator Ihr Konto aktiviert."
+
+msgid "Your account is not activated or disabled!"
+msgstr "Ihr Konto ist nicht aktiviert oder deaktiviert!"
+
+msgid "Continue to application"
+msgstr "Zur Anwendung fortfahren"
+
+msgid "new user account"
+msgstr "Neues Benutzerkonto"
+
+msgid "Your php-ssl account has been created"
+msgstr "Ihr php-ssl-Konto wurde erstellt"
+
+msgid "You will be asked to change your password on first login."
+msgstr "Sie werden beim ersten Login aufgefordert, Ihr Passwort zu ändern."
+
+msgid "In case of any issues please contact"
+msgstr "Bei Problemen wenden Sie sich bitte an"
+
+msgid "system administrator"
+msgstr "Systemadministrator"
+
+msgid "Agent"
+msgstr "Agent"
+
+msgid "agent"
+msgstr "Agent"
+
+msgid "Agents"
+msgstr "Agenten"
+
+msgid "Agent name"
+msgstr "Agentenname"
+
+msgid "Agent version"
+msgstr "Agentenversion"
+
+msgid "Agent errors"
+msgstr "Agentenfehler"
+
+msgid "Agent Error"
+msgstr "Agentenfehler"
+
+msgid "Agent created"
+msgstr "Agent erstellt"
+
+msgid "Agent updated"
+msgstr "Agent aktualisiert"
+
+msgid "Agent deleted"
+msgstr "Agent gelöscht"
+
+msgid "New agent"
+msgstr "Neuer Agent"
+
+msgid "Edit agent"
+msgstr "Agent bearbeiten"
+
+msgid "Delete agent"
+msgstr "Agent löschen"
+
+msgid "Retest agent"
+msgstr "Agent erneut testen"
+
+msgid "Scan agent"
+msgstr "Scan-Agent"
+
+msgid "List of all agents"
+msgstr "Liste aller Agenten"
+
+msgid "No agents available"
+msgstr "Keine Agenten verfügbar"
+
+msgid "Invalid agent"
+msgstr "Ungültiger Agent"
+
+msgid "Invalid Agent"
+msgstr "Ungültiger Agent"
+
+msgid "didnt respond for"
+msgstr "hat nicht geantwortet für"
+
+msgid "Connection details"
+msgstr "Verbindungsdetails"
+
+msgid "Use SSL"
+msgstr "SSL verwenden"
+
+msgid "Use TLS"
+msgstr "TLS verwenden"
+
+msgid "Assigned hosts"
+msgstr "Zugewiesene Hosts"
+
+msgid "Assign portgroup"
+msgstr "Portgruppe zuweisen"
+
+msgid "Port group"
+msgstr "Portgruppe"
+
+msgid "port group"
+msgstr "Portgruppe"
+
+msgid "Port group created"
+msgstr "Portgruppe erstellt"
+
+msgid "Port group updated"
+msgstr "Portgruppe aktualisiert"
+
+msgid "Port group deleted"
+msgstr "Portgruppe gelöscht"
+
+msgid "New port group"
+msgstr "Neue Portgruppe"
+
+msgid "Edit port group"
+msgstr "Portgruppe bearbeiten"
+
+msgid "Delete port group"
+msgstr "Portgruppe löschen"
+
+msgid "Select port group"
+msgstr "Portgruppe auswählen"
+
+msgid "No port groups available"
+msgstr "Keine Portgruppen verfügbar"
+
+msgid "No port groups configured"
+msgstr "Keine Portgruppen konfiguriert"
+
+msgid "Invalid port group"
+msgstr "Ungültige Portgruppe"
+
+msgid "Invalid portgroup"
+msgstr "Ungültige Portgruppe"
+
+msgid "Portgroup updated"
+msgstr "Portgruppe aktualisiert"
+
+msgid "View and manage scanning port groups"
+msgstr "Scan-Portgruppen anzeigen und verwalten"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Ports"
+msgstr "Ports"
+
+msgid "Ports must be comma separated numbers between 1 and 65535"
+msgstr "Ports müssen kommagetrennte Zahlen zwischen 1 und 65535 sein"
+
+msgid "Invalid port number"
+msgstr "Ungültige Portnummer"
+
+msgid "Invalid port value"
+msgstr "Ungültiger Portwert"
+
+msgid "Cron"
+msgstr "Cron"
+
+msgid "Cronjob updated"
+msgstr "Cronjob aktualisiert"
+
+msgid "Edit cronjob"
+msgstr "Cronjob bearbeiten"
+
+msgid "No cronjobs configured"
+msgstr "Keine Cronjobs konfiguriert"
+
+msgid "No jobs available"
+msgstr "Keine Jobs verfügbar"
+
+msgid "List of scheduled cronjobs"
+msgstr "Liste der geplanten Cronjobs"
+
+msgid "Scheduled actions"
+msgstr "Geplante Aktionen"
+
+msgid "Last executed"
+msgstr "Zuletzt ausgeführt"
+
+msgid "Last execution"
+msgstr "Letzte Ausführung"
+
+msgid "Next execution"
+msgstr "Nächste Ausführung"
+
+msgid "Script"
+msgstr "Skript"
+
+msgid "Invalid script"
+msgstr "Ungültiges Skript"
+
+msgid "Invalid cron expression"
+msgstr "Ungültiger Cron-Ausdruck"
+
+msgid "Invalid cronjob"
+msgstr "Ungültiger Cronjob"
+
+msgid "Update certificates"
+msgstr "Zertifikate aktualisieren"
+
+msgid "Update certificates executions"
+msgstr "Zertifikatsaktualisierungen"
+
+msgid "Domain"
+msgstr "Domain"
+
+msgid "domain"
+msgstr "Domain"
+
+msgid "Domains"
+msgstr "Domains"
+
+msgid "Domain created"
+msgstr "Domain erstellt"
+
+msgid "Domain updated"
+msgstr "Domain aktualisiert"
+
+msgid "Domain deleted"
+msgstr "Domain gelöscht"
+
+msgid "Domain is not active"
+msgstr "Domain ist nicht aktiv"
+
+msgid "New domain"
+msgstr "Neue Domain"
+
+msgid "Edit domain"
+msgstr "Domain bearbeiten"
+
+msgid "Delete domain"
+msgstr "Domain löschen"
+
+msgid "No domains available"
+msgstr "Keine Domains verfügbar"
+
+msgid "Invalid domain"
+msgstr "Ungültige Domain"
+
+msgid "Invalid domain ID"
+msgstr "Ungültige Domain-ID"
+
+msgid "List of all login domains"
+msgstr "Liste aller Anmeldedomains"
+
+msgid "Ignored issuer"
+msgstr "Ignorierter Aussteller"
+
+msgid "ignored issuer"
+msgstr "ignorierter Aussteller"
+
+msgid "Ignored issuer created"
+msgstr "Ignorierter Aussteller erstellt"
+
+msgid "Ignored issuer deleted"
+msgstr "Ignorierter Aussteller gelöscht"
+
+msgid "New ignored issuer"
+msgstr "Neuer ignorierter Aussteller"
+
+msgid "Certificates issued by this issuers will still be available in system"
+msgstr ""
+"Von diesen Ausstellern ausgestellte Zertifikate sind weiterhin im System "
+"verfügbar"
+
+msgid "No ignored issuers configured"
+msgstr "Keine ignorierten Aussteller konfiguriert"
+
+msgid "No issuers available"
+msgstr "Keine Aussteller verfügbar"
+
+msgid "Invalid issuer"
+msgstr "Ungültiger Aussteller"
+
+msgid "Invalid SKI value"
+msgstr "Ungültiger SKI-Wert"
+
+msgid "Logs / Notifications"
+msgstr "Protokolle / Benachrichtigungen"
+
+msgid "Log ID"
+msgstr "Protokoll-ID"
+
+msgid "Log details"
+msgstr "Protokolldetails"
+
+msgid "Log does not exist."
+msgstr "Protokoll existiert nicht."
+
+msgid "List of logs"
+msgstr "Protokollliste"
+
+msgid "No logs available"
+msgstr "Keine Protokolle verfügbar"
+
+msgid "Logs truncated"
+msgstr "Protokolle gekürzt"
+
+msgid "Truncate logs"
+msgstr "Protokolle kürzen"
+
+msgid "Truncate"
+msgstr "Kürzen"
+
+msgid "Click Truncate to remove all logs"
+msgstr "Klicken Sie auf Kürzen, um alle Protokolle zu entfernen"
+
+msgid "Select tenants for which you want to truncate logs:"
+msgstr "Wählen Sie Mandanten aus, für die Sie Protokolle kürzen möchten:"
+
+msgid "Delete records"
+msgstr "Datensätze löschen"
+
+msgid "Days before expiry to show warning"
+msgstr "Tage vor Ablauf für Warnung anzeigen"
+
+msgid "Days before expiry to warn"
+msgstr "Tage vor Ablauf warnen"
+
+msgid "Days after expiry to show warning"
+msgstr "Tage nach Ablauf für Warnung anzeigen"
+
+msgid "Days after expiry to still warn"
+msgstr "Tage nach Ablauf noch warnen"
+
+msgid "Days warning"
+msgstr "Tage Warnung"
+
+msgid "Days expired"
+msgstr "Tage abgelaufen"
+
+msgid "Notification"
+msgstr "Benachrichtigung"
+
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+msgid "Disable notification"
+msgstr "Benachrichtigung deaktivieren"
+
+msgid "Enable notification"
+msgstr "Benachrichtigung aktivieren"
+
+msgid "Last notifications"
+msgstr "Letzte Benachrichtigungen"
+
+msgid "Mark all as read"
+msgstr "Alle als gelesen markieren"
+
+msgid "Messages marked as read"
+msgstr "Nachrichten als gelesen markiert"
+
+msgid "Email sent to"
+msgstr "E-Mail gesendet an"
+
+msgid "Authoritative DNS"
+msgstr "Autoritativer DNS"
+
+msgid "DNS server"
+msgstr "DNS-Server"
+
+msgid "AXFR details"
+msgstr "AXFR-Details"
+
+msgid "AXFR parameters"
+msgstr "AXFR-Parameter"
+
+msgid "AXFR test"
+msgstr "AXFR-Test"
+
+msgid "AXFR zone sync"
+msgstr "AXFR-Zonensynchronisierung"
+
+msgid "TSIG"
+msgstr "TSIG"
+
+msgid "TSIG name"
+msgstr "TSIG-Name"
+
+msgid "Invalid TSIG"
+msgstr "Ungültiges TSIG"
+
+msgid "Invalid TSIG name"
+msgstr "Ungültiger TSIG-Name"
+
+msgid "TTL"
+msgstr "TTL"
+
+msgid "Record types"
+msgstr "Datensatztypen"
+
+msgid "Record types:"
+msgstr "Datensatztypen:"
+
+msgid "Valid records"
+msgstr "Gültige Datensätze"
+
+msgid "Invalid record types"
+msgstr "Ungültige Datensatztypen"
+
+msgid "Exclude patterns"
+msgstr "Ausschlussmuster"
+
+msgid "Exclude regex:"
+msgstr "Ausschluss-Regex:"
+
+msgid "Excluded patterns"
+msgstr "Ausgeschlossene Muster"
+
+msgid "Include patterns"
+msgstr "Einschlussmuster"
+
+msgid "Include regex:"
+msgstr "Einschluss-Regex:"
+
+msgid "Included patterns"
+msgstr "Eingeschlossene Muster"
+
+msgid "Invalid exclude regex"
+msgstr "Ungültiger Ausschluss-Regex"
+
+msgid "Invalid include regex"
+msgstr "Ungültiger Einschluss-Regex"
+
+msgid "Active Directory (AD)"
+msgstr "Active Directory (AD)"
+
+msgid "Active Directory settings"
+msgstr "Active Directory-Einstellungen"
+
+msgid "Admin credentials (admin only)"
+msgstr "Admin-Anmeldedaten (nur Admins)"
+
+msgid "Base DN"
+msgstr "Base DN"
+
+msgid "Base DN too long"
+msgstr "Base DN zu lang"
+
+msgid "Account suffix"
+msgstr "Konto-Suffix"
+
+msgid "Account suffix too long"
+msgstr "Konto-Suffix zu lang"
+
+msgid "Domain controllers"
+msgstr "Domaincontroller"
+
+msgid "Domain controllers value too long"
+msgstr "Domaincontroller-Wert zu lang"
+
+msgid "Autocreate group"
+msgstr "Gruppe automatisch erstellen"
+
+msgid "Invalid autocreate group value"
+msgstr "Ungültiger Wert für automatische Gruppenerstellung"
+
+msgid "Search "
+msgstr "Suchen "
+
+msgid "Search certificates"
+msgstr "Zertifikate suchen"
+
+msgid "Search hosts"
+msgstr "Hosts suchen"
+
+msgid "Enter search string"
+msgstr "Suchbegriff eingeben"
+
+msgid "Nothing to search"
+msgstr "Nichts zu suchen"
+
+msgid "Invalid search parameters"
+msgstr "Ungültige Suchparameter"
+
+msgid "Database structure verified. No issues found."
+msgstr "Datenbankstruktur überprüft. Keine Probleme gefunden."
+
+msgid "Database validation"
+msgstr "Datenbankvalidierung"
+
+msgid "All fixes applied successfully. Please reload to verify."
+msgstr ""
+"Alle Korrekturen erfolgreich angewendet. Bitte neu laden zur Überprüfung."
+
+msgid "Applying fixes…"
+msgstr "Korrekturen werden angewendet…"
+
+msgid "Fix all issues"
+msgstr "Alle Probleme beheben"
+
+msgid "Fix SQL"
+msgstr "SQL korrigieren"
+
+msgid "Rollback"
+msgstr "Zurücksetzen"
+
+msgid "Rollback complete"
+msgstr "Zurücksetzen abgeschlossen"
+
+msgid "Revert change"
+msgstr "Änderung rückgängig machen"
+
+msgid "Add more"
+msgstr "Mehr hinzufügen"
+
+msgid "Local"
+msgstr "Lokal"
+
+msgid "Manual"
+msgstr "Manuell"
+
+msgid "Last changed"
+msgstr "Zuletzt geändert"
+
+msgid "Last check"
+msgstr "Letzte Prüfung"
+
+msgid "Last checked"
+msgstr "Zuletzt geprüft"
+
+msgid "Last success"
+msgstr "Letzter Erfolg"
+
+msgid "Last successful response received at"
+msgstr "Letzte erfolgreiche Antwort erhalten um"
+
+msgid "Used filters:"
+msgstr "Verwendete Filter:"
+
+msgid "Ignored"
+msgstr "Ignoriert"
+
+msgid "None configured"
+msgstr "Keine konfiguriert"
+
+msgid "Invalid action"
+msgstr "Ungültige Aktion"
+
+msgid "Invalid active value"
+msgstr "Ungültiger Aktivierungswert"
+
+msgid "Invalid name value"
+msgstr "Ungültiger Namenswert"
+
+msgid "Invalid name"
+msgstr "Ungültiger Name"
+
+msgid "Invalid href value"
+msgstr "Ungültiger Href-Wert"
+
+msgid "Invalid format"
+msgstr "Ungültiges Format"
+
+msgid "Invalid type"
+msgstr "Ungültiger Typ"
+
+msgid "Invalid url value"
+msgstr "Ungültiger URL-Wert"
+
+msgid "Invalid comment value"
+msgstr "Ungültiger Kommentarwert"
+
+msgid "Invalid page requested"
+msgstr "Ungültige Seite angefordert"
+
+msgid "Invalid check IP value"
+msgstr "Ungültiger IP-Prüfwert"
+
+msgid "Invalid delete record value"
+msgstr "Ungültiger Lösch-Datensatz-Wert"
+
+msgid "Invalid is_domain value"
+msgstr "Ungültiger is_domain-Wert"
+
+msgid "Invalid ignore value"
+msgstr "Ungültiger Ignorierungswert"
+
+msgid "Invalid days value"
+msgstr "Ungültiger Tageswert"
+
+msgid "Invalid days expired value"
+msgstr "Ungültiger Ablauf-Tageswert"
+
+msgid "Invalid log retention value. Must be between 1 and 3650 days"
+msgstr ""
+"Ungültiger Protokollaufbewahrungswert. Muss zwischen 1 und 3650 Tagen liegen"
+
+msgid "Invalid remove orphaned value"
+msgstr "Ungültiger Wert für Entfernung Verwaister"
+
+msgid "Invalid email address"
+msgstr "Ungültige E-Mail-Adresse"
+
+msgid "Email address already in use"
+msgstr "E-Mail-Adresse bereits in Verwendung"
+
+msgid "Invalid DNS address"
+msgstr "Ungültige DNS-Adresse"
+
+msgid "Invalid {$field}"
+msgstr "Ungültig: {$field}"
+
+msgid "Only alphanumeric characters are allowed"
+msgstr "Nur alphanumerische Zeichen sind erlaubt"
+
+msgid "Invalid or missing CSRF token."
+msgstr "Ungültiges oder fehlendes CSRF-Token."
+
+msgid "Installation error"
+msgstr "Installationsfehler"
+
+msgid "Required PHP extension not installed: "
+msgstr "Erforderliche PHP-Erweiterung nicht installiert: "
+
+msgid "Required function not found: "
+msgstr "Erforderliche Funktion nicht gefunden: "
+
+msgid "Required function disabled"
+msgstr "Erforderliche Funktion deaktiviert"
+
+msgid "Not implemented"
+msgstr "Nicht implementiert"
+
+msgid "Request failed."
+msgstr "Anfrage fehlgeschlagen."
+
+msgid "Restart installation"
+msgstr "Installation neu starten"
+
+msgid "Oops… This is an error page."
+msgstr "Hoppla… Dies ist eine Fehlerseite."
+
+msgid "We are sorry but our server encountered an internal error."
+msgstr ""
+"Es tut uns leid, aber unser Server hat einen internen Fehler festgestellt."
+
+msgid "Oops… We cannot find this page."
+msgstr "Hoppla… Wir können diese Seite nicht finden."
+
+msgid "We are sorry page requested cannot be found."
+msgstr "Es tut uns leid, die angeforderte Seite wurde nicht gefunden."
+
+msgid "Backup script: missing write permission"
+msgstr "Backup-Skript: Fehlende Schreibberechtigung"

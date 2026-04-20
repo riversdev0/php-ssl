@@ -54,8 +54,15 @@ function init_locale ($user, $Database)
 		} catch (Exception $e) { /* non-fatal */ }
 	}
 
-	// 4. No preference, or English (id=1) → nothing to do
+	// 4. No preference, or English (id=1): explicitly reset the textdomain.
+	// Without this, a PHP-FPM worker that previously served a non-English
+	// user still has e.g. textdomain("messages_2") active, so English users
+	// in the same worker process would receive translated (wrong) strings.
+	// Setting a domain with no .mo file causes gettext to return the original
+	// msgid strings, which are in English — the correct behaviour.
 	if ($lang_id === null || $lang_id === 1) {
+		bindtextdomain ("messages_1", dirname(__FILE__) . "/../functions/locale");
+		textdomain ("messages_1");
 		return;
 	}
 
@@ -74,9 +81,14 @@ function init_locale ($user, $Database)
 	putenv ("LANGUAGE={$locale}");
 	// Try multiple locale variants for cross-platform compatibility
 	setlocale (LC_ALL, [$locale, str_replace('.UTF-8', '.utf8', $locale), str_replace('.UTF-8', '', $locale)]);
-	bindtextdomain ("messages", dirname(__FILE__) . "/../functions/locale");
-	bind_textdomain_codeset ("messages", "UTF-8");
-	textdomain ("messages");
+	// Use a locale-specific domain name to bypass PHP-FPM's per-process
+	// gettext .mo cache — the C library caches by domain name, so reusing
+	// "messages" across locales in the same worker process serves stale
+	// translations.  Each locale gets its own domain → its own cache slot.
+	$domain = "messages_{$lang_id}";
+	bindtextdomain ($domain, dirname(__FILE__) . "/../functions/locale");
+	bind_textdomain_codeset ($domain, "UTF-8");
+	textdomain ($domain);
 }
 
 /**

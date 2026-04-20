@@ -89,7 +89,7 @@ else {
 
 	// name
 	$content[] = "<tr>";
-	$content[] = "	<th style='width:110px;'>"._("Name")."</th>";
+	$content[] = "	<th>"._("Name")."</th>";
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='name' value='".htmlspecialchars(@$edit_user->name, ENT_QUOTES, 'UTF-8')."' $disabled>";
 	$content[] = "	</td>";
@@ -174,7 +174,7 @@ else {
 		// language — only on edit; query translations from DB
 		$all_langs = [];
 		try {
-			$all_langs = $Database->getObjectsQuery("SELECT id, name, native_name, flag FROM translations WHERE enabled = 1 ORDER BY name ASC", []);
+			$all_langs = $Database->getObjectsQuery("SELECT id, name, native_name, locale_code FROM translations WHERE enabled = 1 ORDER BY name ASC", []);
 		} catch (Exception $e) {}
 		if (!empty($all_langs)) {
 			$content[] = "<tr>";
@@ -184,7 +184,7 @@ else {
 			$content[] = "			<option value=''>"._("— Tenant default —")."</option>";
 			foreach ($all_langs as $lang) {
 				$sel = (!empty($edit_user->lang_id) && $edit_user->lang_id == $lang->id) ? "selected" : "";
-				$label = htmlspecialchars(($lang->flag ? $lang->flag . ' ' : '') . $lang->native_name . ' (' . $lang->name . ')');
+				$label = htmlspecialchars($lang->native_name . ' (' . $lang->locale_code . ')');
 				$content[] = "			<option value='" . (int)$lang->id . "' {$sel}>{$label}</option>";
 			}
 			$content[] = "		</select>";

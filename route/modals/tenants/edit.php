@@ -146,7 +146,7 @@ else {
 	if ($_GET['action'] !== "delete") {
 		$all_langs = [];
 		try {
-			$all_langs = $Database->getObjectsQuery("SELECT id, name, native_name, flag FROM translations WHERE enabled = 1 ORDER BY name ASC", []);
+			$all_langs = $Database->getObjectsQuery("SELECT id, name, native_name, locale_code FROM translations WHERE enabled = 1 ORDER BY name ASC", []);
 		} catch (Exception $e) {}
 		if (!empty($all_langs)) {
 			$content[] = "<tr>";
@@ -156,7 +156,7 @@ else {
 			$content[] = "			<option value=''>"._("— System default (English) —")."</option>";
 			foreach ($all_langs as $lang) {
 				$sel = (!empty($tenant->lang_id) && $tenant->lang_id == $lang->id) ? "selected" : "";
-				$label = htmlspecialchars(($lang->flag ? $lang->flag . ' ' : '') . $lang->native_name . ' (' . $lang->name . ')');
+				$label = htmlspecialchars($lang->native_name . ' (' . $lang->locale_code . ')');
 				$content[] = "			<option value='" . (int)$lang->id . "' {$sel}>{$label}</option>";
 			}
 			$content[] = "		</select>";

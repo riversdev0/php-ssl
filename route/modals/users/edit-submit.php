@@ -182,6 +182,14 @@ try {
 		# snapshot before (omit password)
 		$before = clone $edit_user; unset($before->password);
 		$Database->updateObject("users", $update);
+		# if the edited user is the current user, sync lang_id to session immediately
+		if ($edit_user->id === $user->id) {
+			if (!empty($update['lang_id'])) {
+				$_SESSION['lang_id'] = (int)$update['lang_id'];
+			} else {
+				unset($_SESSION['lang_id']);
+			}
+		}
 		# ok
 		$Result->show("success", _("User updated").".", false, false, false, false);
 		# fetch updated state (omit password)
