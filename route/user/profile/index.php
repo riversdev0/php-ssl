@@ -12,24 +12,103 @@ $icon_user       = $url_items["users"]['icon'];
 ?>
 
 <div class='page-header'>
-	<h2 class='page-title'><?php print $icon_user." "._("My profile"); ?> [<?php print htmlspecialchars($view_user->name); ?>]</h2>
+	<h2 class='page-title'><?php print $icon_user; ?> <?php print _("My profile"); ?></h2>
 	<hr>
 </div>
 
-<div>
+<div style="margin-bottom:16px;">
 	<a href="/" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> <?php print _("Back"); ?></a>
-</div><br><br>
+</div>
 
-<div class='row'>
-	<div class='col-xs-12 col-sm-12 col-md-6' style='margin-top:10px;'>
-		<?php include("profile-details.php"); ?>
-		<div style='margin-top:10px;'>
-		<?php include("passkeys.php"); ?>
+<div class="card">
+	<div class="row g-0">
+
+		<!-- Left: nav pills -->
+		<div class="col-12 col-md-3 border-end">
+			<div class="card-body">
+				<h3 class="card-title"><?php print _("Settings"); ?></h3>
+				<div class="list-group list-group-transparent mb-0 border-top">
+
+					<a href="#pf-account" data-bs-toggle="pill"
+					   class="list-group-item list-group-item-action d-flex align-items-center gap-2 active">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+						<?php print _("Account"); ?>
+					</a>
+
+					<a href="#pf-passkeys" data-bs-toggle="pill"
+					   class="list-group-item list-group-item-action d-flex align-items-center gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" /><circle cx="15" cy="9" r="1" fill="currentColor" stroke="none" /></svg>
+						<?php print _("Passkeys"); ?>
+					</a>
+
+					<a href="#pf-notifications" data-bs-toggle="pill"
+					   class="list-group-item list-group-item-action d-flex align-items-center gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
+						<?php print _("Notifications"); ?>
+					</a>
+
+					<a href="#pf-logs" data-bs-toggle="pill"
+					   class="list-group-item list-group-item-action d-flex align-items-center gap-2">
+						<?php print $url_items["logs"]['icon']; ?>
+						<?php print _("Activity"); ?>
+					</a>
+
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class='col-xs-12 col-sm-12 col-md-6' style='margin-top:10px;'>
-		<?php include(dirname(__FILE__)."/../../users/user/user-notifications.php");  ?>
+
+		<!-- Right: tab content -->
+		<div class="col-12 col-md-9">
+			<div class="tab-content">
+
+				<div class="tab-pane active show" id="pf-account">
+					<?php include("profile-details.php"); ?>
+				</div>
+
+				<div class="tab-pane" id="pf-passkeys">
+					<?php include("passkeys.php"); ?>
+				</div>
+
+				<div class="tab-pane" id="pf-notifications">
+					<div class="card-body">
+						<h3 class="card-title">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
+							<?php print _("Notifications"); ?>
+						</h3>
+					</div>
+					<div class="card-body">
+						<?php include(dirname(__FILE__)."/../../users/user/user-notifications.php"); ?>
+					</div>
+				</div>
+
+				<div class="tab-pane" id="pf-logs">
+					<div class="card-body">
+						<h3 class="card-title">
+							<?php print $url_items["logs"]['icon']; ?>
+							<?php print _("Activity"); ?>
+						</h3>
+					</div>
+					<div class="card-body">
+						<?php include(dirname(__FILE__)."/../../users/user/user-logs.php"); ?>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
 	</div>
 </div>
 
-<?php include(dirname(__FILE__)."/../../users/user/user-logs.php"); ?>
+<script>
+// Refresh Bootstrap Table when the logs tab is shown (table renders hidden initially)
+(function () {
+    var logTab = document.querySelector('a[href="#pf-logs"]');
+    if (logTab) {
+        logTab.addEventListener('shown.bs.tab', function () {
+            if (typeof $ !== 'undefined' && $('#table-user-logs').length) {
+                $('#table-user-logs').bootstrapTable('refresh');
+            }
+        });
+    }
+})();
+</script>

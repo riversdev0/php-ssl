@@ -1,6 +1,6 @@
 <?php
 /**
- * Passkeys card — included from route/user/profile/index.php
+ * Passkeys section — included from route/user/profile/index.php
  * Variables available: $view_user, $user, $Database, $User
  */
 
@@ -22,32 +22,35 @@ $force_passkey = !empty($view_user->force_passkey);
 $pk_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" /><circle cx="15" cy="9" r="1" fill="currentColor" stroke="none" /></svg>';
 ?>
 
-<div class="card" id="passkeys-card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <span><?php print $pk_icon; ?> <?php print _("Passkeys"); ?></span>
-        <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-passkey" <?php print !$webauthn_configured ? 'disabled' : ''; ?>>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-            <?php print _("Add passkey"); ?>
-        </button>
+<div id="passkeys-card">
+
+    <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="card-title mb-0"><?php print $pk_icon; ?> <?php print _("Passkeys"); ?></h3>
+        </div>
     </div>
 
     <?php if (!$webauthn_configured): ?>
-    <div class="alert alert-warning m-2 mb-0 p-2" style="font-size:12px;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v4" /><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z" /><path d="M12 16h.01" /></svg>
-        <?php print _("Passkeys are not configured."); ?>
-        <?php print _("Set"); ?> <code>$webauthn_origin</code> <?php print _("and"); ?> <code>$webauthn_rpid</code> <?php print _("in"); ?> <code>config.php</code>.
+    <div class="card-body pb-0">
+        <div class="alert alert-warning p-2" style="font-size:12px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v4" /><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z" /><path d="M12 16h.01" /></svg>
+            <?php print _("Passkeys are not configured."); ?>
+            <?php print _("Set"); ?> <code>$webauthn_origin</code> <?php print _("and"); ?> <code>$webauthn_rpid</code> <?php print _("in"); ?> <code>config.php</code>.
+        </div>
     </div>
     <?php endif; ?>
 
     <?php if ($force_passkey): ?>
-    <div class="alert alert-info m-2 mb-0 p-2" style="font-size:12px;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9h.01" /><path d="M11 12h1v4h1" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /></svg>
-        <?php print _("Password login is disabled — this account requires passkey authentication."); ?>
+    <div class="card-body">
+        <div class="alert alert-info p-2" style="font-size:12px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9h.01" /><path d="M11 12h1v4h1" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /></svg>
+            <?php print _("Password login is disabled — this account requires passkey authentication."); ?>
+        </div>
     </div>
     <?php endif; ?>
 
     <!-- Add passkey form (hidden by default) -->
-    <div id="passkey-add-form" style="display:none;" class="p-3 border-bottom">
+    <div id="passkey-add-form" style="display:none;" class="card-body border-bottom">
         <div class="d-flex gap-2 align-items-end">
             <div class="flex-grow-1">
                 <label class="form-label mb-1" style="font-size:12px;"><?php print _("Passkey name"); ?></label>
@@ -64,17 +67,17 @@ $pk_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewB
         <div id="passkey-register-result" class="mt-2"></div>
     </div>
 
-    <div>
+    <div class="card-body">
         <?php if (empty($passkeys)): ?>
-        <div class="text-secondary p-3" style="font-size:13px;"><?php print _("No passkeys registered yet."); ?></div>
+        <div class="text-secondary" style="font-size:13px;"><?php print _("No passkeys registered yet."); ?></div>
         <?php else: ?>
-        <table class="table table-borderless table-sm table-md table-hove1r" id="passkeys-table">
+        <table class="table table-borderless table-sm table-md" id="passkeys-table">
             <thead>
                 <tr>
                     <th><?php print _("Name"); ?></th>
                     <th><?php print _("Registered"); ?></th>
                     <th><?php print _("Last used"); ?></th>
-                    <th></th>
+                    <th style='width:10px'></th>
                 </tr>
             </thead>
             <tbody>
@@ -103,7 +106,16 @@ $pk_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewB
             </tbody>
         </table>
         <?php endif; ?>
+
+
+        <hr>
+        <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-passkey" <?php print !$webauthn_configured ? 'disabled' : ''; ?>>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+            <?php print _("Add passkey"); ?>
+        </button>
+
     </div>
+
 </div>
 
 <script>
@@ -150,8 +162,6 @@ $pk_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewB
             var data = await resp.json();
             if (data.status !== 'ok') throw new Error(data.message);
 
-            // Use modern JSON API (Chrome 118+, Safari 17.4+, FF 119+) when available;
-            // fall back to manual base64url decoding for older browsers.
             var credential;
             if (typeof PublicKeyCredential.parseCreationOptionsFromJSON === 'function') {
                 credential = await navigator.credentials.create({

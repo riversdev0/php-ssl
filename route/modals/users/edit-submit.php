@@ -102,6 +102,13 @@ if($_POST['action']!=="delete") {
 		$update['changePass']    = (!empty($_POST['changePass']) && strlen($_POST['password']) === 0) ? 1 : 0;
 		$update['disabled']      = !empty($_POST['disabled']) ? 1 : 0;
 		$update['force_passkey'] = !empty($_POST['force_passkey']) ? 1 : 0;
+		# force_passkey requires at least one registered passkey
+		if ($update['force_passkey']) {
+			$pk_count = $Database->getObjectQuery("SELECT COUNT(*) AS cnt FROM passkeys WHERE user_id = ?", [$edit_user->id]);
+			if (!$pk_count || (int)$pk_count->cnt === 0) {
+				$Result->show("danger", _("Cannot enable passwordless-only login: user has no registered passkeys.").".", true, false, false, false);
+			}
+		}
 		# language preference (NULL = use tenant default)
 		$update['lang_id'] = (!empty($_POST['lang_id']) && is_numeric($_POST['lang_id'])) ? (int)$_POST['lang_id'] : null;
 	}

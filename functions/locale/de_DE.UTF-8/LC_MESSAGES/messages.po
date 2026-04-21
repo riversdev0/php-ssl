@@ -1886,3 +1886,6 @@ msgstr "Passkey löschen"
 
 msgid "Could not delete passkey."
 msgstr "Passkey konnte nicht gelöscht werden."
+
+msgid "Cannot enable passwordless-only login: user has no registered passkeys."
+msgstr "Passwortlose Anmeldung kann nicht aktiviert werden: Benutzer hat keine registrierten Passkeys."

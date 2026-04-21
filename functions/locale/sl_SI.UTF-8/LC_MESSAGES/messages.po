@@ -1991,3 +1991,6 @@ msgstr "Izbriši ključ"
 
 msgid "Could not delete passkey."
 msgstr "Ključa ni bilo mogoče izbrisati."
+
+msgid "Cannot enable passwordless-only login: user has no registered passkeys."
+msgstr "Ni mogoče omogočiti prijave samo s ključem: uporabnik nima registriranih ključev."

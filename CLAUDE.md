@@ -107,6 +107,8 @@ All primary tables (`zones`, `hosts`, `certificates`, `users`, `agents`) have a 
 
 `tenants` → `zones` → `hosts` → `certificates` (hierarchical ownership). `users` are scoped to tenants. `agents` handle remote scanning. `ssl_port_groups` / `_ssl_ports` define which ports to scan per zone.
 
+Key `zones` columns: `private_zone_uid` (NULL = public; non-NULL = private, owner's `users.id`).
+
 Key `hosts` columns: `c_id` (current certificate FK), `c_id_old` (previous certificate FK — used for change detection), `ignore`, `mute`, `h_recipients` (per-host notification overrides).
 
 The `pkey` table stores public keys separately so certificates sharing the same key can be linked. The `config` table stores per-tenant configuration overrides for settings defined in `config.php`.
@@ -153,15 +155,54 @@ Tabler 1.4.0 (Bootstrap-based admin UI) + jQuery 3.6.0 + Bootstrap-table 1.26.0.
 
 **AJAX data endpoints** in `route/ajax/` serve JSON rows for Bootstrap Table's server-side pagination (e.g., `route/ajax/certificates.php`, `route/ajax/zone-hosts.php`, `route/ajax/logs.php`). Add new bootstrap-table AJAX sources here.
 
+### Private Zones
+
+Zones can be marked private at creation time (`private_zone_uid` column on `zones` table). Rules:
+- `private_zone_uid IS NULL` — public zone, visible to all users in the tenant (and admins)
+- `private_zone_uid = user.id` — private zone, visible only to its creator
+- Admins **cannot** see private zones belonging to other users; the zones page shows a note if hidden private zones exist
+- Impersonation (`$_SESSION['impersonate_original']` is set) blocks all private zone access — even the impersonated user's own private zones are hidden
+- Cron scripts still scan private zones but send notifications only to the zone creator (no tenant-wide recipients, no BCC leakage)
+- Private zone filtering is applied consistently in: `Zones::get_all()`, `Zones::search_zone_hosts()`, `Certificates::get_expired()`, `route/ajax/zone-hosts.php`, `route/ajax/certificates.php`, `route/ajax/logs.php`
+- Logs filter uses both a live-table subquery (for existing records) and `JSON_EXTRACT(json_object_old, '$.hosts.0.z_id')` fallback (for deleted records, relies on `$log_object = true`)
+- Access checks in `route/zones/zone/index.php`, `route/certificates/certificate.php`, and `route/modals/zones/edit-submit.php` set the zone/cert to `null` if access is denied
+
+### Admin Impersonation
+
+When an admin impersonates another user, `$_SESSION['impersonate_original']` is set to the admin's original username. Check this flag anywhere private-zone or sensitive access control decisions are made. Stopping impersonation clears this key.
+
 ### Database Schema Management
 
-There is no migration system. Schema changes must be applied manually to the database and reflected in `db/SCHEMA.sql`. The only schema file is `db/SCHEMA.sql` (a full dump, not incremental migrations).
+Incremental migrations live in `db/migrations/` (e.g. `0006_add_private_zone_uid_to_zones.sql`). Apply them manually; also keep `db/SCHEMA.sql` (full dump) in sync after any schema change.
 
 ### Configuration (`config.php`)
 
 Key settings beyond DB credentials:
 - `$expired_days` — days before expiry to warn (default 20)
 - `$expired_after_days` — days post-expiry to still report (default 7)
-- `$log_object` — whether to write all object changes to the `logs` table
+- `$log_object` — whether to store full object JSON in `logs.json_object_old/new` (default `true`; required for private zone log filtering of deleted records)
 - `BASE` constant — set if app is not at web root (also update `RewriteBase` in `.htaccess`)
 - `$mail_settings` / `$mail_sender_settings` — SMTP configuration
+
+## Coding Conventions
+
+### Translations
+
+All user-visible strings in PHP templates and route files **must** be wrapped in `_()` so they are picked up by gettext and can be translated. This applies to every `print`, `echo`, button label, placeholder, alert text, table header, and tooltip. Never output a bare English string directly.
+
+```php
+// correct
+print _("Save");
+echo _("No records found.");
+<input placeholder="<?php print _('Search...'); ?>">
+
+// wrong — not translatable
+print "Save";
+echo "No records found.";
+```
+
+When adding new strings, also add the corresponding `msgid` / `msgstr` entries to both translation files:
+- `functions/locale/sl_SI.UTF-8/LC_MESSAGES/messages.po`
+- `functions/locale/de_DE.UTF-8/LC_MESSAGES/messages.po`
+
+After editing `.po` files, recompile on the server with `msgfmt messages.po -o messages.mo`.

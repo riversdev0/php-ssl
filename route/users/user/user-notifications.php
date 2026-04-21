@@ -33,42 +33,37 @@ try {
 
 ?>
 
-<div class='card'>
-	<div class='card-header'><?php print $icon_mail; ?> <?php print _("Notifications"); ?></div>
-	<div>
-	<table class='table table-borderless table-md table-hover table-zones-details table-td-top'>
+<table class='table table-borderless table-md table-hover table-zones-details table-td-top'>
 
-		<tr>
-			<td class='text-secondary' style='min-width:160px;width:180px;vertical-align:top;'><?php print _("Tenant notifications"); ?></td>
-			<td>
-				<?php if (empty($tenant_recipient_of)): ?>
-				<span class='badge bg-light-lt text-muted'><?php print _("Not in any tenant recipients"); ?></span>
-				<?php else: ?>
-				<?php foreach ($tenant_recipient_of as $t_recip): ?>
-				<div><span class='badge bg-green-lt' style='margin-top:2px'><?php print htmlspecialchars($t_recip->name); ?></span></div>
-				<?php endforeach; ?>
-				<?php endif; ?>
-			</td>
-		</tr>
+	<tr>
+		<td class='text-secondary' style='min-width:160px;width:180px;vertical-align:top;'><?php print _("Tenant notifications"); ?></td>
+		<td>
+			<?php if (empty($tenant_recipient_of)): ?>
+			<span class='badge bg-light-lt text-muted'><?php print _("Not in any tenant recipients"); ?></span>
+			<?php else: ?>
+			<?php foreach ($tenant_recipient_of as $t_recip): ?>
+			<div><span class='badge bg-green-lt' style='margin-top:2px'><?php print htmlspecialchars($t_recip->name); ?></span></div>
+			<?php endforeach; ?>
+			<?php endif; ?>
+		</td>
+	</tr>
 
-		<tr>
-			<td class='text-secondary' style='vertical-align:top;'><?php print _("Per-host notifications"); ?></td>
-			<td>
-				<?php if (empty($recipient_hosts)): ?>
-				<span class='text-secondary'><?php print _("No host-specific recipients"); ?></span>
-				<?php else: ?>
-				<?php foreach ($recipient_hosts as $rh): ?>
-				<div>
-					<a class='text-info' href='/<?php print htmlspecialchars($rh->tenant_href); ?>/zones/<?php print htmlspecialchars($rh->zone_name); ?>/<?php print htmlspecialchars($rh->hostname); ?>/'>
-						<?php print htmlspecialchars($rh->hostname); ?>
-					</a>
-					<span class='text-muted' style='font-size:0.85em;'> / <?php print htmlspecialchars($rh->zone_name); ?></span>
-				</div>
-				<?php endforeach; ?>
-				<?php endif; ?>
-			</td>
-		</tr>
+	<tr>
+		<td class='text-secondary' style='vertical-align:top;'><?php print _("Per-host notifications"); ?></td>
+		<td>
+			<?php if (empty($recipient_hosts)): ?>
+			<span class='text-secondary'><?php print _("No host-specific recipients"); ?></span>
+			<?php else: ?>
+			<?php foreach ($recipient_hosts as $rh): ?>
+			<div>
+				<a class='text-info' href='/<?php print htmlspecialchars($rh->tenant_href); ?>/zones/<?php print htmlspecialchars($rh->zone_name); ?>/<?php print htmlspecialchars($rh->hostname); ?>/'>
+					<?php print htmlspecialchars($rh->hostname); ?>
+				</a>
+				<span class='text-muted' style='font-size:0.85em;'> / <?php print htmlspecialchars($rh->zone_name); ?></span>
+			</div>
+			<?php endforeach; ?>
+			<?php endif; ?>
+		</td>
+	</tr>
 
-	</table>
-	</div>
-</div>
+</table>
