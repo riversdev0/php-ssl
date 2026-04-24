@@ -4,7 +4,7 @@ $User->validate_session (false);
 ?>
 
 <div class='page-header'>
-	<h2 class="page-title"><?php print $url_items["search"]['icon']; ?> <?php print _("Search"); ?></h2>
+	<h2 class="page-title"><?php print $url_items["search"]['icon']; ?> <?php print _("Database search"); ?></h2>
 	<hr>
 </div>
 
