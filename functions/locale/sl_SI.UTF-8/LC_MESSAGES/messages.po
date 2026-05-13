@@ -2419,3 +2419,18 @@ msgstr "Certifikat se ne ujema z zasebnim ključem."
 
 msgid "Renewed"
 msgstr "Obnovljen"
+
+msgid "Ignore updates"
+msgstr "Ignoriraj posodobitve"
+
+msgid "Ignore expiry"
+msgstr "Ignoriraj iztekanje"
+
+msgid "Suppress change notifications for this issuer"
+msgstr "Ne pošiljaj obvestil o spremembi za tega izdajatelja"
+
+msgid "Suppress expiry notifications for this issuer"
+msgstr "Ne pošiljaj obvestil o iztekanju za tega izdajatelja"
+
+msgid "Ignored issuer updated"
+msgstr "Ignoriran izdajatelj posodobljen"

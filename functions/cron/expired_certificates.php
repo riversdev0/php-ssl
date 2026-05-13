@@ -41,6 +41,9 @@ try {
     // fetch all certificates that will expire
     $expired_certificates = $Certificates->get_expired ($expired_days, $expired_after_days);
 
+    // load ignored issuers for this tenant
+    $Certificates->get_all_ignored_issuers ($tenant_id);
+
     // mail diff
     if(sizeof($expired_certificates)>0) {
 
@@ -56,6 +59,12 @@ try {
 
         // save to new array
         foreach ($expired_certificates as $c) {
+            // skip certs whose issuer is marked as ignored for expiry notifications
+            $cert_parsed_check = $Certificates->parse_cert ($c->certificate);
+            $aki = str_replace("keyid:", "", $cert_parsed_check['extensions']['authorityKeyIdentifier'] ?? "");
+            if ($Certificates->is_issuer_ignored ($aki, $tenant_id, 'expired') === true) {
+                continue;
+            }
             if(date("Y-m-d H:i:s")>$c->expires) {
                 $all_expired_certs["expired"][] = $c;
             }

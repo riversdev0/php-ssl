@@ -155,7 +155,7 @@ try {
             	else                         { $status = "Valid";            $color = "#1ABC9C"; }
 
             	// check if cert is ignored, if so skip to next item !
-            	if ($Certificates->is_issuer_ignored (str_replace("keyid:", "", $cert_parsed['extensions']['authorityKeyIdentifier']), $tenant_id)===false) {
+            	if ($Certificates->is_issuer_ignored (str_replace("keyid:", "", $cert_parsed['extensions']['authorityKeyIdentifier']), $tenant_id, 'update')===false) {
 
 	            	// try to prevent linkable text
 					$c->hostname                                 = $Mail->prevent_linkable_text($c->hostname);

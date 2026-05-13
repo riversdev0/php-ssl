@@ -237,6 +237,8 @@ CREATE TABLE `ignored_issuers` (
   `t_id` int(11) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `ski` varchar(255) DEFAULT NULL,
+  `update` tinyint(1) NOT NULL DEFAULT 0,
+  `expired` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_sku_tid` (`t_id`,`ski`),
   CONSTRAINT `tid` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE

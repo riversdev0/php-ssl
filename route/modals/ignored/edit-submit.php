@@ -55,6 +55,12 @@ $update = [
 	"ski"             => $_POST['ski'],
 ];
 
+// add/edit: include the new flag fields (checkboxes not submitted when unchecked, so fall back to 0)
+if($_POST['action']!="delete") {
+	$update['update']  = isset($_POST['update'])  && $_POST['update']  == '1' ? 1 : 0;
+	$update['expired'] = isset($_POST['expired']) && $_POST['expired'] == '1' ? 1 : 0;
+}
+
 // add - add t_id
 if($_POST['action']=="add") {
 	$update['t_id'] = $tenant->id;
@@ -75,7 +81,14 @@ try {
 		// add id
 		$update['id'] = $new_ignored_id;
 		// Write log :: object, object_id, tenant_id, user_id, action, public, text
-		$Log->write ("ignored", $new_ignored_id, $tenant->id, $user->id, $_POST['action'], true, "Ignored issuer $update[name] created", null, json_encode(["ignored"=>["0"=>$issuer]]));
+		$Log->write ("ignored", $new_ignored_id, $tenant->id, $user->id, $_POST['action'], true, "Ignored issuer $update[name] created", null, json_encode(["ignored"=>["0"=>$update]]));
+	}
+	elseif($_POST['action']=="edit") {
+		$Database->updateObject("ignored_issuers", $update);
+		// ok
+		$Result->show("success", _("Ignored issuer updated").".", false, false, false, false);
+		// Write log :: object, object_id, tenant_id, user_id, action, public, text
+		$Log->write ("ignored", $issuer->id, $issuer->t_id, $user->id, $_POST['action'], true, "Ignored issuer $update[name] updated", json_encode(["ignored"=>["0"=>$issuer]]), json_encode(["ignored"=>["0"=>$update]]), false);
 	}
 	elseif($_POST['action']=="delete") {
 		$Database->deleteObject("ignored_issuers", $update['id']);

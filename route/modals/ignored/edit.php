@@ -106,6 +106,28 @@ else {
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='ski' value='".htmlspecialchars(@$issuer->ski, ENT_QUOTES, 'UTF-8')."' $disabled>";
 	$content[] = "	</td>";
 	$content[] = "</tr>";
+	// update flag
+	$content[] = "<tr>";
+	$content[] = "	<th style='width:100px;'>"._("Ignore updates")."</th>";
+	$content[] = "	<td>";
+	$content[] = "		<label class='form-check form-switch'>";
+	$content[] = "			<input type='hidden' name='update' value='0'>";
+	$content[] = "			<input class='form-check-input' type='checkbox' name='update' value='1'".(@$issuer->update == '1' ? " checked" : "")." $disabled>";
+	$content[] = "			<span class='form-check-label text-muted'>"._("Suppress change notifications for this issuer")."</span>";
+	$content[] = "		</label>";
+	$content[] = "	</td>";
+	$content[] = "</tr>";
+	// expired flag
+	$content[] = "<tr>";
+	$content[] = "	<th style='width:100px;'>"._("Ignore expiry")."</th>";
+	$content[] = "	<td>";
+	$content[] = "		<label class='form-check form-switch'>";
+	$content[] = "			<input type='hidden' name='expired' value='0'>";
+	$content[] = "			<input class='form-check-input' type='checkbox' name='expired' value='1'".(@$issuer->expired == '1' ? " checked" : "")." $disabled>";
+	$content[] = "			<span class='form-check-label text-muted'>"._("Suppress expiry notifications for this issuer")."</span>";
+	$content[] = "		</label>";
+	$content[] = "	</td>";
+	$content[] = "</tr>";
 	$content[] = "</tbody>";
 
 	$content[] = "</table>";

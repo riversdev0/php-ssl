@@ -668,11 +668,14 @@ class Certificates extends Common
 	 * @param  int $t_id
 	 * @return bool
 	 */
-	public function is_issuer_ignored($ski = "", $t_id = 0)
+	public function is_issuer_ignored($ski = "", $t_id = 0, $type = null)
 	{
 		if (array_key_exists($t_id, $this->ignored_issuers)) {
 			if (array_key_exists(trim($ski), $this->ignored_issuers[$t_id])) {
-				return true;
+				if ($type === null) {
+					return true;
+				}
+				return (bool)$this->ignored_issuers[$t_id][trim($ski)]->$type;
 			}
 		}
 		// not found - default

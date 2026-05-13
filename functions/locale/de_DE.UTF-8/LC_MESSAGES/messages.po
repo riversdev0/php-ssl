@@ -2314,3 +2314,18 @@ msgstr "Das Zertifikat stimmt nicht mit dem privaten Schlüssel überein."
 
 msgid "Renewed"
 msgstr "Erneuert"
+
+msgid "Ignore updates"
+msgstr "Updates ignorieren"
+
+msgid "Ignore expiry"
+msgstr "Ablauf ignorieren"
+
+msgid "Suppress change notifications for this issuer"
+msgstr "Änderungsbenachrichtigungen für diesen Aussteller unterdrücken"
+
+msgid "Suppress expiry notifications for this issuer"
+msgstr "Ablaufbenachrichtigungen für diesen Aussteller unterdrücken"
+
+msgid "Ignored issuer updated"
+msgstr "Ignorierter Aussteller aktualisiert"
