@@ -636,21 +636,25 @@ class Certificates extends Common
 		// set tenant
 		$t_id = is_null($t_id) ? $this->user->t_id : $t_id;
 
-		// fetch
+		// fetch from cas table — only rows with at least one notification flag set
 		try {
-			// admins, ignore href
 			if ($this->user->admin == "1") {
-				$ignored = $this->Database->getObjectsQuery("select * from ignored_issuers as i");
+				$ignored = $this->Database->getObjectsQuery(
+					"SELECT * FROM cas WHERE ski IS NOT NULL AND (ignore_updates = 1 OR ignore_expiry = 1)"
+				);
 			}
 			else {
-				$ignored = $this->Database->getObjectsQuery("select * from ignored_issuers as i where t_id = ?", [$t_id]);
+				$ignored = $this->Database->getObjectsQuery(
+					"SELECT * FROM cas WHERE ski IS NOT NULL AND t_id = ? AND (ignore_updates = 1 OR ignore_expiry = 1)",
+					[$t_id]
+				);
 			}
 		}
 		catch (Exception $e) {
 			$this->errors[] = $e->getMessage();
 			$this->result_die();
 		}
-		// save for later checks to avoild multiple db checks
+		// save for later checks to avoid multiple db checks
 		if (sizeof($ignored) > 0) {
 			foreach ($ignored as $i) {
 				$this->ignored_issuers[$i->t_id][$i->ski] = $i;
@@ -666,6 +670,7 @@ class Certificates extends Common
 	 * @method is_issuer_ignored
 	 * @param  string $ski
 	 * @param  int $t_id
+	 * @param  string|null $type  'update'|'expired' (mapped to cas columns ignore_updates|ignore_expiry)
 	 * @return bool
 	 */
 	public function is_issuer_ignored($ski = "", $t_id = 0, $type = null)
@@ -675,7 +680,9 @@ class Certificates extends Common
 				if ($type === null) {
 					return true;
 				}
-				return (bool)$this->ignored_issuers[$t_id][trim($ski)]->$type;
+				// map legacy type names to cas column names
+				$col = ($type === 'update') ? 'ignore_updates' : (($type === 'expired') ? 'ignore_expiry' : $type);
+				return (bool)$this->ignored_issuers[$t_id][trim($ski)]->$col;
 			}
 		}
 		// not found - default

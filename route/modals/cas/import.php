@@ -48,8 +48,14 @@ $content .= "<textarea id='ca-cert-pem' class='form-control form-control-sm mb-2
 
 // Private key section
 $content .= "<hr><p class='mb-1 fw-bold small text-muted text-uppercase'>" . _("CA Private Key") . " <span class='text-danger'>*</span></p>";
-$content .= "<p class='text-secondary small mb-2'>" . _("Private key is required to sign certificates. It will be stored encrypted.") . "</p>";
-$content .= "<div class='mb-2'><input type='file' id='ca-key-file' class='form-control form-control-sm' accept='.pem,.key'></div>";
+$content .= "<p class='text-secondary small mb-2'>" . _("Private key is required to sign certificates. It will be stored encrypted. Accepts .pem, .key or .p12/.pfx (key will be extracted).") . "</p>";
+$content .= "<div class='mb-2'><input type='file' id='ca-key-file' class='form-control form-control-sm' accept='.pem,.key,.p12,.pfx'></div>";
+$content .= "<div id='ca-key-pfx-wrap' style='display:none' class='mb-2'>";
+$content .= "<label class='form-label small'>" . _("P12/PFX passphrase") . "</label>";
+$content .= "<div class='input-group input-group-sm'>";
+$content .= "<input type='password' id='ca-key-pfx-passphrase' class='form-control form-control-sm' placeholder='" . _("Leave empty if not set") . "'>";
+$content .= "<button type='button' class='btn btn-sm btn-secondary' id='ca-key-pfx-extract'>" . _("Extract key") . "</button>";
+$content .= "</div></div>";
 $content .= "<textarea id='ca-key-pem' class='form-control form-control-sm mb-2' rows='5'"
           . " style='font-family:monospace;font-size:11px;'"
           . " placeholder='-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----'></textarea>";
@@ -119,15 +125,59 @@ $Modal->modal_print(_("Import Certificate Authority"), $content, _("Import"), ""
         extractPfx(document.getElementById('ca-pfx-passphrase').value || '');
     });
 
+    var _keyPfxFile = null;
+
+    function extractKeyPfx(passphrase) {
+        if (!_keyPfxFile) return;
+        var $result = $('#ca-import-result');
+        var $btn = $('#ca-key-pfx-extract').prop('disabled', true).text(<?php print json_encode(_("Extracting...")); ?>);
+        var form = new FormData();
+        form.append('pfx_file', _keyPfxFile);
+        form.append('passphrase', passphrase || '');
+        form.append('csrf_token', '<?php print $csrf_token; ?>');
+        fetch('/route/ajax/cert-convert.php', { method: 'POST', body: form })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            if (data.error) {
+                $result.html("<div class='alert alert-danger p-2'>" + data.error + "</div>");
+            } else {
+                if (data.pkey_pem) {
+                    document.getElementById('ca-key-pem').value = data.pkey_pem;
+                    togglePassphrase(data.pkey_pem);
+                }
+                $result.html('');
+            }
+            $btn.prop('disabled', false).text(<?php print json_encode(_("Extract key")); ?>);
+        })
+        .catch(function () {
+            $result.html("<div class='alert alert-danger p-2'><?php print addslashes(_("Extraction failed.")); ?></div>");
+            $btn.prop('disabled', false).text(<?php print json_encode(_("Extract key")); ?>);
+        });
+    }
+
     document.getElementById('ca-key-file').addEventListener('change', function () {
         var file = this.files[0];
         if (!file) return;
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('ca-key-pem').value = e.target.result;
-            togglePassphrase(e.target.result);
-        };
-        reader.readAsText(file);
+        var name = file.name.toLowerCase();
+        if (name.endsWith('.p12') || name.endsWith('.pfx')) {
+            _keyPfxFile = file;
+            document.getElementById('ca-key-pfx-wrap').style.display = '';
+            document.getElementById('ca-passphrase-wrap').style.display = 'none';
+            extractKeyPfx('');
+        } else {
+            _keyPfxFile = null;
+            document.getElementById('ca-key-pfx-wrap').style.display = 'none';
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('ca-key-pem').value = e.target.result;
+                togglePassphrase(e.target.result);
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    document.getElementById('ca-key-pfx-extract').addEventListener('click', function () {
+        extractKeyPfx(document.getElementById('ca-key-pfx-passphrase').value || '');
     });
 
     document.getElementById('ca-key-pem').addEventListener('input', function () {

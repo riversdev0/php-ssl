@@ -43,8 +43,9 @@ try {
 	if (sizeof($hosts)>0) {
 
 		$z = 0;
+		$scanMaxThreads = max(1, (int)($config['scanMaxThreads'] ?? 64));
 
-		for ($m=0; $m<=sizeof($hosts); $m += $config['scanMaxThreads']) {
+		for ($m=0; $m<=sizeof($hosts); $m += $scanMaxThreads) {
 		    // create threads
 		    $threads = [];
 		    //fork processes

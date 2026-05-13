@@ -130,6 +130,9 @@ $conf .= "[v3_ca]\n";
 $conf .= "basicConstraints = critical, CA:TRUE" . $bc_pathlen . "\n";
 $conf .= "keyUsage = critical, keyCertSign, cRLSign\n";
 $conf .= "subjectKeyIdentifier = hash\n";
+if ($parent_ca_id !== null) {
+    $conf .= "authorityKeyIdentifier = keyid:always,issuer\n";
+}
 file_put_contents($tmp_conf, $conf);
 
 // Create CSR

@@ -450,10 +450,14 @@ class SSL extends Common
 
 			// not found ?
 			if ($db_cert == null) {
+				// Extract AKI (issuer's SKI) from leaf cert for CA linkage
+				$leaf_parsed = @openssl_x509_parse($certificate['certificate']);
+				$aki = trim(str_replace('keyid:', '', $leaf_parsed['extensions']['authorityKeyIdentifier'] ?? ''));
+
 				// insert new
 				try {
 					// try to insert, if we get error because of threading it means one was entered in the meantime, so recheck !
-					$new_cert_id = $this->Database->insertObject("certificates", ["serial" => $certificate['serial'], "certificate" => $certificate['certificate'], "expires" => $certificate['expires'], "chain" => $certificate['chain'], "z_id" => $zone_id, "t_id" => $tenant_id, "created" => $execution_time]);
+					$new_cert_id = $this->Database->insertObject("certificates", ["serial" => $certificate['serial'], "certificate" => $certificate['certificate'], "expires" => $certificate['expires'], "chain" => $certificate['chain'], "aki" => ($aki ?: null), "z_id" => $zone_id, "t_id" => $tenant_id, "created" => $execution_time]);
 				}
 				catch (Exception $e) {
 					// do nothing
@@ -478,6 +482,83 @@ class SSL extends Common
 			$this->errors[] = $e->getMessage();
 			$this->result_die();
 		}
+	}
+
+	/**
+	 * Extracts CA certificates from a chain PEM and upserts them into the cas table.
+	 * @method upsert_chain_cas
+	 * @param  string $chain_pem  Full chain PEM (leaf first, then intermediates, then root)
+	 * @param  int    $tenant_id
+	 */
+	public function upsert_chain_cas($chain_pem, $tenant_id)
+	{
+		if (empty($chain_pem)) return;
+
+		$delimiter = "-----BEGIN CERTIFICATE-----\n";
+		$parts = array_values(array_filter(explode($delimiter, $chain_pem)));
+		// need at least 2 entries (leaf + one CA)
+		if (count($parts) < 2) return;
+
+		// reverse so [0]=root, last=leaf; remove the leaf (already in certificates table)
+		$parts = array_reverse($parts);
+		array_pop($parts);
+
+		$prev_ca_id = null;
+
+		foreach ($parts as $raw) {
+			$pem    = $delimiter . $raw;
+			$parsed = @openssl_x509_parse($pem);
+			if (!$parsed) continue;
+
+			// only CA certs
+			if (strpos($parsed['extensions']['basicConstraints'] ?? '', 'CA:TRUE') === false) continue;
+
+			$ski = trim($parsed['extensions']['subjectKeyIdentifier'] ?? '');
+			if (empty($ski)) continue;
+
+			$name    = $parsed['subject']['CN'] ?? $parsed['subject']['O'] ?? 'Unknown CA';
+			$subject = $this->build_subject_string($parsed['subject'] ?? []);
+			$expires = date('Y-m-d H:i:s', $parsed['validTo_time_t']);
+
+			$existing = $this->Database->getObjectQuery(
+				"SELECT id FROM cas WHERE ski = ? AND t_id = ?",
+				[$ski, (int)$tenant_id]
+			);
+
+			if ($existing) {
+				$ca_id = (int)$existing->id;
+				$this->Database->updateObject("cas", [
+					"id"           => $ca_id,
+					"expires"      => $expires,
+					"parent_ca_id" => $prev_ca_id,
+				]);
+			} else {
+				$ca_id = (int)$this->Database->insertObject("cas", [
+					"t_id"         => (int)$tenant_id,
+					"name"         => $name,
+					"subject"      => $subject,
+					"ski"          => $ski,
+					"expires"      => $expires,
+					"certificate"  => $pem,
+					"source"       => "auto",
+					"parent_ca_id" => $prev_ca_id,
+				]);
+			}
+
+			$prev_ca_id = $ca_id;
+		}
+	}
+
+	/**
+	 * Builds a subject string from a parsed subject array.
+	 */
+	private function build_subject_string($subject)
+	{
+		$parts = [];
+		foreach (['CN', 'O', 'OU', 'C', 'ST', 'L'] as $k) {
+			if (!empty($subject[$k])) $parts[] = "$k=" . $subject[$k];
+		}
+		return implode(', ', $parts);
 	}
 
 	/**

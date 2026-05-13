@@ -37,16 +37,21 @@ CREATE TABLE `cas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `t_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `certificate` text NOT NULL,
+  `certificate` text DEFAULT NULL,
   `pkey_id` int(11) unsigned DEFAULT NULL,
   `parent_ca_id` int(11) DEFAULT NULL,
   `subject` varchar(500) DEFAULT NULL,
   `expires` datetime DEFAULT NULL,
   `created` datetime DEFAULT current_timestamp(),
+  `ski` varchar(255) DEFAULT NULL,
+  `source` enum('manual','auto') DEFAULT 'manual',
+  `ignore_updates` tinyint(1) NOT NULL DEFAULT 0,
+  `ignore_expiry` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `t_id` (`t_id`),
   KEY `pkey_id` (`pkey_id`),
   KEY `parent_ca_id` (`parent_ca_id`),
+  KEY `cas_ski_tid` (`ski`,`t_id`),
   CONSTRAINT `cas_parent_fk` FOREIGN KEY (`parent_ca_id`) REFERENCES `cas` (`id`) ON DELETE SET NULL,
   CONSTRAINT `cas_pkey_fk` FOREIGN KEY (`pkey_id`) REFERENCES `pkey` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
@@ -65,11 +70,13 @@ CREATE TABLE `certificates` (
   `expires` datetime DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT current_timestamp(),
   `is_manual` tinyint(1) NOT NULL DEFAULT 0,
+  `aki` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_zone_serial` (`z_id`,`serial`),
   KEY `serial` (`serial`),
   KEY `c_tenants` (`t_id`),
   KEY `c_pkey` (`pkey_id`),
+  KEY `cert_aki` (`aki`),
   CONSTRAINT `c_pkey` FOREIGN KEY (`pkey_id`) REFERENCES `pkey` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `c_tenants` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `c_zones` FOREIGN KEY (`z_id`) REFERENCES `zones` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -228,21 +235,6 @@ CREATE TABLE `hosts` (
   CONSTRAINT `h_cert` FOREIGN KEY (`c_id`) REFERENCES `certificates` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `h_domain` FOREIGN KEY (`z_id`) REFERENCES `zones` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=86372 DEFAULT CHARSET=utf8 COLLATE=utf8_slovenian_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `ignored_issuers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ignored_issuers` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `t_id` int(11) unsigned NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `ski` varchar(255) DEFAULT NULL,
-  `update` tinyint(1) NOT NULL DEFAULT 0,
-  `expired` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_sku_tid` (`t_id`,`ski`),
-  CONSTRAINT `tid` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

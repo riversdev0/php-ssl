@@ -629,6 +629,8 @@ class User extends Common
 			$hosts = $this->Database->count_database_objects("hosts", "id", "%", true);
 			// certs
 			$certs = $this->Database->count_database_objects("certificates", "t_id", "%", true);
+			// cas
+			$cas_cnt = $this->Database->count_database_objects("cas", "t_id", "%", true);
 			// users
 			$users = $this->Database->count_database_objects("users", "t_id", "%", true);
 		}
@@ -640,6 +642,8 @@ class User extends Common
 			$hosts = $hosts->cnt;
 			// certs
 			$certs = $this->Database->count_database_objects("certificates", "t_id", $this->user->t_id, false);
+			// cas
+			$cas_cnt = $this->Database->count_database_objects("cas", "t_id", $this->user->t_id, false);
 			// users
 			$users = $this->Database->count_database_objects("users", "t_id", $this->user->t_id, false);
 		}
@@ -652,6 +656,7 @@ class User extends Common
 		$stats['zones'] = $zones;
 		$stats['hosts'] = $hosts;
 		$stats['certificates'] = $certs;
+		$stats['CAs'] = $cas_cnt;
 		// result
 		return $stats;
 	}

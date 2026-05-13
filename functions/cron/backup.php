@@ -112,14 +112,13 @@ try {
 	fwrite($fh, "\n-- Inserts in FK order\n");
 	# tenants (root)
 	$dump_table('tenants',         "id = ?",                                    [$tid]);
-	# users, domains, agents, port groups, config, cron, ignored issuers (FK → tenants)
+	# users, domains, agents, port groups, config, cron (FK → tenants)
 	$dump_table('users',           "t_id = ?",                                  [$tid]);
 	$dump_table('domains',         "t_id = ?",                                  [$tid]);
 	$dump_table('agents',          "t_id = ?",                                  [$tid]);
 	$dump_table('ssl_port_groups', "t_id = ?",                                  [$tid]);
 	$dump_table('config',          "t_id = ?",                                  [$tid]);
 	$dump_table('cron',            "t_id = ?",                                  [$tid]);
-	$dump_table('ignored_issuers', "t_id = ?",                                  [$tid]);
 	# zones (FK → tenants, agents, users)
 	$dump_table('zones',           "t_id = ?",                                  [$tid]);
 	# pkey is shared across tenants — INSERT IGNORE, no DELETE

@@ -41,11 +41,7 @@ if (empty($ca)) {
 }
 $ca = $ca[0];
 
-$parsed = openssl_x509_parse($ca->certificate);
-if ($parsed === false) {
-    $Modal->modal_print(_("CA Details"), "<div class='alert alert-danger'>" . _("Cannot parse certificate.") . "</div>", "", "", false, "");
-    exit;
-}
+$parsed = !empty($ca->certificate) ? @openssl_x509_parse($ca->certificate) : false;
 
 // Helpers
 function ca_fmt_ts($ts) {
@@ -77,7 +73,8 @@ if (!$exp_ts) {
 }
 
 // Key info from parsed cert
-$pkey_res     = openssl_pkey_get_public($ca->certificate);
+$has_cert     = !empty($ca->certificate);
+$pkey_res     = $has_cert ? openssl_pkey_get_public($ca->certificate) : false;
 $pkey_details = $pkey_res ? openssl_pkey_get_details($pkey_res) : [];
 $key_type_map = [OPENSSL_KEYTYPE_RSA => 'RSA', OPENSSL_KEYTYPE_EC => 'EC (ECDSA)', OPENSSL_KEYTYPE_DSA => 'DSA'];
 $key_type_str = $key_type_map[$pkey_details['type'] ?? -1] ?? _("Unknown");
@@ -111,45 +108,73 @@ if ($user->admin === "1" || (int)$user->permission >= 3) {
 }
 $content .= $row(_("Created"),         htmlspecialchars($ca->created ?? '&mdash;'));
 
-$content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Subject") . "</small></td></tr>";
-$content .= $row(_("Common Name"),      htmlspecialchars($parsed['subject']['CN']  ?? '&mdash;'));
-$content .= $row(_("Organization"),     htmlspecialchars($parsed['subject']['O']   ?? '&mdash;'));
-$content .= $row(_("Org. Unit"),        htmlspecialchars($parsed['subject']['OU']  ?? '&mdash;'));
-$content .= $row(_("Country"),          htmlspecialchars($parsed['subject']['C']   ?? '&mdash;'));
-$content .= $row(_("State / Province"), htmlspecialchars($parsed['subject']['ST']  ?? '&mdash;'));
-$content .= $row(_("Locality / City"),  htmlspecialchars($parsed['subject']['L']   ?? '&mdash;'));
+if ($parsed) {
+    $content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Subject") . "</small></td></tr>";
+    $content .= $row(_("Common Name"),      htmlspecialchars($parsed['subject']['CN']  ?? '&mdash;'));
+    $content .= $row(_("Organization"),     htmlspecialchars($parsed['subject']['O']   ?? '&mdash;'));
+    $content .= $row(_("Org. Unit"),        htmlspecialchars($parsed['subject']['OU']  ?? '&mdash;'));
+    $content .= $row(_("Country"),          htmlspecialchars($parsed['subject']['C']   ?? '&mdash;'));
+    $content .= $row(_("State / Province"), htmlspecialchars($parsed['subject']['ST']  ?? '&mdash;'));
+    $content .= $row(_("Locality / City"),  htmlspecialchars($parsed['subject']['L']   ?? '&mdash;'));
 
-$content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Issuer") . "</small></td></tr>";
-$content .= $row(_("Issuer DN"),        "<span class='font-monospace small'>" . ca_fmt_dn($parsed['issuer'] ?? []) . "</span>");
+    $content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Issuer") . "</small></td></tr>";
+    $content .= $row(_("Issuer DN"),        "<span class='font-monospace small'>" . ca_fmt_dn($parsed['issuer'] ?? []) . "</span>");
 
-$content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Validity") . "</small></td></tr>";
-$content .= $row(_("Not Before"),       ca_fmt_ts($parsed['validFrom_time_t'] ?? 0));
-$content .= $row(_("Not After"),        $exp_html);
+    $content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Validity") . "</small></td></tr>";
+    $content .= $row(_("Not Before"),       ca_fmt_ts($parsed['validFrom_time_t'] ?? 0));
+    $content .= $row(_("Not After"),        $exp_html);
 
-$content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Key & Serial") . "</small></td></tr>";
-$content .= $row(_("Key algorithm"),    htmlspecialchars($key_type_str));
-$content .= $row(_("Serial number"),    "<span class='font-monospace small'>" . htmlspecialchars($parsed['serialNumberHex'] ?? $parsed['serialNumber'] ?? '&mdash;') . "</span>");
+    $content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Key & Serial") . "</small></td></tr>";
+    $content .= $row(_("Key algorithm"),    htmlspecialchars($key_type_str));
+    $content .= $row(_("Serial number"),    "<span class='font-monospace small'>" . htmlspecialchars($parsed['serialNumberHex'] ?? $parsed['serialNumber'] ?? '&mdash;') . "</span>");
 
-if (!empty($extensions)) {
-    $content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Extensions") . "</small></td></tr>";
-    foreach ($extensions as $ext_name => $ext_val) {
-        $val_str = is_array($ext_val) ? implode(', ', $ext_val) : (string)$ext_val;
-        $content .= $row(htmlspecialchars($ext_name), "<span class='font-monospace small'>" . nl2br(htmlspecialchars($val_str)) . "</span>");
+    if (!empty($extensions)) {
+        $content .= "<tr><td colspan='2' class='pt-3 pb-1'><small class='text-muted text-uppercase fw-bold'>" . _("Extensions") . "</small></td></tr>";
+        foreach ($extensions as $ext_name => $ext_val) {
+            $val_str = is_array($ext_val) ? implode(', ', $ext_val) : (string)$ext_val;
+            $content .= $row(htmlspecialchars($ext_name), "<span class='font-monospace small'>" . nl2br(htmlspecialchars($val_str)) . "</span>");
+        }
     }
+} else {
+    $content .= "<tr><td colspan='2' class='pt-3 pb-1'><span class='text-muted small'>" . _("No certificate data available for this CA.") . "</span></td></tr>";
 }
 
 $content .= "</table>";
 
-$content .= "<div class='mt-3'>";
-$content .= "<button type='button' class='btn btn-sm bg-info-lt text-info' id='ca-view-copy-pem'>";
-$content .= "<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z' /><path d='M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1' /></svg> ";
-$content .= _("Copy PEM") . "</button>";
-$content .= "<textarea id='ca-view-pem-raw' style='display:none'>" . htmlspecialchars($ca->certificate) . "</textarea>";
+// Notification flags (admins and permission >= 3 can edit)
+$can_edit_flags = ($user->admin === "1" || (int)$user->permission >= 3);
+$chk_updates = $ca->ignore_updates ? " checked" : "";
+$chk_expiry  = $ca->ignore_expiry  ? " checked" : "";
+
+$content .= "<div class='mt-3 border-top pt-3'>";
+$content .= "<small class='text-muted text-uppercase fw-bold d-block mb-2'>" . _("Notification settings") . "</small>";
+$content .= "<div class='d-flex gap-3 flex-wrap'>";
+$content .= "<label class='d-flex align-items-center gap-2" . ($can_edit_flags ? "" : " text-muted") . "'>";
+$content .= "<input type='checkbox' id='ca-flag-ignore-updates' class='form-check-input m-0'" . $chk_updates . ($can_edit_flags ? "" : " disabled") . " data-ca-id='{$ca_id}' data-flag='ignore_updates'>";
+$content .= _("Ignore update notifications") . "</label>";
+$content .= "<label class='d-flex align-items-center gap-2" . ($can_edit_flags ? "" : " text-muted") . "'>";
+$content .= "<input type='checkbox' id='ca-flag-ignore-expiry' class='form-check-input m-0'" . $chk_expiry . ($can_edit_flags ? "" : " disabled") . " data-ca-id='{$ca_id}' data-flag='ignore_expiry'>";
+$content .= _("Ignore expiry notifications") . "</label>";
 $content .= "</div>";
+if ($can_edit_flags) {
+    $content .= "<button type='button' class='btn btn-sm btn-primary mt-2' id='ca-flags-save'>" . _("Save") . "</button>";
+    $content .= "<span id='ca-flags-result' class='ms-2 small'></span>";
+}
+$content .= "</div>";
+
+if ($has_cert) {
+    $content .= "<div class='mt-2'>";
+    $content .= "<button type='button' class='btn btn-sm bg-info-lt text-info' id='ca-view-copy-pem'>";
+    $content .= "<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z' /><path d='M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1' /></svg> ";
+    $content .= _("Copy PEM") . "</button>";
+    $content .= "<textarea id='ca-view-pem-raw' style='display:none'>" . htmlspecialchars($ca->certificate) . "</textarea>";
+    $content .= "</div>";
+}
 
 $Modal->modal_print(htmlspecialchars($ca->name), $content, "", "", false, "");
 ?>
 <script>
+<?php if ($has_cert): ?>
 document.getElementById('ca-view-copy-pem').addEventListener('click', function() {
     var pem = document.getElementById('ca-view-pem-raw').value;
     var btn = this;
@@ -160,4 +185,31 @@ document.getElementById('ca-view-copy-pem').addEventListener('click', function()
         setTimeout(function() { label.textContent = ' ' + orig; }, 1500);
     });
 });
+<?php endif; ?>
+<?php if ($can_edit_flags): ?>
+document.getElementById('ca-flags-save').addEventListener('click', function() {
+    var btn    = this;
+    var result = document.getElementById('ca-flags-result');
+    btn.disabled = true;
+    $.post('/route/ajax/ca/update-flags.php', {
+        ca_id:          <?php print (int)$ca_id; ?>,
+        ignore_updates: document.getElementById('ca-flag-ignore-updates').checked ? 1 : 0,
+        ignore_expiry:  document.getElementById('ca-flag-ignore-expiry').checked  ? 1 : 0
+    }, function(data) {
+        btn.disabled = false;
+        if (data.success) {
+            result.className = 'ms-2 small text-success';
+            result.textContent = <?php print json_encode(_("Saved.")); ?>;
+        } else {
+            result.className = 'ms-2 small text-danger';
+            result.textContent = data.message || <?php print json_encode(_("Error.")); ?>;
+        }
+        setTimeout(function() { result.textContent = ''; }, 2500);
+    }, 'json').fail(function() {
+        btn.disabled = false;
+        result.className = 'ms-2 small text-danger';
+        result.textContent = <?php print json_encode(_("Request failed.")); ?>;
+    });
+});
+<?php endif; ?>
 </script>

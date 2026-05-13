@@ -7,6 +7,7 @@
 
 require('../../../functions/autoload.php');
 $User->validate_session(false, false, false);
+$csrf_token = $User->create_csrf_token();
 
 $cert_id = (int) ($_GET['cert_id'] ?? 0);
 
@@ -48,14 +49,21 @@ $content .= "<p class='text-secondary mb-2'>"
           . sprintf(_("Upload the private key for certificate <b>%s</b>."), $cn)
           . "</p>";
 $content .= "<p class='text-secondary' style='font-size:12px;'>"
-          . _("Paste the PEM private key below, or select a .key / .pem file.")
+          . _("Paste the PEM private key below, or select a .key / .pem / .p12 / .pfx file.")
           . "</p>";
 $content .= "</div>";
 
 $content .= "<div class='mb-2'>";
 $content .= "<label class='form-label'>"._("Select file (optional)")."</label>";
-$content .= "<input type='file' id='pkey-file-input' class='form-control form-control-sm' accept='.key,.pem'>";
+$content .= "<input type='file' id='pkey-file-input' class='form-control form-control-sm' accept='.key,.pem,.p12,.pfx'>";
 $content .= "</div>";
+
+$content .= "<div id='pkey-pfx-wrap' class='mb-2' style='display:none'>";
+$content .= "<label class='form-label small'>" . _("P12/PFX passphrase") . "</label>";
+$content .= "<div class='input-group input-group-sm'>";
+$content .= "<input type='password' id='pkey-pfx-passphrase' class='form-control form-control-sm' placeholder='" . _("Leave empty if not set") . "'>";
+$content .= "<button type='button' class='btn btn-sm btn-secondary' id='pkey-pfx-extract'>" . _("Extract key") . "</button>";
+$content .= "</div></div>";
 
 $content .= "<div class='mb-2'>";
 $content .= "<label class='form-label'>"._("PEM private key")."</label>";
@@ -77,22 +85,66 @@ $Modal->modal_print(_("Upload private key"), $content, _("Upload"), "", false, "
 
 <script>
 (function () {
+    var _pfxFile = null;
+
     function togglePassphrase(val) {
         var encrypted = val.indexOf('ENCRYPTED') !== -1;
         document.getElementById('pkey-passphrase-wrap').style.display = encrypted ? '' : 'none';
         if (!encrypted) document.getElementById('pkey-passphrase-input').value = '';
     }
 
+    function extractPfx(passphrase) {
+        if (!_pfxFile) return;
+        var $result = $('#pkey-upload-result');
+        var $btn = $('#pkey-pfx-extract').prop('disabled', true).text(<?php print json_encode(_("Extracting...")); ?>);
+        var form = new FormData();
+        form.append('pfx_file', _pfxFile);
+        form.append('passphrase', passphrase || '');
+        form.append('csrf_token', '<?php print $csrf_token; ?>');
+        fetch('/route/ajax/cert-convert.php', { method: 'POST', body: form })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            if (data.error) {
+                $result.html("<div class='alert alert-danger p-2'>" + data.error + "</div>");
+            } else {
+                if (data.pkey_pem) {
+                    document.getElementById('pkey-pem-input').value = data.pkey_pem;
+                    togglePassphrase(data.pkey_pem);
+                }
+                $result.html('');
+            }
+            $btn.prop('disabled', false).text(<?php print json_encode(_("Extract key")); ?>);
+        })
+        .catch(function () {
+            $result.html("<div class='alert alert-danger p-2'><?php print addslashes(_("Extraction failed.")); ?></div>");
+            $btn.prop('disabled', false).text(<?php print json_encode(_("Extract key")); ?>);
+        });
+    }
+
     // File → textarea
     document.getElementById('pkey-file-input').addEventListener('change', function () {
         var file = this.files[0];
         if (!file) return;
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('pkey-pem-input').value = e.target.result;
-            togglePassphrase(e.target.result);
-        };
-        reader.readAsText(file);
+        var name = file.name.toLowerCase();
+        if (name.endsWith('.p12') || name.endsWith('.pfx')) {
+            _pfxFile = file;
+            document.getElementById('pkey-pfx-wrap').style.display = '';
+            document.getElementById('pkey-passphrase-wrap').style.display = 'none';
+            extractPfx('');
+        } else {
+            _pfxFile = null;
+            document.getElementById('pkey-pfx-wrap').style.display = 'none';
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('pkey-pem-input').value = e.target.result;
+                togglePassphrase(e.target.result);
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    document.getElementById('pkey-pfx-extract').addEventListener('click', function () {
+        extractPfx(document.getElementById('pkey-pfx-passphrase').value || '');
     });
 
     document.getElementById('pkey-pem-input').addEventListener('input', function () {

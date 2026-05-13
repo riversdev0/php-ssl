@@ -31,7 +31,6 @@ class Log extends Common
 		"zones",
 		"hosts",
 		"agents",
-		"ignored",
 		"certificates",
 		"scanning",
 		"portgroups",
