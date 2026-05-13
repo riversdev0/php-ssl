@@ -229,6 +229,8 @@ class SSL extends Common
 		// local fetch
 		//
 		if ($host->agent_id == 1 || is_null($host->agent_id)) {
+			// save hostname so process_fetch_result() can resolve IP via $this->hostname
+			$this->hostname = $host->hostname;
 			// update host last check, resolve IP locally
 			$this->update_host_last_check($host->host_id, $this->resolve_ip($host->hostname), $execution_time);
 
