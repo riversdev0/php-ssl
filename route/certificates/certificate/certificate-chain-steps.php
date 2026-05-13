@@ -11,7 +11,7 @@ $cert_chain = $SSL->process_certificate_chain ($certificate->chain);
 
 // print chain
 $int = 1;
-$valid_cert = true;
+$valid_cert = false;
 $valid_cert_text = [];
 
 
