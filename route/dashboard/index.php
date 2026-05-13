@@ -15,9 +15,16 @@
 	</div>
 
 	<!-- links -->
+	<!-- <div class="col-sm-12 col-md-6"> -->
+	<!-- <div class="card"> -->
+		<?php #include("card-links.php"); ?>
+	<!-- </div> -->
+	<!-- </div> -->
+
+	<!-- Top Certificate Authorities -->
 	<div class="col-sm-12 col-md-6">
 	<div class="card">
-		<?php include("card-links.php"); ?>
+		<?php include("card-top-cas.php"); ?>
 	</div>
 	</div>
 
@@ -25,6 +32,20 @@
 	<div class="col-sm-12 col-md-6">
 	<div class="card">
 		<?php include("card-checks.php"); ?>
+	</div>
+	</div>
+
+	<!-- Latest certificates -->
+	<div class="col-sm-12 col-md-6">
+	<div class="card">
+		<?php include("card-latest-certificates.php"); ?>
+	</div>
+	</div>
+
+	<!-- Latest hosts -->
+	<div class="col-sm-12 col-md-6">
+	<div class="card">
+		<?php include("card-latest-hosts.php"); ?>
 	</div>
 	</div>
 

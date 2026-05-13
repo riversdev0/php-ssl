@@ -204,7 +204,7 @@ $(document).on('click', '.ca-flag-toggle', function() {
 
 	$badge.css('opacity', '0.4');
 	$.post('/route/ajax/ca/update-flags.php', { ca_id: ca_id, ignore_updates: ign_u, ignore_expiry: ign_e }, function(d) {
-		if (d.success) {
+		if (d.status === 'ok') {
 			$row.data('ignore-updates', ign_u).data('ignore-expiry', ign_e);
 			$badge.data('value', newVal);
 			if (newVal) {
@@ -212,13 +212,20 @@ $(document).on('click', '.ca-flag-toggle', function() {
 			} else {
 				$badge.removeClass('bg-green-lt text-green').addClass('bg-secondary-lt text-muted').text(<?php print json_encode(_("No")); ?>);
 			}
+			var $alert = $('<div class="alert alert-success alert-dismissible py-2 mt-2" role="alert">' + <?php print json_encode(_("Saved.")); ?> + '</div>');
+			$row.closest('table').before($alert);
+			setTimeout(function() { $alert.fadeOut(400, function() { $(this).remove(); }); }, 2000);
 		} else {
-			alert(d.message || <?php print json_encode(_("Error")); ?>);
+			var $err = $('<div class="alert alert-danger alert-dismissible py-2 mt-2" role="alert">' + (d.message || <?php print json_encode(_("Error")); ?>) + '</div>');
+			$row.closest('table').before($err);
+			setTimeout(function() { $err.fadeOut(400, function() { $(this).remove(); }); }, 3000);
 		}
 		$badge.css('opacity', '1');
 	}, 'json').fail(function() {
 		$badge.css('opacity', '1');
-		alert(<?php print json_encode(_("Request failed.")); ?>);
+		var $err = $('<div class="alert alert-danger alert-dismissible py-2 mt-2" role="alert">' + <?php print json_encode(_("Request failed.")); ?> + '</div>');
+		$row.closest('table').before($err);
+		setTimeout(function() { $err.fadeOut(400, function() { $(this).remove(); }); }, 3000);
 	});
 });
 </script>

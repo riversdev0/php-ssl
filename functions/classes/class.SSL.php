@@ -454,22 +454,37 @@ class SSL extends Common
 				$leaf_parsed = @openssl_x509_parse($certificate['certificate']);
 				$aki = trim(str_replace('keyid:', '', $leaf_parsed['extensions']['authorityKeyIdentifier'] ?? ''));
 
-				// insert new
-				try {
-					// try to insert, if we get error because of threading it means one was entered in the meantime, so recheck !
-					$new_cert_id = $this->Database->insertObject("certificates", ["serial" => $certificate['serial'], "certificate" => $certificate['certificate'], "expires" => $certificate['expires'], "chain" => $certificate['chain'], "aki" => ($aki ?: null), "z_id" => $zone_id, "t_id" => $tenant_id, "created" => $execution_time]);
+				// Atomic upsert: ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id) makes lastInsertId()
+				// return the existing row's id when a parallel thread already inserted the same cert,
+				// so we never need to re-fetch by serial+zone (which can miss under REPEATABLE-READ).
+				$this->Database->runQuery(
+					"INSERT INTO `certificates` (serial, certificate, expires, chain, aki, z_id, t_id, created)
+					 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+					 ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)",
+					[$certificate['serial'], $certificate['certificate'], $certificate['expires'], $certificate['chain'], ($aki ?: null), $zone_id, $tenant_id, $execution_time]
+				);
+				$new_cert_id = (int)$this->Database->lastInsertId();
+
+				if (!$new_cert_id) {
+					$this->errors[] = "Failed to insert certificate with serial " . $certificate['serial'];
+					$this->result_die();
 				}
-				catch (Exception $e) {
-					// do nothing
-					die($e->getMessage());
-				}
-				// fetch now that it is created
+
+				// Fetch by PK — guaranteed to find the row (ours or the winning thread's)
 				$db_cert = $this->Database->getObjectQuery("select * from certificates where id = ?", [$new_cert_id]);
 
-				// Write log :: object, object_id, tenant_id, user_id, action, public, text
-				if ($this->Log === false)
-					$this->Log = new Log($this->Database);
-				$this->Log->write("certificates", $new_cert_id, $tenant_id, null, "add", true, "New certificate imported with serial " . $certificate['serial'], NULL, json_encode($db_cert));
+				if ($db_cert === null) {
+					$this->errors[] = "Certificate id=" . $new_cert_id . " missing after insert (serial " . $certificate['serial'] . ")";
+					$this->result_die();
+				}
+
+				// ROW_COUNT()=1 means we inserted; =2 means ON DUPLICATE KEY UPDATE fired
+				$was_inserted = (int)$this->Database->getValueQuery("SELECT ROW_COUNT()") === 1;
+				if ($was_inserted) {
+					if ($this->Log === false)
+						$this->Log = new Log($this->Database);
+					$this->Log->write("certificates", $db_cert->id, $tenant_id, null, "add", true, "New certificate imported with serial " . $certificate['serial'], NULL, json_encode($db_cert));
+				}
 			}
 
 			// add to cache

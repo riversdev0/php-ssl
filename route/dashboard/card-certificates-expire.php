@@ -103,8 +103,20 @@ else {
 		print "	<td class='align-top text-muted d-none d-lg-table-cell'>".$cert_parsed['issuer']['CN']."<br>".$cert_parsed['subject']['CN']."</span></td>";
 		print "	<td class='align-top d-none d-lg-table-cell'><a href='/".$t->href."/zones/".$t->zone_name."/' style='color:var(--tblr-info)'>".$t->zone_name."</td>";
 		print "	<td class='align-top'>";
-		foreach ($t->hosts as $h) {
-			print "<a href='/".$t->href."/zones/".$t->zone_name."/".$h->hostname."/' style='color:var(--tblr-secondary)' target='_blank'>".$h->hostname."</a><br>";
+		$hosts      = $t->hosts;
+		$host_count = count($hosts);
+		$first      = $hosts[0];
+		print "<a href='/".$t->href."/zones/".$t->zone_name."/".$first->hostname."/' style='color:var(--tblr-secondary)' target='_blank'>".$first->hostname."</a>";
+		if ($host_count > 1) {
+			$extra = $host_count - 1;
+			$uid   = 'hx-' . $t->id;
+			print "<br><span class='badge bg-secondary-lt text-secondary mt-1' style='cursor:pointer' onclick=\"var el=document.getElementById('{$uid}');el.style.display=el.style.display==='none'?'block':'none'\">+{$extra} " . _("hosts") . "</span>";
+			print "<div id='{$uid}' style='display:none;margin-top:4px'>";
+			for ($hi = 1; $hi < $host_count; $hi++) {
+				$h = $hosts[$hi];
+				print "<a href='/".$t->href."/zones/".$t->zone_name."/".$h->hostname."/' style='color:var(--tblr-secondary)' target='_blank'>".$h->hostname."</a><br>";
+			}
+			print "</div>";
 		}
 		print "</td>";
 		print "</tr>";
