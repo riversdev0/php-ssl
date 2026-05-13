@@ -15,7 +15,7 @@ if (php_sapi_name() !== 'cli') {
 	exit("This script must be run from the command line.\n");
 }
 
-require(__DIR__ . '/functions/autoload.php');
+require(__DIR__ . '/../functions/autoload.php');
 
 $command        = $argv[1] ?? 'apply';
 $current        = $Migration->get_current_version();
