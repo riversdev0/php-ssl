@@ -92,6 +92,21 @@ else {
 	$content[] = "</select>";
 	$content[] = "	</td>";
 	$content[] = "</tr>";
+	// admin
+	if ($_GET['action'] !== "delete") {
+	$content[] = "<tr>";
+	$content[] = "	<th style='width:100px;'>"._("Admin tenant")."</th>";
+	$content[] = "	<td>";
+	$content[] = "<select name='admin' class='form-select form-select-sm' style='width:auto' $disabled>";
+	foreach([0=>"No", 1=>"Yes"] as $key=>$val) {
+	$selected = (@$tenant->admin == $key) ? "selected" : "";
+	$content[] =  "<option value='".$key."' $selected>".$val."</option>";
+	}
+	$content[] = "</select>";
+	$content[] = "	<span class='text-muted ms-2' style='font-size:11px'>"._("Admin tenants can manage all tenants and users")."</span>";
+	$content[] = "	</td>";
+	$content[] = "</tr>";
+	}
 	// remove orphaned
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Remove orphaned")."</th>";

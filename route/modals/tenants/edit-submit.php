@@ -73,7 +73,11 @@ $update = [
 if($_POST['action']!="add") {
 	$update['id'] = $tenant->id;
 	$update['order'] = $tenant->order;
-	$update['admin'] = $tenant->admin;
+	$update['admin'] = isset($_POST['admin']) ? (int)(bool)$_POST['admin'] : (int)$tenant->admin;
+}
+// add
+if($_POST['action']=="add") {
+	$update['admin'] = isset($_POST['admin']) ? (int)(bool)$_POST['admin'] : 0;
 }
 
 
