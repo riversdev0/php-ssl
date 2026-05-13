@@ -460,7 +460,7 @@ class SSL extends Common
 				$this->Database->runQuery(
 					"INSERT INTO `certificates` (serial, certificate, expires, chain, aki, z_id, t_id, created)
 					 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-					 ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)",
+					 ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id), aki = IF(aki IS NULL OR aki = '', VALUES(aki), aki)",
 					[$certificate['serial'], $certificate['certificate'], $certificate['expires'], $certificate['chain'], ($aki ?: null), $zone_id, $tenant_id, $execution_time]
 				);
 				$new_cert_id = (int)$this->Database->lastInsertId();

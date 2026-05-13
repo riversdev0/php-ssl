@@ -74,6 +74,28 @@ try {
 		unset($Database);
 		$Database = new Database_PDO ();
 
+		// backfill aki and CA chain for any certs in this tenant that are not yet linked
+		$unlinked = $Database->getObjectsQuery(
+			"SELECT id, certificate, chain FROM certificates WHERE t_id = ? AND (aki IS NULL OR aki = '')",
+			[$tenant_id]
+		);
+		if (!empty($unlinked)) {
+			$SSL_bf = new SSL($Database);
+			foreach ($unlinked as $_c) {
+				$_parsed = @openssl_x509_parse($_c->certificate);
+				if ($_parsed) {
+					$_aki = trim(str_replace('keyid:', '', $_parsed['extensions']['authorityKeyIdentifier'] ?? ''));
+					if ($_aki !== '') {
+						$Database->runQuery("UPDATE certificates SET aki = ? WHERE id = ?", [$_aki, (int)$_c->id]);
+					}
+				}
+				if (!empty($_c->chain)) {
+					$SSL_bf->upsert_chain_cas($_c->chain, $tenant_id);
+				}
+			}
+			unset($SSL_bf);
+		}
+
 		// get changed based on execution time !
         $changed_hosts = $Database->getObjectsQuery("select *,h.id as id,a.name as agname,z.t_id as t_id,z.name as zone_name from zones as z,hosts as h, certificates as c, agents as a where h.z_id = z.id and h.c_id = c.id and z.agent_id = a.id and h.last_change = ? and h.mute = 0 and z.t_id = ?", [$execution_time, $tenant_id]);
 
