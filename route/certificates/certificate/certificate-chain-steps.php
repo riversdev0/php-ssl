@@ -11,10 +11,12 @@ $cert_chain = $SSL->process_certificate_chain ($certificate->chain);
 
 // print chain
 $int = 1;
-$valid_cert = false;
+$valid_cert = true;
 $valid_cert_text = [];
 
 
+if (sizeof($cert_chain)==0)
+$valid_cert = false;
 
 print "<ul class='steps steps-vertical' style='margin-left:0px;border-left:none; margin-top:20px;'>";
 
@@ -42,8 +44,8 @@ foreach ($cert_chain as $index=>$cert) {
 	}
 
 	// ignored issuer ?
-	$ignored_cert = $Certificates->is_issuer_ignored (str_replace("keyid:", "", $cert['certificate']['extensions']['authorityKeyIdentifier']), $certificate->t_id)===true ? " <span class='badge bg-warning'><i class='fa fa-volume-xmark'></i></span>" : "";
-	$ignored_issuer = $Certificates->is_issuer_ignored ($cert['certificate']['extensions']['subjectKeyIdentifier'], $certificate->t_id)===true ? " <span class='badge bg-warning'>"._("Ignored issuer")."</span>" : "";
+	$ignored_cert = $Certificates->is_issuer_ignored (str_replace("keyid:", "", $cert['certificate']['extensions']['authorityKeyIdentifier']), $certificate->t_id)===true ? " <span class='badge bg-warning-lt'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-volume-off"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 8a5 5 0 0 1 1.912 4.934m-1.377 2.602a5 5 0 0 1 -.535 .464" /><path d="M17.7 5a9 9 0 0 1 2.362 11.086m-1.676 2.299a9 9 0 0 1 -.686 .615" /><path d="M9.069 5.054l.431 -.554a.8 .8 0 0 1 1.5 .5v2m0 4v8a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l1.294 -1.664" /><path d="M3 3l18 18" /></svg>'."</span>" : "";
+	$ignored_issuer = $Certificates->is_issuer_ignored ($cert['certificate']['extensions']['subjectKeyIdentifier'], $certificate->t_id)===true ? " <span class='badge bg-warning-lt'>"._("Ignored issuer")."</span>" : "";
 
 	// get hash
 	$cert['raw'] = "-----BEGIN CERTIFICATE-----\n".$cert['raw'];
