@@ -179,6 +179,7 @@ foreach (['CN', 'O', 'OU', 'C'] as $k) {
 }
 $subject_str = implode(', ', $subj_parts);
 $expires     = date('Y-m-d H:i:s', $cert_parsed['validTo_time_t']);
+$serial_hex  = strtolower($cert_parsed['serialNumberHex'] ?? '');
 
 // Encrypt and store private key
 $encrypted = $Certificates->pkey_encrypt($key_pem, $t_id);
@@ -192,8 +193,8 @@ try {
     $pkey_id = $Database->lastInsertId();
 
     $Database->runQuery(
-        "INSERT INTO cas (t_id, name, certificate, pkey_id, parent_ca_id, subject, expires) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [$t_id, $name, $cert_pem, $pkey_id, $parent_ca_id, $subject_str ?: null, $expires]
+        "INSERT INTO cas (t_id, name, certificate, pkey_id, parent_ca_id, subject, expires, serial) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        [$t_id, $name, $cert_pem, $pkey_id, $parent_ca_id, $subject_str ?: null, $expires, $serial_hex ?: null]
     );
     $ca_id = $Database->lastInsertId();
 

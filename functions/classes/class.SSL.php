@@ -533,9 +533,10 @@ class SSL extends Common
 			$ski = trim($parsed['extensions']['subjectKeyIdentifier'] ?? '');
 			if (empty($ski)) continue;
 
-			$name    = $parsed['subject']['CN'] ?? $parsed['subject']['O'] ?? 'Unknown CA';
-			$subject = $this->build_subject_string($parsed['subject'] ?? []);
-			$expires = date('Y-m-d H:i:s', $parsed['validTo_time_t']);
+			$name       = $parsed['subject']['CN'] ?? $parsed['subject']['O'] ?? 'Unknown CA';
+			$subject    = $this->build_subject_string($parsed['subject'] ?? []);
+			$expires    = date('Y-m-d H:i:s', $parsed['validTo_time_t']);
+			$serial_hex = strtolower($parsed['serialNumberHex'] ?? '');
 
 			$existing = $this->Database->getObjectQuery(
 				"SELECT id FROM cas WHERE ski = ? AND t_id = ?",
@@ -555,6 +556,7 @@ class SSL extends Common
 					"name"         => $name,
 					"subject"      => $subject,
 					"ski"          => $ski,
+					"serial"       => $serial_hex ?: null,
 					"expires"      => $expires,
 					"certificate"  => $pem,
 					"source"       => "auto",
