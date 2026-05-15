@@ -78,6 +78,10 @@ if(!isset($_SESSION['theme'])) { $_SESSION['theme'] = "dark"; }
 	if($_params['tenant']=="login" || $_params['tenant']=="logout") {
 		include ("route/login/index.php");
 	}
+	// public testSSL report by hash — no auth required
+	elseif ($_params['tenant']=="report") {
+		include ("route/report/index.php");
+	}
 	// generic errors
 	elseif ($_params['tenant']=="error" && $_params['route']=="generic") {
 		include ("route/error/generic.php");
@@ -107,6 +111,7 @@ if(!isset($_SESSION['theme'])) { $_SESSION['theme'] = "dark"; }
 	    	<?php include ("route/common/left-menu.php"); ?>
 		</aside>
 	    <div class='page-wrapper'>
+	    	<?php include ("route/common/checks.php"); ?>
 	    	<?php include ("route/content.php"); ?>
 	    </main>
 	  </div>

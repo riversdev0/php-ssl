@@ -424,20 +424,6 @@ msgstr "Geslo je bilo uspešno spremenjeno."
 msgid "Password is required"
 msgstr "Geslo je obvezno"
 
-msgid ""
-"Password must be at least 10 characters and contain an uppercase letter, a "
-"lowercase letter, and a number"
-msgstr ""
-"Geslo mora imeti vsaj 10 znakov in vsebovati veliko črko, malo črko in "
-"številko"
-
-msgid ""
-"Password must be at least 10 characters and contain an uppercase letter, a "
-"lowercase letter, and a number."
-msgstr ""
-"Geslo mora imeti vsaj 10 znakov in vsebovati veliko črko, malo črko in "
-"številko."
-
 msgid "Language"
 msgstr "Jezik"
 
@@ -629,21 +615,8 @@ msgstr "Certifikat ni najden"
 msgid "Cannot parse certificate"
 msgstr "Certifikata ni mogoče razčleniti"
 
-msgid ""
-"Cannot parse certificate. Please provide a valid PEM-encoded certificate."
-msgstr ""
-"Certifikata ni mogoče razčleniti. Prosimo, navedite veljaven PEM-kodiran "
-"certifikat."
-
 msgid "This certificate was manually imported"
 msgstr "Ta certifikat je bil ročno uvožen"
-
-msgid ""
-"This certificate was manually uploaded and will not be removed by orphaned-"
-"certificate cleanup."
-msgstr ""
-"Ta certifikat je bil ročno naložen in ga čiščenje sirotskih certifikatov ne "
-"bo odstranilo."
 
 msgid "Previous certificate"
 msgstr "Prejšnji certifikat"
@@ -729,13 +702,6 @@ msgstr "Pretvorba ni uspela."
 
 msgid "Request failed."
 msgstr "Zahteva ni uspela."
-
-msgid ""
-"Failed to read PFX file. Check the passphrase and make sure the file is a "
-"valid PKCS#12 archive."
-msgstr ""
-"Branje PFX datoteke ni uspelo. Preverite geslo in se prepričajte, da je "
-"datoteka veljavni PKCS#12 arhiv."
 
 msgid "No file uploaded or upload error."
 msgstr "Datoteka ni bila naložena ali je prišlo do napake."
@@ -1450,13 +1416,6 @@ msgstr "Prezrt izdajatelj ustvarjen"
 msgid "Ignored issuer deleted"
 msgstr "Prezrt izdajatelj izbrisan"
 
-msgid ""
-"List of all ignored issuers - new certificates detected by this issuers will "
-"not be reported"
-msgstr ""
-"Seznam vseh prezrtih izdajateljev — novi certifikati teh izdajateljev ne "
-"bodo poročani"
-
 msgid "No ignored issuers configured"
 msgstr "Ni konfiguriranih prezrtih izdajateljev"
 
@@ -1714,28 +1673,12 @@ msgstr "Zahtevana funkcija ni najdena: "
 msgid "Required PHP extension not installed: "
 msgstr "Zahtevana PHP razširitev ni nameščena: "
 
-msgid ""
-"Insuffiecient permissions to access this function. Please contact "
-"administrators"
-msgstr ""
-"Nezadostna dovoljenja za dostop do te funkcije. Prosimo, kontaktirajte "
-"skrbnike."
-
 # ── Settings / DB validation ───────────────────────────────────────────────────
 msgid "Database validation"
 msgstr "Validacija baze podatkov"
 
 msgid "Database structure verified. No issues found."
 msgstr "Struktura baze podatkov je preverjena. Ni napak."
-
-msgid ""
-"Validates the live database structure against db/SCHEMA.sql. Checks for "
-"missing tables, missing or wrong columns, missing indexes and missing "
-"foreign key constraints."
-msgstr ""
-"Preverja strukturo baze podatkov glede na db/SCHEMA.sql. Preveri manjkajoče "
-"tabele, manjkajoče ali napačne stolpce, manjkajoče indekse in manjkajoče "
-"omejitve tujih ključev."
 
 msgid "All fixes applied successfully. Please reload to verify."
 msgstr ""
@@ -1837,13 +1780,6 @@ msgstr "Pridobljena serijska"
 msgid "Rollback complete"
 msgstr "Povrnitev zaključena"
 
-msgid ""
-"There %s <strong>%d private zone(s)</strong> in the system that are not "
-"visible here."
-msgstr ""
-"V sistemu je %s <strong>%d zasebna(-e/-ih) cona(-e)</strong>, ki tukaj ni(-"
-"so) vidna."
-
 msgid "Curl error"
 msgstr "Napaka Curl"
 
@@ -1870,12 +1806,6 @@ msgstr "Jezikovna nastavitev vmesnika"
 
 msgid "— System default (English) —"
 msgstr "— Privzeto sistema (angleščina) —"
-
-msgid ""
-"Default language for users in this tenant who have no personal preference set"
-msgstr ""
-"Privzeti jezik za uporabnike tega najemnika, ki nimajo nastavljene osebne "
-"preference"
 
 msgid "Backup script: missing write permission"
 msgstr "Skript za varnostno kopiranje: manjkajo pravice pisanja"
@@ -2434,3 +2364,153 @@ msgstr "Ne pošiljaj obvestil o iztekanju za tega izdajatelja"
 
 msgid "Ignored issuer updated"
 msgstr "Ignoriran izdajatelj posodobljen"
+
+msgid "testSSL"
+msgstr "testSSL"
+
+msgid "Request new scan"
+msgstr "Zahtevaj nov sken"
+
+msgid "Request testSSL scan"
+msgstr "Zahtevaj testSSL sken"
+
+msgid "Request scan"
+msgstr "Zahtevaj sken"
+
+msgid "Scan details"
+msgstr "Podrobnosti skena"
+
+msgid "testSSL Report"
+msgstr "testSSL poročilo"
+
+msgid "testSSL scan runner"
+msgstr "testSSL izvajalec skeniranja"
+
+msgid "Requested"
+msgstr "Zahtevano"
+
+msgid "Completed"
+msgstr "Zaključeno"
+
+msgid "Cancelled"
+msgstr "Preklicano"
+
+msgid "Rating"
+msgstr "Ocena"
+
+msgid "Requested by"
+msgstr "Zahtevano od"
+
+msgid "Back to list"
+msgstr "Nazaj na seznam"
+
+msgid "Download JSON"
+msgstr "Prenesi JSON"
+
+msgid "Download CSV"
+msgstr "Prenesi CSV"
+
+msgid "Public link"
+msgstr "Javna povezava"
+
+msgid "Cancel this scan?"
+msgstr "Prekliči ta sken?"
+
+msgid "Delete this scan record?"
+msgstr "Izbriši ta zapis skena?"
+
+msgid "Report"
+msgstr "Poročilo"
+
+msgid "No scans found."
+msgstr "Ni najdenih skenov."
+
+msgid "No scans for this tenant."
+msgstr "Ni skenov za tega najemnika."
+
+msgid "Scan is currently running. Reload the page to check progress."
+msgstr "Sken poteka. Osvežite stran za preveritev napredka."
+
+msgid "Scan is queued and will start on the next cron run."
+msgstr "Sken je v čakalni vrsti in bo zagnan ob naslednjem cron zagonu."
+
+msgid "Scan completed but no result data was stored."
+msgstr "Sken je zaključen, vendar ni shranjenih podatkov."
+
+msgid "Scan error"
+msgstr "Napaka pri skenu"
+
+msgid "Scan requested successfully. It will start on the next cron run."
+msgstr "Sken uspešno zahtevan. Zagnati se bo ob naslednjem cron zagonu."
+
+msgid "Invalid hostname."
+msgstr "Neveljavno ime gostitelja."
+
+msgid "Invalid port."
+msgstr "Neveljavna vrata."
+
+msgid "testssl.sh submodule not found"
+msgstr "Podmodul testssl.sh ni najden"
+
+msgid "The testssl.sh submodule is missing. Run the following commands to pull it:"
+msgstr "Podmodul testssl.sh manjka. Zaženite naslednje ukaze za prenos:"
+
+msgid "Scans will fail until the submodule is available on the server."
+msgstr "Skeni bodo neuspešni, dokler podmodul ni na voljo na strežniku."
+
+msgid "General"
+msgstr "Splošno"
+
+msgid "Protocols via sockets"
+msgstr "Protokoli prek vtičnic"
+
+msgid "Cipher categories"
+msgstr "Kategorije šifer"
+
+msgid "Robust forward secrecy (FS)"
+msgstr "Robustna posredna zaupnost (FS)"
+
+msgid "Server defaults"
+msgstr "Privzete nastavitve strežnika"
+
+msgid "HTTP security headers"
+msgstr "Varnostne glave HTTP"
+
+msgid "Vulnerabilities"
+msgstr "Ranljivosti"
+
+msgid "Other"
+msgstr "Drugo"
+
+msgid "Check"
+msgstr "Pregled"
+
+msgid "Finding"
+msgstr "Ugotovitev"
+
+msgid "Severity"
+msgstr "Resnost"
+
+msgid "Generated by"
+msgstr "Ustvaril"
+
+msgid "Domain name or IP address to scan."
+msgstr "Domeno ali IP naslov za skeniranje."
+
+msgid "Notify email"
+msgstr "E-mail za obvestila"
+
+msgid "email@example.com (optional)"
+msgstr "email@primer.com (neobvezno)"
+
+msgid "Send an email when the scan completes. Leave blank to disable."
+msgstr "Pošlji e-mail, ko se skeniranje zaključi. Pusti prazno za izklop."
+
+msgid "Invalid email address."
+msgstr "Neveljaven e-mail naslov."
+
+msgid "testSSL scan completed"
+msgstr "Skeniranje testSSL zaključeno"
+
+msgid "View report"
+msgstr "Ogled poročila"

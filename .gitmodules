@@ -7,3 +7,7 @@
 [submodule "functions/assets/PHPMailer"]
         path = functions/assets/PHPMailer
         url = https://github.com/PHPMailer/PHPMailer.git
+
+[submodule "functions/testSSL"]
+	path = functions/testSSL
+	url = https://github.com/testssl/testssl.sh.git

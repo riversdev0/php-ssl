@@ -17,7 +17,8 @@ class Cron extends Common
 		"axfr_transfer"        => "axfr_transfer",
 		"remove_orphaned"      => "remove_orphaned",
 		"expired_certificates" => "expired_certificates",
-		"backup"               => "backup"
+		"backup"               => "backup",
+		"testssl_scan"         => "testssl_scan"
 	];
 
 	/**
@@ -212,28 +213,51 @@ class Cron extends Common
 			foreach ($this->cronjobs as $j) {
 				// does it need to be executed?
 				if ($this->needs_execution($j, $cli_arguments)) {
-					// update time
-					$this->update_crontime_execution($j->id);
+					// stamp last_executed before running so schedule won't re-trigger in the same window
+					$this->update_last_executed($j->id);
 					// execute script
 					include(dirname(__FILE__) . "/../cron/{$j->script}.php");
+					// clear force only after the script has finished — if it crashes, force stays set
+					if (!empty($j->force)) {
+						$this->clear_force($j->id);
+					}
 				}
+			}
+
+			// always run testssl_scan for every tenant that has any cron entry
+			$tenant_ids = array_unique(array_column($this->cronjobs, 't_id'));
+			foreach ($tenant_ids as $tid) {
+				$j = (object)['t_id' => $tid, 'script' => 'testssl_scan'];
+				include(dirname(__FILE__) . "/../cron/testssl_scan.php");
 			}
 		}
 	}
 
 	/**
-	 * Update last execution time for specific script and reset force flag
-	 * @method update_crontime_execution
+	 * Stamp last_executed for a cron entry (called before the script runs).
 	 * @param  int $cron_id
-	 * @return void
 	 */
-	private function update_crontime_execution($cron_id = 0)
+	private function update_last_executed($cron_id = 0)
 	{
 		try {
-			$this->Database->runQuery("update cron set last_executed = ?, `force` = 0 where id = ?", [$this->exec_time, $cron_id]);
+			$this->Database->runQuery("update cron set last_executed = ? where id = ?", [$this->exec_time, $cron_id]);
 		}
 		catch (Exception $e) {
 			$this->errors[] = "Unable to update cron execution time";
+		}
+	}
+
+	/**
+	 * Clear the force flag after a successful script run.
+	 * @param  int $cron_id
+	 */
+	private function clear_force($cron_id = 0)
+	{
+		try {
+			$this->Database->runQuery("update cron set `force` = 0 where id = ?", [$cron_id]);
+		}
+		catch (Exception $e) {
+			$this->errors[] = "Unable to clear force flag";
 		}
 	}
 

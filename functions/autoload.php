@@ -136,6 +136,10 @@ include ("classes/class.Log.php");
 include ("classes/class.ADsync.php");
 include ("classes/class.Migration.php");
 include ("classes/class.WebAuthn.php");
+include ("classes/class.testssl.php");
+
+# testssl submodule availability flag
+$testssl_available = file_exists(dirname(__FILE__)."/../functions/testSSL/testssl.sh");
 
 # required extensions
 $required_extensions = ['curl', 'openssl', 'pcntl', 'posix', 'pdo', 'pdo_mysql', 'session', 'hash'];
