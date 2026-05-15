@@ -211,7 +211,7 @@ if (!empty($ca->ski)) {
 		<?php print _("Issuer"); ?>
 	</div>
 	<div class="card-content">
-		<?php include(dirname(__FILE__) . '//../certificates/certificate/certificate-issuer.php'); ?>
+		<?php include(dirname(__FILE__) . '/../../certificates/certificate/certificate-issuer.php'); ?>
 	</div>
 </div>
 </div>
@@ -224,7 +224,7 @@ if (!empty($ca->ski)) {
 		<?php print _("Certificate details"); ?>
 	</div>
 	<div class="card-content">
-		<?php include(dirname(__FILE__) . '//../certificates/certificate/certificate-details.php'); ?>
+		<?php include(dirname(__FILE__) . '/../../certificates/certificate/certificate-details.php'); ?>
 	</div>
 </div>
 </div>
@@ -237,7 +237,7 @@ if (!empty($ca->ski)) {
 		<?php print _("Fingerprints"); ?>
 	</div>
 	<div class="card-content">
-		<?php include(dirname(__FILE__) . '//../certificates/certificate/certificate-fingerprints.php'); ?>
+		<?php include(dirname(__FILE__) . '/../../certificates/certificate/certificate-fingerprints.php'); ?>
 	</div>
 </div>
 </div>
@@ -250,7 +250,7 @@ if (!empty($ca->ski)) {
 		<?php print _("Extensions"); ?>
 	</div>
 	<div class="card-content">
-		<?php include(dirname(__FILE__) . '//../certificates/certificate/certificate-extensions.php'); ?>
+		<?php include(dirname(__FILE__) . '/../../certificates/certificate/certificate-extensions.php'); ?>
 	</div>
 </div>
 </div>

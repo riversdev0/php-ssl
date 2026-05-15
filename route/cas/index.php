@@ -4,7 +4,7 @@ $User->validate_session();
 
 // Dispatch to CA detail page when a CA serial/id is in the URL
 if (isset($_params['app']) && $_params['app'] !== '') {
-	include(dirname(__FILE__) . '/../ca-certificates/ca-certificate.php');
+	include(dirname(__FILE__) . '/ca-certificates/ca-certificate.php');
 	return;
 }
 
