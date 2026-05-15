@@ -22,7 +22,7 @@ if (!empty($missing_submodules)) {
         $links[] = "<a href='" . htmlspecialchars($url) . "' target='_blank' rel='noreferrer'>" . htmlspecialchars($name) . "</a>";
     }
     print implode(', ', $links);
-    print "<br><small class='text-muted'><code>git submodule update --init --recursive</code></small></div>";
+    print "<br><small class='text-muted'><code style='background: var(--tblr-bg-surface-dark);color:var(--tblr-light);padding:5px 4px'>git submodule update --init --recursive</code></small></div>";
     print "</div></div>";
 }
 

@@ -32,13 +32,13 @@ $flask_icon = $url_items['testssl']['icon'];
 </div>
 
 <?php if (!$testssl_available): ?>
-<div class="alert alert-warning">
+<div class="alert alert-block alert-warning">
+    <div>
     <h4><?php print _("testssl.sh submodule not found"); ?></h4>
-    <p><?php print _("The testssl.sh submodule is missing. Run the following commands to pull it:"); ?></p>
-    <pre>git submodule update --init --recursive
-# or if adding for the first time:
-git submodule add https://github.com/testssl/testssl.sh.git functions/testSSL</pre>
-    <p><?php print _("Scans will fail until the submodule is available on the server."); ?></p>
+    <p><?php print _("The testssl.sh submodule is missing. Run the following commands to pull it:"); ?>
+    <code>git submodule update --init --recursive</code>.
+    <br><?php print _("Scans will fail until the submodule is available on the server."); ?></p>
+</div>
 </div>
 <?php endif; ?>
 

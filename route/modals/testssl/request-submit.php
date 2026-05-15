@@ -17,17 +17,22 @@ if (!$is_admin) {
 // Validate hostname (reuse existing validator)
 $hostname_check = str_replace(['http://', 'https://'], '', $hostname);
 if (!$User->validate_url('http://' . $hostname_check) && !$User->validate_ip($hostname_check) && !preg_match('/^[a-zA-Z0-9._-]+$/', $hostname)) {
-    $Result->show('danger', _("Invalid hostname."), true, true);
+    $Result->show('danger', _("Invalid hostname."), true);
 }
 
 // Validate port range
 if ($port < 1 || $port > 65535) {
-    $Result->show('danger', _("Invalid port."), true, true);
+    $Result->show('danger', _("Invalid port."), true);
+}
+
+
+if (!$testssl_available) {
+    $Result->show('danger', _("TestSSL not avaialble."), true);
 }
 
 // Validate email if provided
 if ($notify_email !== '' && !filter_var($notify_email, FILTER_VALIDATE_EMAIL)) {
-    $Result->show('danger', _("Invalid email address."), true, true);
+    $Result->show('danger', _("Invalid email address."), true);
 }
 
 $TestSSL = new TestSSL($Database);
@@ -36,5 +41,5 @@ try {
     $id = $TestSSL->create($hostname, $port, $tenant_id, (int)$user->id, $notify_email !== '' ? $notify_email : null);
     $Result->show('success', _("Scan requested successfully. It will start on the next cron run."), true, true);
 } catch (Exception $e) {
-    $Result->show('danger', $e->getMessage(), true, true);
+    $Result->show('danger', $e->getMessage(), true);
 }
