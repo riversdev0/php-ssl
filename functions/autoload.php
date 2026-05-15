@@ -142,7 +142,7 @@ include ("classes/class.testssl.php");
 $testssl_available = file_exists(dirname(__FILE__)."/../functions/testSSL/testssl.sh");
 
 # required extensions
-$required_extensions = ['curl', 'openssl', 'pcntl', 'posix', 'pdo', 'pdo_mysql', 'session', 'hash'];
+$required_extensions = ['curl', 'openssl', 'posix', 'pdo', 'pdo_mysql', 'session', 'hash'];
 $missing_extensions = php_feature_missing_all ($required_extensions);
 
 if (sizeof($missing_extensions)>0)
