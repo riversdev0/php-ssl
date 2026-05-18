@@ -223,11 +223,14 @@ class Cron extends Common
 					}
 				}
 			}
+		}
 
-			// always run testssl_scan for every tenant that has any cron entry
-			$tenant_ids = array_unique(array_column($this->cronjobs, 't_id'));
-			foreach ($tenant_ids as $tid) {
-				$j = (object)['t_id' => $tid, 'script' => 'testssl_scan'];
+		// always run testssl_scan for every tenant that has pending scans
+		$pending = $this->Database->getObjectsQuery(
+			"SELECT DISTINCT tenant_id AS t_id FROM testssl WHERE status = 'Requested'", []
+		);
+		if ($pending) {
+			foreach ($pending as $j) {
 				include(dirname(__FILE__) . "/../cron/testssl_scan.php");
 			}
 		}

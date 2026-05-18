@@ -139,7 +139,7 @@ include ("classes/class.WebAuthn.php");
 include ("classes/class.testssl.php");
 
 # testssl submodule availability flag
-$testssl_available = file_exists(dirname(__FILE__)."/../functions/testSSL/testssl.sh");
+$testssl_available = file_exists(dirname(__FILE__)."/testSSL/testssl.sh");
 
 # required extensions
 $required_extensions = ['curl', 'openssl', 'pcntl', 'posix', 'pdo', 'pdo_mysql', 'session', 'hash'];
