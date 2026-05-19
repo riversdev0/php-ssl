@@ -124,8 +124,12 @@ class Agent
 			$this->result['result_code'] = $result_info['http_code'];
 
 			// error ?
-			if ($this->result['result_code'] != "200")
+			if ($this->result['result_code'] != "200") {
 				$this->errors[] = "Received http code " . $this->result['result_code'];
+				// extract error detail from response body if available
+				if (isset($this->result_full->result->error) && strlen($this->result_full->result->error) > 0)
+					$this->errors[] = $this->result_full->result->error;
+			}
 
 			// from json to object, result only
 			$this->result = $this->result_full->result;

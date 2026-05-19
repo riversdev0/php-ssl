@@ -42,7 +42,7 @@ else {
 
 
 	// check result - local
-	if($fetched_cert->success===false && $agent->atype=="local") {
+	if($fetched_cert===false && $agent->atype=="local") {
 		print "<div class='main' style='margin-top:30px'>";
 		print "<div class='alert alert-danger alert-block' style='display:block'>"._("Failed to obtain certificate")." :: ".end($SSL->errors);
 		print "<hr>";

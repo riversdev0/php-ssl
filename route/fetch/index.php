@@ -25,6 +25,8 @@ $tenants = $Tenants->get_all ();
 	if(isset($_POST['website'])) {
 		// remove https / https for IP checking
 		$_POST['website_ip_check'] = str_replace(["http://", "https://"], "", $_POST['website']);
+		// if only hostname is set prepend https.
+		if(filter_var($_POST['website'], FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) $_POST['website'] = "https://".$_POST['website'];
 		// validate
 		if(!$User->validate_url($_POST['website']) && !$User->validate_ip($_POST['website_ip_check'])) {
 			unset ($_POST['website'], $_POST['website_ip_check']);

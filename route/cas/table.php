@@ -62,10 +62,9 @@ $can_manage = $user->admin === "1" || (int)$user->permission >= 3;
 		<th class="d-none d-lg-table-cell"><?php print _("Subject"); ?></th>
 		<th class="d-none d-md-table-cell"><?php print _("Parent CA"); ?></th>
 		<th><?php print _("Expires"); ?></th>
-		<th><?php print _("Key"); ?></th>
-		<th class="text-center d-none d-md-table-cell"><?php print _("Certificates"); ?></th>
-		<th class="text-center d-none d-md-table-cell"><?php print _("Ign. updates"); ?></th>
-		<th class="text-center d-none d-md-table-cell"><?php print _("Ign. expiry"); ?></th>
+		<th></th>
+		<th class="text-center d-none d-md-table-cell"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-rosette-discount-check text-muted"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12.01 2.011a3.2 3.2 0 0 1 2.113 .797l.154 .145l.698 .698a1.2 1.2 0 0 0 .71 .341l.135 .008h1a3.2 3.2 0 0 1 3.195 3.018l.005 .182v1c0 .27 .092 .533 .258 .743l.09 .1l.697 .698a3.2 3.2 0 0 1 .147 4.382l-.145 .154l-.698 .698a1.2 1.2 0 0 0 -.341 .71l-.008 .135v1a3.2 3.2 0 0 1 -3.018 3.195l-.182 .005h-1a1.2 1.2 0 0 0 -.743 .258l-.1 .09l-.698 .697a3.2 3.2 0 0 1 -4.382 .147l-.154 -.145l-.698 -.698a1.2 1.2 0 0 0 -.71 -.341l-.135 -.008h-1a3.2 3.2 0 0 1 -3.195 -3.018l-.005 -.182v-1a1.2 1.2 0 0 0 -.258 -.743l-.09 -.1l-.697 -.698a3.2 3.2 0 0 1 -.147 -4.382l.145 -.154l.698 -.698a1.2 1.2 0 0 0 .341 -.71l.008 -.135v-1l.005 -.182a3.2 3.2 0 0 1 3.013 -3.013l.182 -.005h1a1.2 1.2 0 0 0 .743 -.258l.1 -.09l.698 -.697a3.2 3.2 0 0 1 2.269 -.944zm3.697 7.282a1 1 0 0 0 -1.414 0l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.32 1.497l2 2l.094 .083a1 1 0 0 0 1.32 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z"></path></svg></th>
+		<th class="text-center d-none d-md-table-cell"><?php print _("Ign. updates / expiry"); ?></th>
 		<th class="text-end"><?php print _("Actions"); ?></th>
 	</tr>
 </thead>
@@ -146,7 +145,7 @@ if (empty($groups)) {
 				? "<a href='/{$ca_link_target}/{$ca_slug}/' class='text-body'>" . htmlspecialchars($ca->name) . "</a>"
 				: "<a href='/route/modals/cas/view.php?ca_id={$ca_id}' class='text-body' data-bs-toggle='modal' data-bs-target='#modal1'>" . htmlspecialchars($ca->name) . "</a>";
 			print "<tr data-ca-id='{$ca_id}' data-ignore-updates='{$ign_u}' data-ignore-expiry='{$ign_e}'>";
-			print "  <td>{$indent}{$angle_icon_show}{$ca_icon} {$name_html}</td>";
+			print "  <td style='white-space:nowrap'>{$indent}{$angle_icon_show}{$ca_icon} {$name_html}</td>";
 			print "  <td class='d-none d-lg-table-cell text-muted small'>" . htmlspecialchars($ca->subject ?? '') . "</td>";
 			$parent_html = $ca->parent_ca_name ? "<span class='text-muted small'>" . htmlspecialchars($ca->parent_ca_name) . "</span>" : "<span class='text-muted'>—</span>";
 			print "  <td class='d-none d-md-table-cell'>{$parent_html}</td>";
@@ -157,9 +156,8 @@ if (empty($groups)) {
 				? "<span class='badge bg-blue-lt text-blue'>{$cert_count}</span>"
 				: "<span class='text-muted'>—</span>";
 			print "  <td class='text-center d-none d-md-table-cell'>{$count_html}</td>";
-			print "  <td class='text-center d-none d-md-table-cell'>{$badge_u}</td>";
-			print "  <td class='text-center d-none d-md-table-cell'>{$badge_e}</td>";
-			print "  <td class='text-end'>{$actions}</td>";
+			print "  <td class='text-center d-none d-md-table-cell'>{$badge_u} {$badge_e}</td>";
+			print "  <td class='text-end' style='white-space:nowrap'>{$actions}</td>";
 			print "</tr>";
 		}
 	}
