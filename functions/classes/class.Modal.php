@@ -110,7 +110,7 @@ class Modal {
         if($this->modal_id=="#modal2")
         $html[] = "     <button type='button' class='btn btn-sm btn-default bg-info-lt $reload_class' onclick='$(\"$this->modal_id\").modal(\"hide\");$(\"#modal1\").modal(\"show\");' >"._("Close window")."</button>";
         else
-        $html[] = "     <button type='button' class='btn btn-sm btn-default bg-info-lt $reload_class' onclick='$(\"$this->modal_id\").modal(\"hide\");' >"._("Close window")."</button>";
+        $html[] = "     <button type='button' class='btn btn-sm btn-default bg-info-lt $reload_class' data-bs-dismiss='modal'>"._("Close window")."</button>";
         if (strlen($footer_text)>0)
         $html[] = "     <button type='button' class='btn btn-sm bg-info-lt text-$btn_class modal-execute'>$footer_text</button>";
         $html[] = " </div>";
@@ -166,7 +166,7 @@ class Modal {
             $html[] = "})";
 
             // cancel reload
-            $html[] = "$('button[data-dismiss=\"modal\"]').click(function() {";
+            $html[] = "$('button[data-bs-dismiss=\"modal\"]').click(function() {";
             $html[] = "    clearTimeout(tmout)";
             $html[] = "})";
 

@@ -30,7 +30,7 @@ $(document).ready(function () {
         modal_html += '         <div class="progress-bar progress-bar-indeterminate"></div>'
         modal_html += '     </div>'
         modal_html += '</div>'
-        modal_html += '<div class="modal-footer"><button type="button" class="btn btn-sm btn-default btn-outline-secondary" onclick="$(&quot;#modal1&quot;).modal(&quot;hide&quot;);">Close window</button></div>';
+        modal_html += '<div class="modal-footer"><button type="button" class="btn btn-sm btn-default btn-outline-secondary" data-bs-dismiss="modal">Close window</button></div>';
 
         // set default content
         $(index + ' .modal-content').html(modal_html);
