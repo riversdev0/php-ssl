@@ -216,6 +216,12 @@ class Cron extends Common
 					$this->update_last_executed($j->id);
 					// execute script
 					include(dirname(__FILE__) . "/../cron/{$j->script}.php");
+					// Forked scripts (update_certificates) use pcntl_fork(). When child processes
+					// exit, their PHP destructors send COM_QUIT over the inherited MySQL socket,
+					// causing the parent's connection to be closed server-side ("server has gone
+					// away"). Reconnect before any further DB operations so clear_force() and the
+					// next iteration's update_last_executed() always have a live connection.
+					$this->Database = new Database_PDO();
 					// clear force only after the script has finished — if it crashes, force stays set
 					if (!empty($j->force)) {
 						$this->clear_force($j->id);
