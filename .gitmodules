@@ -3,6 +3,7 @@
 [submodule "functions/assets/Net_DNS2"]
         path = functions/assets/Net_DNS2
         url = https://github.com/mikepultz/netdns2.git
+	branch = version-1.5.x
 
 [submodule "functions/assets/PHPMailer"]
         path = functions/assets/PHPMailer
