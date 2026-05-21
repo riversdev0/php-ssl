@@ -48,8 +48,9 @@ if($_POST['action']!=="delete") {
 	if($Common->validate_alphanumeric($_POST['name'])===false || strlen(trim($_POST['name']))==0)
 	$Result->show("danger", _("Invalid name").".", true, false, false, false);
 
-	# type
-	if(!in_array($_POST['type'], ['AD', 'local']))
+	# type — Local is not a valid type for new domains
+	$allowed_types = $_POST['action']==='add' ? ['AD'] : ['AD', 'local'];
+	if(!in_array($_POST['type'], $allowed_types))
 	$Result->show("danger", _("Invalid type").".", true, false, false, false);
 
 	# active

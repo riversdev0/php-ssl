@@ -81,6 +81,7 @@ else {
 	$content[] = "	<th>"._("Type")."</th>";
 	$content[] = "	<td>";
 	$content[] = "		<select class='form-select form-select-sm' name='type' $disabled>";
+	if($_GET['action']!=="add")
 	$content[] = "			<option value='local'".(@$domain->type==='local' ? ' selected' : '').">"._("Local")."</option>";
 	$content[] = "			<option value='AD'".(@$domain->type==='AD' ? ' selected' : '').">"._("Active Directory (AD)")."</option>";
 	$content[] = "		</select>";
