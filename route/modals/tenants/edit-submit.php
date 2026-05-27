@@ -107,7 +107,7 @@ try {
 		$rand = $Cron->rand(0,60,5);
 
 		// add default cronjobs
-		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>"*", "day"=>"*", "weekday"=>"*", "script"=>"update_certificates"]);
+		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>"*/30", "hour"=>"*", "day"=>"*", "weekday"=>"*", "script"=>"update_certificates"]);
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>2,   "day"=>"*", "weekday"=>"*", "script"=>"remove_orphaned"]);
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>8,   "day"=>"*", "weekday"=>"*", "script"=>"expired_certificates"]);
 		$Database->insertObject("cron", ["t_id"=>$new_tenant_id, "minute"=>$rand, "hour"=>3,   "day"=>"*", "weekday"=>"*", "script"=>"axfr_transfer"]);

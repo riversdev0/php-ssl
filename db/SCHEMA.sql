@@ -81,7 +81,8 @@ CREATE TABLE `cas` (
   KEY `parent_ca_id` (`parent_ca_id`),
   KEY `cas_ski_tid` (`ski`,`t_id`),
   CONSTRAINT `cas_parent_fk` FOREIGN KEY (`parent_ca_id`) REFERENCES `cas` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `cas_pkey_fk` FOREIGN KEY (`pkey_id`) REFERENCES `pkey` (`id`) ON DELETE SET NULL
+  CONSTRAINT `cas_pkey_fk` FOREIGN KEY (`pkey_id`) REFERENCES `pkey` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `cas_tenant_fk` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
