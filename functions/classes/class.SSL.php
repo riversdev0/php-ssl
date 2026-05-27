@@ -173,6 +173,7 @@ class SSL extends Common
 			'allow_self_signed' => true,
 			'SNI_enabled' => true,
 			'verify_peer' => false,
+			'verify_peer_name' => false,
 			'capath' => '/etc/ssl/certs'
 		];
 	}
@@ -369,55 +370,53 @@ class SSL extends Common
 	 */
 	private function process_fetch_result($errno, $errstr, $execution_time, $port, $client)
 	{
-		// check stream
-		if ($this->stream === false && strlen($errstr) == 0) {
-			$this->errors[] = "Unable to establish socket connection";
+		// $client is false when stream_socket_client failed (TCP or TLS error).
+		// $errstr may be non-empty even on a successful connection (e.g. OpenSSL
+		// emits a warning about self-signed certs even with verify_peer=false on
+		// some platforms), so we key on $client, not $errstr.
+		if ($client === false) {
+			if (strlen($errstr) > 0) {
+				$this->errors[] = "Unable to connect on port $port: $errstr";
+			} else {
+				$this->errors[] = "Unable to establish socket connection on port $port";
+			}
 			return false;
 		}
-		// check for errors, return false
-		elseif (strlen($errstr) > 0) {
-			//$this->errors[] = $errstr;
+		// get stream context and extract certificate
+		$cont = stream_context_get_params($this->stream);
+
+		// metadata - TLS version
+		$metadata = stream_get_meta_data($client);
+
+		// get cert and export it
+		$peer_cert = $cont["options"]["ssl"]["peer_certificate"] ?? null;
+		$peer_cert_chain = $cont["options"]["ssl"]["peer_certificate_chain"] ?? [];
+
+		if (@openssl_x509_export($peer_cert, $certinfo) === false) {
+			$this->errors[] = "Could not fetch peer certificate";
 			return false;
 		}
-		// ok
-		else {
-			// get
-			$cont = stream_context_get_params($this->stream);
 
-			// metadata - TLS version
-			$metadata = stream_get_meta_data($client);
-
-			// get cert and export it
-			$peer_cert = $cont["options"]["ssl"]["peer_certificate"];
-			$peer_cert_chain = $cont["options"]["ssl"]["peer_certificate_chain"];
-
-			if (@openssl_x509_export($peer_cert, $certinfo) === false) {
-				$this->errors[] = "Could not fetch peer certificate";
-				return false;
-			}
-			else {
-				// chain
-				$certinfo_chain = "";
-				foreach ($peer_cert_chain as $int_cert) {
-					if (@openssl_x509_export($int_cert, $output) !== false)
-						$certinfo_chain .= $output;
-				}
-				// parse
-				$peer_cert_parsed = openssl_x509_parse($peer_cert);
-				$valid_to = date("Y-m-d H:i:s", $peer_cert_parsed['validTo_time_t']);
-				// insert
-				return [
-					"serial" => $peer_cert_parsed['serialNumber'],
-					"certificate" => trim($certinfo),
-					"chain" => trim($certinfo_chain),
-					"expires" => $valid_to,
-					"created" => $execution_time,
-					"port" => $port,
-					"ip" => $this->resolve_ip($this->hostname),
-					"tls_proto" => $metadata['crypto']['cipher_version']
-				];
-			}
+		// chain
+		$certinfo_chain = "";
+		foreach ($peer_cert_chain as $int_cert) {
+			if (@openssl_x509_export($int_cert, $output) !== false)
+				$certinfo_chain .= $output;
 		}
+		// parse
+		$peer_cert_parsed = openssl_x509_parse($peer_cert);
+		$valid_to = date("Y-m-d H:i:s", $peer_cert_parsed['validTo_time_t']);
+		// insert
+		return [
+			"serial" => $peer_cert_parsed['serialNumber'],
+			"certificate" => trim($certinfo),
+			"chain" => trim($certinfo_chain),
+			"expires" => $valid_to,
+			"created" => $execution_time,
+			"port" => $port,
+			"ip" => $this->resolve_ip($this->hostname),
+			"tls_proto" => $metadata['crypto']['cipher_version']
+		];
 	}
 
 
