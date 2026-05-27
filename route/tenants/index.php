@@ -49,6 +49,8 @@ else {
 	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-width='20' data-width-unit='px' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Agents")."'>".$url_items["scanning"]["icon"]."</th>";
 	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-width='20' data-width-unit='px' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Zones")."'>".$url_items["zones"]["icon"]."</th>";
 	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-width='20' data-width-unit='px' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Users")."'>".$url_items["users"]["icon"]."</th>";
+	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-width='20' data-width-unit='px' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Certificates")."'>".$url_items["certificates"]["icon"]."</th>";
+	print "	<th class='text-center' style='width:20px;padding:0.5rem 0rem' data-width='20' data-width-unit='px' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("CAs")."'>".$url_items["cas"]["icon"]."</th>";
 	print "	<th class='text-center' style='width:15px;padding:0.5rem 0rem' data-width='20' data-width-unit='px'></th>";
 	print "	<th class='text-center' style='width:15px;padding:0.5rem 0rem' data-width='20' data-width-unit='px'></th>";
 	print "</tr>";
@@ -60,9 +62,11 @@ else {
 
 
 	$status = $t->active == 1 ? "<span class='badge bg-green-lt'>Active</span>" : "<span class='badge bg-red-lt'>Disabled</span>";
-	$zones  = $Database->count_database_objects("zones", "t_id", $t->id);
-	$users  = $Database->count_database_objects("users", "t_id", $t->id);
-	$agents = $Database->count_database_objects("agents", "t_id", $t->id);
+	$zones        = $Database->count_database_objects("zones", "t_id", $t->id);
+	$users        = $Database->count_database_objects("users", "t_id", $t->id);
+	$agents       = $Database->count_database_objects("agents", "t_id", $t->id);
+	$certificates = $Database->count_database_objects("certificates", "t_id", $t->id);
+	$cas          = $Database->count_database_objects("cas", "t_id", $t->id);
 
 	# check for missing cronjobs and portgroups
 	$warnings = [];
@@ -91,6 +95,8 @@ else {
 	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge' style='width:100%'>".$agents."</span></td>";
 	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge' style='width:100%'>".$zones."</span></td>";
 	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge' style='width:100%'>".$users."</span></td>";
+	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge' style='width:100%'>".$certificates."</span></td>";
+	print "	<td class='text-center' style='padding:0.5rem 0.1rem;'><span class='badge' style='width:100%'>".$cas."</span></td>";
 	print "	<td class='text-center' style='padding:0.5rem 0.2rem;padding-left:0.5rem;border-left:1px solid var(--tblr-border-color);'>
 					<a href='/route/modals/tenants/edit.php?id=".$t->id."&action=edit' data-bs-toggle='modal' data-bs-target='#modal1'>
 						<span class='badge text-info' data-bs-toggle='tooltip' data-bs-placement='top' title='"._("Edit tenant")."'>

@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `cas`;
 
 CREATE TABLE `cas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `t_id` int(11) NOT NULL,
+  `t_id` int(11) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `certificate` text DEFAULT NULL,
   `pkey_id` int(11) unsigned DEFAULT NULL,
@@ -80,6 +80,7 @@ CREATE TABLE `cas` (
   KEY `pkey_id` (`pkey_id`),
   KEY `parent_ca_id` (`parent_ca_id`),
   KEY `cas_ski_tid` (`ski`,`t_id`),
+  KEY `cas_serial_tid` (`serial`,`t_id`),
   CONSTRAINT `cas_parent_fk` FOREIGN KEY (`parent_ca_id`) REFERENCES `cas` (`id`) ON DELETE SET NULL,
   CONSTRAINT `cas_pkey_fk` FOREIGN KEY (`pkey_id`) REFERENCES `pkey` (`id`) ON DELETE SET NULL,
   CONSTRAINT `cas_tenant_fk` FOREIGN KEY (`t_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
