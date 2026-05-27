@@ -115,9 +115,9 @@ if (empty($groups)) {
 		foreach (ca_tree_sort($cas) as [$ca, $depth]) {
 			// Synthetic placeholder for CAs with an unknown issuer
 			if (!empty($ca->is_unknown_placeholder)) {
-				$unknown_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-muted"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9h.01"/><path d="M11 12h1v4h1"/><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9-9 9-9-1.8-9-9 1.8-9 9-9z"/></svg>';
-				print "<tr class='table-warning'>";
-				print "  <td colspan='9' class='text-muted fst-italic py-1'>{$unknown_icon} " . _("Unknown — issuer not discovered (incomplete chain)") . "</td>";
+				$unknown_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-mu1ted text-warning"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9h.01"/><path d="M11 12h1v4h1"/><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9-9 9-9-1.8-9-9 1.8-9 9-9z"/></svg>';
+				print "<tr class=''>";
+				print "  <td colspan='9' class='text-warning fst-ital1ic py-1'>{$unknown_icon} " . _("Unknown — issuer not discovered (incomplete chain)") . "</td>";
 				print "</tr>";
 				continue;
 			}
