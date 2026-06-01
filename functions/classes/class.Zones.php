@@ -199,7 +199,7 @@ class Zones extends Common
 	{
 		// fetch
 		try {
-			$cnt = $this->Database->getObjectQuery("select count(distinct(c_id)) as cnt from hosts where z_id = ?", [$zone_id]);
+			$cnt = $this->Database->getObjectQuery("select count(distinct(c_id)) as cnt from hosts where z_id = ? and c_id is not null", [$zone_id]);
 		}
 		catch (Exception $e) {
 			$this->errors[] = $e->getMessage();
