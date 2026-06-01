@@ -9,17 +9,22 @@ if (!isset($show_manage_actions)) { $show_manage_actions = true; }
 /**
  * Sort a flat array of CA objects into parent-before-child DFS order.
  * Returns array of [$ca, $depth] pairs; siblings ordered as received (caller sorts by name).
- * CAs whose parent_ca_id is not present in the set are treated as roots.
+ * CAs whose parent_ca_id points to a CA not present in the set are grouped under a synthetic
+ * "Unknown" placeholder node to make incomplete chains visible.
  */
 function ca_tree_sort(array $cas): array {
     $by_id    = [];
     $children = [];
     $roots    = [];
+    $orphaned = [];
     foreach ($cas as $ca) { $by_id[(int)$ca->id] = $ca; }
     foreach ($cas as $ca) {
         $pid = (int)($ca->parent_ca_id ?? 0);
         if ($pid && isset($by_id[$pid])) {
             $children[$pid][] = $ca;
+        } elseif ($pid) {
+            // parent_ca_id is set but the parent CA is not known — incomplete chain
+            $orphaned[] = $ca;
         } else {
             $roots[] = $ca;
         }
@@ -32,6 +37,27 @@ function ca_tree_sort(array $cas): array {
         }
     };
     foreach ($roots as $root) { $visit($root, 0); }
+    // Orphaned intermediates: their issuer was never discovered. Show them nested under a
+    // synthetic "Unknown" placeholder so the incomplete chain is clearly visible.
+    if (!empty($orphaned)) {
+        $placeholder                      = new stdClass();
+        $placeholder->id                  = 0;
+        $placeholder->name                = _("Unknown");
+        $placeholder->is_unknown_placeholder = true;
+        $placeholder->parent_ca_id        = null;
+        $placeholder->parent_ca_name      = null;
+        $placeholder->subject             = null;
+        $placeholder->expires             = null;
+        $placeholder->has_pkey            = false;
+        $placeholder->cert_count          = 0;
+        $placeholder->ignore_updates      = 0;
+        $placeholder->ignore_expiry       = 0;
+        $placeholder->serial              = null;
+        $result[] = [$placeholder, 0];
+        foreach ($orphaned as $ca) {
+            $visit($ca, 1);
+        }
+    }
     return $result;
 }
 
@@ -87,6 +113,14 @@ if (empty($groups)) {
 		}
 
 		foreach (ca_tree_sort($cas) as [$ca, $depth]) {
+			// Synthetic placeholder for CAs with an unknown issuer
+			if (!empty($ca->is_unknown_placeholder)) {
+				$unknown_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-mu1ted text-warning"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9h.01"/><path d="M11 12h1v4h1"/><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9-9 9-9-1.8-9-9 1.8-9 9-9z"/></svg>';
+				print "<tr class=''>";
+				print "  <td colspan='9' class='text-warning fst-ital1ic py-1'>{$unknown_icon} " . _("Unknown — issuer not discovered (incomplete chain)") . "</td>";
+				print "</tr>";
+				continue;
+			}
 			$ca_id    = (int)$ca->id;
 			$name_esc = htmlspecialchars($ca->name, ENT_QUOTES);
 

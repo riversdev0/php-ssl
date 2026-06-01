@@ -121,7 +121,7 @@ else {
 			$expire_soon 	   = $expire_soon-$expired_certs_cnt;
 			// ikona levo
 			$icon_color        = $expired_certs_cnt == 0 ? "text-success" : "text-danger";
-			$icon_color        = $hosts==0 ? "text-muted" : $icon_color;
+			$icon_color        = ($hosts == 0 || $certs == 0) ? "text-muted" : $icon_color;
 			$icon_color 	   = $expired_certs_cnt == 0 && $expire_soon!=0 ? "text-warning" : $icon_color;
 			// klase za badge
 			$warning_class     = $expire_soon==0 ? "" : "text-warning";
