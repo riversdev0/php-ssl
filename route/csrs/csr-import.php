@@ -112,7 +112,7 @@ if (!empty($cert_pem)) {
         exit;
     }
 
-    if ($user->admin === "1") {
+    if ($user->admin == "1") {
         $zone = $Database->getObjectQuery("SELECT * FROM zones WHERE id = ?", [$zone_id]);
     } else {
         $zone = $Database->getObjectQuery("SELECT * FROM zones WHERE id = ? AND t_id = ?", [$zone_id, (int)$user->t_id]);
@@ -200,7 +200,7 @@ if ($cert_parsed !== null && $zone !== null) {
 } elseif ($pkey_res !== false) {
     // No cert provided but key available — scan certificates for a key match
     // Admins may have saved the CSR under their own t_id while the cert lives in another tenant
-    if ($user->admin === "1") {
+    if ($user->admin == "1") {
         $tenant_certs = $Database->getObjectsQuery(
             "SELECT id, certificate, t_id FROM certificates WHERE certificate != '' AND certificate IS NOT NULL",
             []

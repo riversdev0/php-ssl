@@ -32,7 +32,7 @@ if (empty($name)) {
     $Result->show("danger", _("Template name is required."), true, false, false, false);
 }
 
-if ($user->admin === "1" && !empty($_POST_safe['t_id'])) {
+if ($user->admin == "1" && !empty($_POST_safe['t_id'])) {
     $t_id = (int)$_POST_safe['t_id'];
     if (!$Database->getObject("tenants", $t_id)) {
         $Result->show("danger", _("Invalid tenant."), true, false, false, false);
@@ -58,7 +58,7 @@ $fields = [
 try {
     if ($tpl_id > 0) {
         // Update — verify ownership
-        if ($user->admin === "1") {
+        if ($user->admin == "1") {
             $existing = $Database->getObjectQuery("SELECT id FROM csr_templates WHERE id = ?", [$tpl_id]);
         } else {
             $existing = $Database->getObjectQuery("SELECT id FROM csr_templates WHERE id = ? AND t_id = ?", [$tpl_id, $t_id]);

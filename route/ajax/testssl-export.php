@@ -11,7 +11,7 @@ if (!$id) {
 }
 
 $TestSSL = new TestSSL($Database);
-$scan    = $TestSSL->get_by_id($id, (int)$user->t_id, $user->admin === "1");
+$scan    = $TestSSL->get_by_id($id, (int)$user->t_id, $user->admin == "1");
 
 if (!$scan || $scan->status !== 'Completed') {
     http_response_code(404);

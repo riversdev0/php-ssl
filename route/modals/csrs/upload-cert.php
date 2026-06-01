@@ -14,7 +14,7 @@ if ($csr_id <= 0) {
     exit;
 }
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ?", [$csr_id]);
 } else {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ? AND t_id = ?", [$csr_id, $user->t_id]);
@@ -45,7 +45,7 @@ $content  = "<p class='text-secondary mb-3'>" . sprintf(_("Paste the signed cert
 $content .= "<div class='mb-3'>";
 $content .= "<label class='form-label'>" . _("Zone") . "</label>";
 $content .= "<select id='upload-zone-id' class='form-select form-select-sm'>";
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $by_tenant = [];
     foreach ($all_zones as $z) { $by_tenant[$z->t_id][] = $z; }
     foreach ($all_tenants as $t) {

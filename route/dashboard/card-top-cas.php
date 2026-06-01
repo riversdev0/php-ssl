@@ -1,6 +1,6 @@
 <?php
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $top_cas = $Database->getObjectsQuery(
         "SELECT ca.id, ca.name, ca.ski, ca.t_id, t.name AS tenant_name, t.href AS tenant_href,
                 COUNT(c.id) AS cert_count
@@ -47,7 +47,7 @@ $max_count = !empty($top_cas) ? (int)$top_cas[0]->cert_count : 0;
             <tr>
                 <th class="w-1 text-muted">#</th>
                 <th><?php print _("Certificate Authority"); ?></th>
-                <?php if ($user->admin === "1"): ?>
+                <?php if ($user->admin == "1"): ?>
                 <th class="d-none d-md-table-cell"><?php print _("Tenant"); ?></th>
                 <?php endif; ?>
                 <th class="text-end" style="width:80px"></th>
@@ -57,7 +57,7 @@ $max_count = !empty($top_cas) ? (int)$top_cas[0]->cert_count : 0;
             <?php foreach ($top_cas as $i => $ca):
                 $cert_count = (int)$ca->cert_count;
                 $pct = $max_count > 0 ? round($cert_count / $max_count * 100) : 0;
-                $ca_href = $user->admin === "1" ? ($ca->tenant_href ?? $user->href) : $user->href;
+                $ca_href = $user->admin == "1" ? ($ca->tenant_href ?? $user->href) : $user->href;
             ?>
             <tr>
                 <td class="text-muted"><?php print $i + 1; ?></td>
@@ -73,7 +73,7 @@ $max_count = !empty($top_cas) ? (int)$top_cas[0]->cert_count : 0;
                     </div>
                     </div>
                 </td>
-                <?php if ($user->admin === "1"): ?>
+                <?php if ($user->admin == "1"): ?>
                 <td class="text-muted d-none d-md-table-cell"><?php print htmlspecialchars($ca->tenant_name ?? ''); ?></td>
                 <?php endif; ?>
                 <td class="text-end text-muted"><span class='badge'><?php print number_format($cert_count); ?></span></td>

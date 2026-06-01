@@ -16,7 +16,7 @@ $pk_id      = (int) ($body['id'] ?? 0);
 $target_uid = isset($body['user_id']) ? (int)$body['user_id'] : (int)$user->id;
 
 // Only admins may delete another user's passkeys
-if ($target_uid !== (int)$user->id && $user->admin !== "1") {
+if ($target_uid !== (int)$user->id && $user->admin != "1") {
     http_response_code(403);
     print json_encode(['status' => 'error', 'message' => 'Access denied']);
     exit;

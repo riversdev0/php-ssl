@@ -37,7 +37,7 @@ if(!$User->validate_action($_GET['action'])) {
 	$btn_text = "";
 }
 # rtenant validation
-elseif($user->admin !== "1" && $user->t_id!=$_GET['tenant']) {
+elseif($user->admin != "1" && $user->t_id!=$_GET['tenant']) {
 	# content
 	$content      = [];
 	$content[]    = $Result->show("danger", _("Admin user required"), false, false, true);
@@ -80,7 +80,7 @@ else {
 	$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";
 	$content[] = "<table class='table table-condensed table-borderless align-middle table-zone-management table-sm'>";
 	// tenant - admin
-	if($user->admin === "1" && $_GET['action']=="add") {
+	if($user->admin == "1" && $_GET['action']=="add") {
 	$content[] = "<tr>";
 	$content[] = "	<th style='width:100px;'>"._("Tenant")."</th>";
 	$content[] = "	<td>".$tenant->name."</td>";
@@ -94,7 +94,7 @@ else {
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='name' value='".htmlspecialchars(@$issuer->name, ENT_QUOTES, 'UTF-8')."' $disabled>";
 	$content[] = "		<input type='hidden' name='t_id' value='".htmlspecialchars(@$tenant->id, ENT_QUOTES, 'UTF-8')."'>";
 	$content[] = "		<input type='hidden' name='action' value='".htmlspecialchars($_GET['action'], ENT_QUOTES, 'UTF-8')."'>";
-	if($user->admin !== "1" || $_GET['action']!=="add")
+	if($user->admin != "1" || $_GET['action']!=="add")
 	$content[] = "		<input type='hidden' name='id' value='".htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')."'>";
 	$content[] = "	</td>";
 	$content[] = "	<td>";

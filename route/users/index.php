@@ -136,7 +136,7 @@ if (empty($groups)) {
 			// Actions
 			$actions = "";
 
-			if ($user->admin === "1" && !isset($_SESSION['impersonate_original']) && $u->email !== $user->email) {
+			if ($user->admin == "1" && !isset($_SESSION['impersonate_original']) && $u->email !== $user->email) {
 				$actions .= "<a class='btn btn-sm bg-info-lt text-warning' href='/{$user->href}/user/impersonate/{$u_id}/'>{$imp_icon} </a> ";
 			}
 			$actions .= "<a class='btn btn-sm bg-info-lt text-info me-1 {$user->actions_disabled}' href='/route/modals/users/edit.php?action=edit&tenant={$u_tenant_href}&id={$u_id}' data-bs-toggle='modal' data-bs-target='#modal1'>{$edit_icon} " . _("Edit") . "</a>";

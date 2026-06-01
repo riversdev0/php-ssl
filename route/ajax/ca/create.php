@@ -32,7 +32,7 @@ $parent_ca_id = isset($body['parent_ca_id']) && $body['parent_ca_id'] !== null ?
 $pathlen      = isset($body['pathlen'])      && $body['pathlen']      !== null ? max(0, (int)$body['pathlen']) : null;
 
 // Determine tenant
-if ($user->admin === "1" && !empty($body['t_id'])) {
+if ($user->admin == "1" && !empty($body['t_id'])) {
     $t_id = (int)$body['t_id'];
     if (!$Database->getObject("tenants", $t_id)) {
         print json_encode(['status' => 'error', 'message' => _("Invalid tenant.")]);
@@ -104,7 +104,7 @@ if ($parent_ca_id !== null) {
     }
     $parent_ca = $parent_ca[0];
     // Tenant access check
-    if ($user->admin !== "1" && (int)$parent_ca->t_id !== $t_id) {
+    if ($user->admin != "1" && (int)$parent_ca->t_id !== $t_id) {
         print json_encode(['status' => 'error', 'message' => _("Access denied to parent CA.")]);
         exit;
     }

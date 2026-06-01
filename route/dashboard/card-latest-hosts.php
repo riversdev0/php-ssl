@@ -1,6 +1,6 @@
 <?php
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $latest_hosts = $Database->getObjectsQuery(
         "SELECT h.id, h.hostname, h.port, h.ip, h.last_check, h.last_change, h.ignore,
                 z.name AS zone_name, z.id AS z_id,
@@ -45,7 +45,7 @@ if ($user->admin === "1") {
             <tr>
                 <th><?php print _("Host"); ?></th>
                 <th class="d-none d-md-table-cell"><?php print _("Zone"); ?></th>
-                <?php if ($user->admin === "1"): ?>
+                <?php if ($user->admin == "1"): ?>
                 <th class="d-none d-lg-table-cell"><?php print _("Tenant"); ?></th>
                 <?php endif; ?>
                 <th class="text-end d-none d-md-table-cell" style="width:130px"><?php print _("Last check"); ?></th>
@@ -73,7 +73,7 @@ if ($user->admin === "1") {
                         <?php print $zone; ?>
                     </a>
                 </td>
-                <?php if ($user->admin === "1"): ?>
+                <?php if ($user->admin == "1"): ?>
                 <td class="text-muted d-none d-lg-table-cell"><?php print htmlspecialchars($host->tenant_name ?? ''); ?></td>
                 <?php endif; ?>
                 <td class="text-end text-muted d-none d-md-table-cell" style="white-space:nowrap"><?php print $last_check; ?></td>

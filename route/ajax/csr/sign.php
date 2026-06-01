@@ -32,7 +32,7 @@ if ($days < 1 || $days > 3650) {
 }
 
 // Fetch CSR
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ?", [$csr_id]);
 } else {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ? AND t_id = ?", [$csr_id, $user->t_id]);
@@ -62,7 +62,7 @@ if (!$zone) {
     exit;
 }
 // Non-admin: zone must belong to user's tenant
-if ($user->admin !== "1" && $zone->t_id != $user->t_id) {
+if ($user->admin != "1" && $zone->t_id != $user->t_id) {
     print json_encode(['status' => 'error', 'message' => _("Access denied.")]);
     exit;
 }

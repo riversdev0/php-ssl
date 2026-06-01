@@ -14,7 +14,7 @@ if ($csr_id <= 0) {
     exit;
 }
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ?", [$csr_id]);
 } else {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ? AND t_id = ?", [$csr_id, $user->t_id]);

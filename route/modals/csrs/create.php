@@ -17,7 +17,7 @@ $is_renew   = false;
 $renew_t_id = 0;
 
 if ($renew_csr_id > 0) {
-    if ($user->admin === "1") {
+    if ($user->admin == "1") {
         $renew_csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ?", [$renew_csr_id]);
     } else {
         $renew_csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ? AND t_id = ?", [$renew_csr_id, $user->t_id]);
@@ -53,7 +53,7 @@ if ($renew_csr_id > 0) {
 }
 
 if ($renew_cert_id > 0) {
-    if ($user->admin === "1") {
+    if ($user->admin == "1") {
         $renew_cert = $Database->getObjectQuery("SELECT * FROM certificates WHERE id = ?", [$renew_cert_id]);
     } else {
         $renew_cert = $Database->getObjectQuery("SELECT * FROM certificates WHERE id = ? AND t_id = ?", [$renew_cert_id, $user->t_id]);
@@ -142,7 +142,7 @@ if ($renew_cert_id > 0) {
 }
 
 // Load templates for this tenant
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $templates = $Database->getObjectsQuery("SELECT * FROM csr_templates ORDER BY name");
 } else {
     $templates = $Database->getObjectsQuery("SELECT * FROM csr_templates WHERE t_id = ? ORDER BY name", [$user->t_id]);
@@ -191,7 +191,7 @@ $p = function(string $key) use ($prefill): string {
 };
 
 // Tenant selector — admin only
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $all_tenants_for_form = $Tenants->get_all();
     $content .= "<tr><th style='width:140px'>" . _("Tenant") . " <span class='text-danger'>*</span></th><td>";
     $content .= "<select id='csr-tenant' name='t_id' class='form-select form-select-sm'>";
@@ -436,7 +436,7 @@ $Modal->modal_print($modal_title, $content, _("Generate CSR"), "", false, "azure
             ou:            (document.getElementById('csr-ou').value       || '').trim(),
             email:         (document.getElementById('csr-email').value    || '').trim(),
         };
-        <?php if ($user->admin === "1"): ?>
+        <?php if ($user->admin == "1"): ?>
         var tenantSel = document.getElementById('csr-tenant');
         if (tenantSel) payload.t_id = parseInt(tenantSel.value);
         <?php endif; ?>

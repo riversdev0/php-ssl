@@ -18,7 +18,7 @@ if ($ca_id <= 0) {
     exit;
 }
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $ca = $Database->getObjectQuery("SELECT * FROM cas WHERE id = ?", [$ca_id]);
 } else {
     $ca = $Database->getObjectQuery("SELECT * FROM cas WHERE id = ? AND t_id = ?", [$ca_id, $user->t_id]);

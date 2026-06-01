@@ -12,7 +12,7 @@ $User->validate_user_permissions (3, true);
 global $private_key_encryption_key;
 
 // Load CAs with private keys for parent selector (scoped to user's tenant; admin sees all)
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $parent_cas = $Database->getObjectsQuery(
         "SELECT ca.id, ca.name, ca.subject, ca.t_id FROM cas ca
          INNER JOIN pkey pk ON ca.pkey_id = pk.id
@@ -27,13 +27,13 @@ if ($user->admin === "1") {
          ORDER BY ca.name ASC", [$user->t_id]
     );
 }
-$all_tenants_map = $user->admin === "1" ? $Tenants->get_all() : [];
+$all_tenants_map = $user->admin == "1" ? $Tenants->get_all() : [];
 
 $content  = "<form id='modal-form'>";
 $content .= "<table class='table table-borderless table-sm align-middle'>";
 
 // Tenant selector — admin only
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $all_tenants = $Tenants->get_all();
     $content .= "<tr><th style='width:130px'>" . _("Tenant") . " <span class='text-danger'>*</span></th><td>";
     $content .= "<select id='ca-tenant' class='form-select form-select-sm'>";
@@ -75,7 +75,7 @@ $content .= "<td><input type='number' id='ca-days' class='form-control form-cont
 $content .= "<tr><th>" . _("Parent CA") . "</th><td>";
 $content .= "<select id='ca-parent' class='form-select form-select-sm'>";
 $content .= "<option value=''>\xe2\x80\x94 " . _("None (self-signed root)") . " \xe2\x80\x94</option>";
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $seen_tenants = [];
     foreach ($parent_cas as $pc) {
         $tid = (int)$pc->t_id;
@@ -143,7 +143,7 @@ $Modal->modal_print(_("Create Certificate Authority"), $content, _("Create CA"),
     }
     parentSel.addEventListener('change', syncParent);
 
-    <?php if ($user->admin === "1"): ?>
+    <?php if ($user->admin == "1"): ?>
     var tenantSel = document.getElementById('ca-tenant');
     function checkEncryption() {
         var opt = tenantSel.options[tenantSel.selectedIndex];
@@ -194,7 +194,7 @@ $Modal->modal_print(_("Create Certificate Authority"), $content, _("Create CA"),
             parent_ca_id: parentVal ? parseInt(parentVal) : null,
             pathlen:      parentVal ? parseInt(document.getElementById('ca-pathlen').value) : null,
         };
-        <?php if ($user->admin === "1"): ?>
+        <?php if ($user->admin == "1"): ?>
         payload.t_id = parseInt(document.getElementById('ca-tenant').value);
         <?php endif; ?>
 

@@ -57,7 +57,7 @@ else {
 	$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";
 	$content[] = "<table class='table table-condensed table-borderless align-middle table-sm table-zone-management'>";
 	// tenant - admin
-	if($user->admin === "1" && $_GET['action']=="add") {
+	if($user->admin == "1" && $_GET['action']=="add") {
 		$content[] = "<tr>";
 		$content[] = "	<th style='width:100px;'>"._("Tenant")."</th>";
 		$content[] = "	<td>";
@@ -77,7 +77,7 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='name' value='".@$zone->name."' $disabled>";
 	$content[] = "		<input type='hidden' name='action' value='".$_GET['action']."'>";
-	if($user->admin !== "1" || $_GET['action']!=="add")
+	if($user->admin != "1" || $_GET['action']!=="add")
 	$content[] = "		<input type='hidden' name='tenant' value='".$_GET['tenant']."'>";
 	if($_GET['action']=="delete")
 	$content[] = "		<input type='hidden' id='target' name='target' value='/".$user->href."/zones/'>";

@@ -51,7 +51,7 @@ $u_name = isset($users[$log->object_u_id]) ? htmlspecialchars($users[$log->objec
 $content[] = "<tr><td class='text-secondary' style='min-width:100px;width:120px;'>"._("User")."</td><td><b>".$u_name."</b></td></tr>";
 
 # tenant (admin only)
-if($user->admin === "1") {
+if($user->admin == "1") {
 	$tenant = $Database->getObject("tenants", $log->object_t_id);
 	$t_name = $tenant ? htmlspecialchars($tenant->name, ENT_QUOTES, 'UTF-8') : "-";
 	$content[] = "<tr><td class='text-secondary'>"._("Tenant")."</td><td>".$t_name."</td></tr>";

@@ -25,7 +25,7 @@ if($tenant===null)
 $Result->show("danger", _("Invalid tenant").".", true, false, false, false);
 
 # tenant access - non-admins can only manage their own tenant
-if($user->admin !== "1" && $user->t_id !== $tenant->id)
+if($user->admin != "1" && $user->t_id !== $tenant->id)
 $Result->show("danger", _("Access denied").".", true, false, false, false);
 
 # fetch user to edit/delete

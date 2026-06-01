@@ -17,7 +17,7 @@ if ($cert_id <= 0) {
     exit;
 }
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $cert = $Database->getObjectQuery("SELECT * FROM certificates WHERE id = ?", [$cert_id]);
 } else {
     $cert = $Database->getObjectQuery("SELECT * FROM certificates WHERE id = ? AND t_id = ?", [$cert_id, $user->t_id]);

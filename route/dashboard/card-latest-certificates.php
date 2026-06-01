@@ -1,6 +1,6 @@
 <?php
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $latest_certs = $Database->getObjectsQuery(
         "SELECT c.id, c.serial, c.certificate, c.expires, c.created, c.t_id,
                 z.name AS zone_name, z.id AS z_id,
@@ -45,7 +45,7 @@ if ($user->admin === "1") {
             <tr>
                 <th><?php print _("Certificate"); ?></th>
                 <th class="d-none d-md-table-cell"><?php print _("Zone"); ?></th>
-                <?php if ($user->admin === "1"): ?>
+                <?php if ($user->admin == "1"): ?>
                 <th class="d-none d-lg-table-cell"><?php print _("Tenant"); ?></th>
                 <?php endif; ?>
                 <th class="text-end" style="width:110px"><?php print _("Expires"); ?></th>
@@ -81,7 +81,7 @@ if ($user->admin === "1") {
                         <?php print $zone; ?>
                     </a>
                 </td>
-                <?php if ($user->admin === "1"): ?>
+                <?php if ($user->admin == "1"): ?>
                 <td class="text-muted d-none d-lg-table-cell"><?php print htmlspecialchars($cert->tenant_name ?? ''); ?></td>
                 <?php endif; ?>
                 <td class="text-end <?php print $exp_class; ?>" style="white-space:nowrap"><?php print $expires; ?></td>

@@ -118,13 +118,19 @@ class AXFR
 		$this->Database = $Database;
 		// Results
 		$this->Result = new Result();
-		// include Net_DNS2 v1.x — v2.x is not compatible with PHP 7.4
-		$net_dns2 = dirname(__FILE__) . "/../assets/Net_DNS2/Net/DNS2.php";
-		if (!file_exists($net_dns2)) {
-			throw new Exception(_("Net_DNS2 v1.x is required for AXFR (v2.x is not compatible with PHP 7.4). Run: git -C functions/assets/Net_DNS2 checkout v1.5.5"));
+		// register PSR-4 autoloader for Net_DNS2 v2.x
+		$net_dns2_src = dirname(__FILE__) . "/../assets/Net_DNS2/src";
+		if (!is_readable($net_dns2_src . "/NetDNS2/Client.php")) {
+			throw new Exception(_("Net_DNS2 submodule is missing. Run: git submodule update --init --recursive"));
 		}
-		ini_set("include_path", dirname(__FILE__) . "/../assets/Net_DNS2");
-		require_once($net_dns2);
+		spl_autoload_register(function (string $class) use ($net_dns2_src): void {
+			if (str_starts_with($class, 'NetDNS2\\')) {
+				$file = $net_dns2_src . '/' . str_replace('\\', '/', $class) . '.php';
+				if (is_readable($file)) {
+					require_once $file;
+				}
+			}
+		});
 	}
 
 	/**
@@ -144,7 +150,7 @@ class AXFR
 			// check response
 			if (isset($result->answer)) {
 				foreach ($result->answer as $rr) {
-					if (in_array($rr->type, $this->valid_record_types)) {
+					if (in_array($rr->type->label(), $this->valid_record_types)) {
 						// save to result
 						$this->result["values"][] = $rr;
 					}
@@ -167,9 +173,9 @@ class AXFR
 	private function set_link()
 	{
 		if ($this->link === false) {
-			$this->link = new Net_DNS2_Resolver([
+			$this->link = new \NetDNS2\Resolver([
 				'nameservers' => $this->nameservers,
-				'use_tcp' => $this->use_tcp
+				'use_tcp'     => $this->use_tcp,
 			]);
 		}
 
@@ -266,7 +272,9 @@ class AXFR
 	{
 		if (strlen($this->regex_include) > 0) {
 			foreach ($this->result["values"] as $k => $rr) {
-				if (!preg_match($this->regex_include, $rr->name) && !preg_match($this->regex_include, $rr->address)) {
+				$name    = (string)$rr->name;
+				$address = isset($rr->address) ? (string)$rr->address : '';
+				if (!preg_match($this->regex_include, $name) && !preg_match($this->regex_include, $address)) {
 					unset($this->result["values"][$k]);
 				}
 			}
@@ -282,7 +290,9 @@ class AXFR
 	{
 		if (strlen($this->regex_exclude) > 0) {
 			foreach ($this->result["values"] as $k => $rr) {
-				if (preg_match($this->regex_exclude, $rr->name) || preg_match($this->regex_exclude, $rr->address)) {
+				$name    = (string)$rr->name;
+				$address = isset($rr->address) ? (string)$rr->address : '';
+				if (preg_match($this->regex_exclude, $name) || preg_match($this->regex_exclude, $address)) {
 					unset($this->result["values"][$k]);
 				}
 			}
@@ -349,10 +359,13 @@ class AXFR
 		// AXFR received records
 		if (sizeof($this->result['values']) > 0) {
 			foreach ($this->result['values'] as $rr) {
-				$this->records['axfr_records'][] = $rr->name;
-				$this->records['axfr_records'][] = $rr->cname;
-				if ($check_ip == "1")
-					$this->records['axfr_records'][] = $rr->address;
+				$this->records['axfr_records'][] = (string)$rr->name;
+				if (isset($rr->cname)) {
+					$this->records['axfr_records'][] = (string)$rr->cname;
+				}
+				if ($check_ip == "1" && isset($rr->address)) {
+					$this->records['axfr_records'][] = (string)$rr->address;
+				}
 			}
 		}
 		// make unique

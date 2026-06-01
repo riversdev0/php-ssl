@@ -25,7 +25,7 @@ if($_POST['action']=="add") {
 	if($tenant===null)
 	$Result->show("danger", _("Invalid tenant").".", true, false, false, false);
 	// not allowed
-	if($user->admin !== "1" && $user->t_id!=$_POST['t_id'])
+	if($user->admin != "1" && $user->t_id!=$_POST['t_id'])
 	$Result->show("danger", _("Admin privileges required").".", true, false, false, false);
 }
 else {
@@ -35,7 +35,7 @@ else {
 	if($issuer===null)
 	$Result->show("danger", _("Invalid issuer").".", true, false, false, false);
 	// not allowed
-	if($user->admin !== "1" && $user->t_id!=$issuer->t_id)
+	if($user->admin != "1" && $user->t_id!=$issuer->t_id)
 	$Result->show("danger", _("Admin privileges required").".", true, false, false, false);
 }
 

@@ -15,7 +15,7 @@ if (!$ca_id) {
 }
 
 // Fetch CA (tenant-scoped)
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $ca = $Database->getObjectsQuery(
         "SELECT ca.*, pk.private_key_enc IS NOT NULL AND pk.private_key_enc != '' AS has_pkey,
                 pca.name AS parent_ca_name
@@ -92,13 +92,13 @@ $content  = "<table class='table table-borderless table-sm align-middle mb-0'>";
 
 $content .= "<tr><td colspan='2' class='py-1'><small class='text-muted text-uppercase fw-bold'>" . _("General") . "</small></td></tr>";
 $content .= $row(_("Display name"),    "<strong>" . htmlspecialchars($ca->name) . "</strong>");
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $all_tenants = $Tenants->get_all();
     $tname = isset($all_tenants[(int)$ca->t_id]) ? htmlspecialchars($all_tenants[(int)$ca->t_id]->name) : $ca->t_id;
     $content .= $row(_("Tenant"), $tname);
 }
 $content .= $row(_("Parent CA"),       $ca->parent_ca_name ? htmlspecialchars($ca->parent_ca_name) : "<span class='text-muted'>" . _("None (self-signed root)") . "</span>");
-if ($user->admin === "1" || (int)$user->permission >= 3) {
+if ($user->admin == "1" || (int)$user->permission >= 3) {
     $pkey_val = $ca->has_pkey
         ? "<span class='badge bg-green-lt me-2'>" . _("Stored — can sign") . "</span>"
           . "<a class='btn btn-sm bg-info-lt text-info py-0' href='/route/ajax/ca/download.php?ca_id={$ca_id}&type=pkey'>"
@@ -142,7 +142,7 @@ if ($parsed) {
 $content .= "</table>";
 
 // Notification flags (admins and permission >= 3 can edit)
-$can_edit_flags = ($user->admin === "1" || (int)$user->permission >= 3);
+$can_edit_flags = ($user->admin == "1" || (int)$user->permission >= 3);
 $chk_updates = $ca->ignore_updates ? " checked" : "";
 $chk_expiry  = $ca->ignore_expiry  ? " checked" : "";
 

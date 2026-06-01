@@ -24,7 +24,7 @@ $key_pem  = trim($body['key_pem']  ?? '');
 $passphrase = $body['passphrase'] ?? null;
 
 // Determine tenant
-if ($user->admin === "1" && !empty($body['t_id'])) {
+if ($user->admin == "1" && !empty($body['t_id'])) {
     $t_id = (int)$body['t_id'];
     if (!$Database->getObject("tenants", $t_id)) {
         print json_encode(['status' => 'error', 'message' => _("Invalid tenant.")]);

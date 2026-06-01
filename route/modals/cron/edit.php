@@ -25,7 +25,7 @@ $cronjob = $Cron->fetch_cronjob ($_GET['tenant'], $_GET['script']);
 $title = _("Edit cronjob");
 
 # tenant validation
-if($user->admin !== "1" && $user->t_id!=$cronjob->t_id) {
+if($user->admin != "1" && $user->t_id!=$cronjob->t_id) {
 	# content
 	$content      = [];
 	$content[]    = $Result->show("danger", _("Admin user required"), false, false, true);

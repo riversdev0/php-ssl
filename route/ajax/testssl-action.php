@@ -12,7 +12,7 @@ if (!$id || !in_array($action, ['cancel', 'delete', 'retest'], true)) {
 }
 
 $TestSSL  = new TestSSL($Database);
-$is_admin = $user->admin === "1";
+$is_admin = $user->admin == "1";
 
 try {
     if ($action === 'cancel') {

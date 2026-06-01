@@ -9,7 +9,7 @@ if (isset($_params['app']) && $_params['app'] !== '') {
 
 $all_tenants = $Tenants->get_all();
 
-$where  = $user->admin !== "1" ? " WHERE ca.t_id = " . (int)$user->t_id : "";
+$where  = $user->admin != "1" ? " WHERE ca.t_id = " . (int)$user->t_id : "";
 $select = "SELECT ca.id, ca.t_id, ca.name, ca.subject, ca.expires, ca.created, ca.parent_ca_id,
            ca.ignore_updates, ca.ignore_expiry, ca.serial,
            pca.name AS parent_ca_name,
@@ -23,7 +23,7 @@ $select = "SELECT ca.id, ca.t_id, ca.name, ca.subject, ca.expires, ca.created, c
 $all_cas = $Database->getObjectsQuery($select, []);
 
 $groups = [];
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     foreach ($all_tenants as $t) { $groups[$t->id] = []; }
 }
 foreach ($all_cas as $ca) { $groups[$ca->t_id][] = $ca; }

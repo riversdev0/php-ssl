@@ -15,7 +15,7 @@ $base_select = "SELECT ca.*, (pk.private_key_enc IS NOT NULL AND pk.private_key_
                 LEFT JOIN cas pca ON ca.parent_ca_id = pca.id";
 
 // Look up by serial first, fall back to numeric ID for legacy URLs
-if ($user->admin === "1") {
+if ($user->admin == "1") {
 	$ca_rows = $Database->getObjectsQuery("$base_select WHERE ca.serial = ?", [$app]);
 	if (empty($ca_rows) && ctype_digit($app)) {
 		$ca_rows = $Database->getObjectsQuery("$base_select WHERE ca.id = ?", [(int)$app]);

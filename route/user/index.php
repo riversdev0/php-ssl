@@ -62,7 +62,7 @@ elseif (@$_params['app']=="impersonate") {
 			die();
 		}
 		// must be admin
-		if ($user->admin !== "1") {
+		if ($user->admin != "1") {
 			$Common->save_error("Administrative privileges required");
 			require (dirname(__FILE__)."/../error/500.php");
 			die();

@@ -31,7 +31,7 @@ $Result->show("danger", _("Invalid cronjob").".", true, false, false, false);
 $tenant = $Tenants->get_tenant_by_href ($cronjob->t_id);
 
 # not allowed
-if($user->admin !== "1" && $user->t_id!=$cronjob->t_id)
+if($user->admin != "1" && $user->t_id!=$cronjob->t_id)
 $Result->show("danger", _("Admin privileges required").".", true, false, false, false);
 
 

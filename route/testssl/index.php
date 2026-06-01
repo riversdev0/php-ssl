@@ -8,7 +8,7 @@ if (!empty($_params['app']) && preg_match('/^[a-f0-9]{64}$/', $_params['app'])) 
 }
 
 $TestSSL    = new TestSSL($Database);
-$is_admin   = $user->admin === "1";
+$is_admin   = $user->admin == "1";
 $all_tenants = $Tenants->get_all();
 
 $all_scans = $TestSSL->get_all((int)$user->t_id, $is_admin);

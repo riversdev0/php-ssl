@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-if ((int)$user->permission < 3 && $user->admin !== "1") {
+if ((int)$user->permission < 3 && $user->admin != "1") {
     print json_encode(['status' => 'error', 'message' => _("Permission denied.")]);
     exit;
 }
@@ -32,7 +32,7 @@ if (!$ca_id) {
 }
 
 // Fetch CA with tenant scope check
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $ca = $Database->getObjectQuery("SELECT id FROM cas WHERE id = ?", [$ca_id]);
 } else {
     $ca = $Database->getObjectQuery("SELECT id FROM cas WHERE id = ? AND t_id = ?", [$ca_id, (int)$user->t_id]);

@@ -14,7 +14,7 @@ if ($csr_id <= 0) {
     exit;
 }
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ?", [$csr_id]);
 } else {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ? AND t_id = ?", [$csr_id, $user->t_id]);
@@ -118,7 +118,7 @@ if (empty($all_zones)) {
     $content .= "<span class='text-danger'>" . _("No zones available.") . "</span>";
 } else {
     $content .= "<select id='sign-zone-id' class='form-select form-select-sm'>";
-    if ($user->admin === "1") {
+    if ($user->admin == "1") {
         $by_tenant = [];
         foreach ($all_zones as $z) { $by_tenant[$z->t_id][] = $z; }
         // Show CSR's tenant first

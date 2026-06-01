@@ -36,7 +36,7 @@ try {
 	}
 
 	# validate ids for non-admin
-	if ($user->admin !== "1") {
+	if ($user->admin != "1") {
 		foreach ($ids as $id) {
 			if ($user->t_id !== $id) {
 				throw new Exception('Invalid tenant');

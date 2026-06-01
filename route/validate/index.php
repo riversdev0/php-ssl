@@ -3,7 +3,7 @@
 $User->validate_session (true);
 
 # admin only
-if ($user->admin !== "1") {
+if ($user->admin != "1") {
 	$Result->show("danger", _("Admin access required."), true, false, false, false);
 }
 else {

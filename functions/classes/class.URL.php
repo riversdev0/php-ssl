@@ -20,12 +20,12 @@ class URL extends Common
 	 */
 	public function __construct()
 	{
-		// parse url
-		$uri = parse_url($_SERVER['REQUEST_URI']);
+		// parse url (REQUEST_URI is absent in CLI/cron context)
+		$uri = parse_url($_SERVER['REQUEST_URI'] ?? '/');
 		// process query first to prevent overriding
-		$this->process_query(@$uri['query']);
+		$this->process_query($uri['query'] ?? '');
 		// process path
-		$this->process_path(@$uri['path']);
+		$this->process_path($uri['path'] ?? '/');
 		// validate
 		$this->validate_requested_uri();
 		// search
@@ -43,6 +43,7 @@ class URL extends Common
 	 */
 	private function process_query($uri = "")
 	{
+		if ($uri === '') return;
 		// split by &
 		$uri_arr = explode("&", $uri);
 		// loop
@@ -50,7 +51,7 @@ class URL extends Common
 			// split
 			$tmp = explode("=", $line);
 			// save
-			$this->uri_params[$tmp[0]] = strip_tags($tmp[1]);
+			$this->uri_params[$tmp[0]] = strip_tags($tmp[1] ?? '');
 		}
 	}
 
@@ -130,12 +131,16 @@ class URL extends Common
 	 */
 	public function validate_path($user)
 	{
+		// no user (CLI/cron context)
+		if (is_null($user)) {
+			return false;
+		}
 		// admin
 		if ($user->admin == "1") {
 			return true;
 		}
 		// non-admin - tenant check
-		if ($user->href == $this->uri_params['tenant']) {
+		if (($this->uri_params['tenant'] ?? '') !== '' && $user->href == $this->uri_params['tenant']) {
 			return true;
 		}
 		// fail

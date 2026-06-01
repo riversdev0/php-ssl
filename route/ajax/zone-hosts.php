@@ -123,7 +123,7 @@ try {
 	// fetch latest testssl result per hostname for this batch
 	$TestSSL_obj      = new TestSSL($Database);
 	$_batch_hostnames = array_map(fn($h) => $h->hostname, $hosts ?: []);
-	$testssl_map      = $TestSSL_obj->get_latest_by_hostnames($_batch_hostnames, (int)$user->t_id, $user->admin === "1");
+	$testssl_map      = $TestSSL_obj->get_latest_by_hostnames($_batch_hostnames, (int)$user->t_id, $user->admin == "1");
 
 	if(sizeof($hosts)>0) {
 		foreach ($hosts as $h) {

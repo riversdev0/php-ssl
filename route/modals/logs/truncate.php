@@ -41,7 +41,7 @@ else {
 	$all_tenants = $Tenants->get_all () ;
 
 	// select tenants
-	if($user->admin === "1") {
+	if($user->admin == "1") {
 		$content[] = _('Select tenants for which you want to truncate logs:')."<br><br>";
 		$content[] = "<form id='modal-form'>";
 		$content[] = "<input type='hidden' name='csrf_token' value='" . $User->create_csrf_token() . "'>";

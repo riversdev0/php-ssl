@@ -14,7 +14,7 @@ $content  = "<form id='modal-form'>";
 $content .= "<table class='table table-borderless table-sm align-middle'>";
 
 // Tenant selector — admin only
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $all_tenants = $Tenants->get_all();
     $content .= "<tr><th style='width:130px'>" . _("Tenant") . " <span class='text-danger'>*</span></th><td>";
     $content .= "<select id='ca-tenant' name='t_id' class='form-select form-select-sm'>";
@@ -184,7 +184,7 @@ $Modal->modal_print(_("Import Certificate Authority"), $content, _("Import"), ""
         togglePassphrase(this.value);
     });
 
-    <?php if ($user->admin === "1"): ?>
+    <?php if ($user->admin == "1"): ?>
     var tenantSel = document.getElementById('ca-tenant');
     function checkEncryption() {
         var opt = tenantSel.options[tenantSel.selectedIndex];
@@ -223,7 +223,7 @@ $Modal->modal_print(_("Import Certificate Authority"), $content, _("Import"), ""
         if (keyPem.indexOf('ENCRYPTED') !== -1) {
             payload.passphrase = (document.getElementById('ca-passphrase').value || '');
         }
-        <?php if ($user->admin === "1"): ?>
+        <?php if ($user->admin == "1"): ?>
         payload.t_id = parseInt(document.getElementById('ca-tenant').value);
         <?php endif; ?>
 

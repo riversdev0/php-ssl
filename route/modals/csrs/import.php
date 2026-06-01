@@ -11,7 +11,7 @@ $external    = !empty($_GET['external']);
 $all_zones   = $Zones->get_all();
 $has_zones   = !empty($all_zones);
 $zone_options = '';
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $by_tenant = [];
     foreach ($all_zones as $z) {
         $by_tenant[$z->tenant_name][] = $z;
@@ -32,7 +32,7 @@ if ($user->admin === "1") {
 $content  = "";
 
 // Tenant selector — admin only
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $all_tenants = $Tenants->get_all();
     $content .= "<div class='mb-2'>";
     $content .= "<label class='form-label fw-bold'>" . _("Tenant") . " <span class='text-danger'>*</span></label>";
@@ -152,7 +152,7 @@ $Modal->modal_print(_("Import CSR"), $content, _("Import"), "", false, "info");
         }
         <?php endif; ?>
         var payload = { csr_pem: csrPem<?php print $external ? ', external: true' : ''; ?> };
-        <?php if ($user->admin === "1"): ?>
+        <?php if ($user->admin == "1"): ?>
         payload.t_id = parseInt(document.getElementById('import-tenant-id').value);
         <?php endif; ?>
         if (keyPem) {

@@ -34,7 +34,7 @@ if(!$User->validate_action($_GET['action'])) {
 	$btn_text = "";
 }
 # tenant validation
-elseif($user->admin !== "1" && $user->t_id!=$tenant->id) {
+elseif($user->admin != "1" && $user->t_id!=$tenant->id) {
 	$content      = [];
 	$content[]    = $Result->show("danger", _("Admin user required"), false, false, true);
 	$header_class = "danger";
@@ -143,7 +143,7 @@ else {
 	$content[] = "</tr>";
 
 	// Admin credentials - only for admins
-	if($user->admin === "1") {
+	if($user->admin == "1") {
 		$content[] = "<tr><td colspan=2><hr style='margin:5px 0'><small class='text-muted'>"._("Admin credentials (admin only)")."</small></td></tr>";
 		$content[] = "<tr>";
 		$content[] = "	<th>"._("Admin username")."</th>";

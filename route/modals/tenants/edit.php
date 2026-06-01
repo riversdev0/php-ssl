@@ -31,7 +31,7 @@ if(!$User->validate_action($_GET['action'])) {
 	$btn_text = "";
 }
 # admin
-elseif($user->admin !== "1") {
+elseif($user->admin != "1") {
 	# content
 	$content = [];
 	$content[]    = $Result->show("danger", _("Admin user required"), false, false, true);
@@ -66,7 +66,7 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='name' value='".@$tenant->name."' $disabled>";
 	$content[] = "		<input type='hidden' name='action' value='".$_GET['action']."'>";
-	if($user->admin !== "1" || $_GET['action']!=="add")
+	if($user->admin != "1" || $_GET['action']!=="add")
 	$content[] = "		<input type='hidden' name='id' value='".$_GET['id']."'>";
 	if($_GET['action']=="delete")
 	$content[] = "		<input type='hidden' id='target' name='target' value='/".$user->href."/tenants/'>";

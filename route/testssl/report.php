@@ -3,7 +3,7 @@
 
 $scan_hash = $_params['app'];
 $TestSSL   = new TestSSL($Database);
-$scan      = $TestSSL->get_by_hash_auth($scan_hash, (int)$user->t_id, $user->admin === "1");
+$scan      = $TestSSL->get_by_hash_auth($scan_hash, (int)$user->t_id, $user->admin == "1");
 
 if (!$scan) {
     $Result->show('danger', _("Scan not found or access denied."), false);

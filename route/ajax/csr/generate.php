@@ -137,7 +137,7 @@ if (empty($csr_pem) || empty($key_pem)) {
 // Store private key — encrypted if configured, otherwise return to client once
 global $private_key_encryption_key;
 
-if ($user->admin === "1" && !empty($body['t_id'])) {
+if ($user->admin == "1" && !empty($body['t_id'])) {
     $t_id = (int)$body['t_id'];
     if (!$Database->getObject("tenants", $t_id)) {
         print json_encode(['status' => 'error', 'message' => _("Invalid tenant.")]);
@@ -189,7 +189,7 @@ $Log->write("csrs", $csr_db_id, $t_id, $user->id, "generate", false, "CSR genera
 
 // Mark source CSR as renewed
 if ($source_csr_id > 0) {
-    if ($user->admin === "1") {
+    if ($user->admin == "1") {
         $src = $Database->getObjectQuery("SELECT id FROM csrs WHERE id = ?", [$source_csr_id]);
     } else {
         $src = $Database->getObjectQuery("SELECT id FROM csrs WHERE id = ? AND t_id = ?", [$source_csr_id, $t_id]);

@@ -13,7 +13,7 @@ $tpl_id = (int)($_GET['id'] ?? 0);
 $tpl    = null;
 
 if ($tpl_id > 0) {
-    if ($user->admin === "1") {
+    if ($user->admin == "1") {
         $tpl = $Database->getObjectQuery("SELECT * FROM csr_templates WHERE id = ?", [$tpl_id]);
     } else {
         $tpl = $Database->getObjectQuery("SELECT * FROM csr_templates WHERE id = ? AND t_id = ?", [$tpl_id, $user->t_id]);
@@ -35,7 +35,7 @@ $content .= "<input type='hidden' name='id' value='{$tpl_id}'>";
 $content .= "<table class='table table-borderless table-sm align-middle'>";
 
 // Tenant selector — admin only
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $all_tenants = $Tenants->get_all();
     $tpl_t_id    = $tpl ? (int)$tpl->t_id : 0;
     $content .= "<tr><th style='width:140px'>" . _("Tenant") . " <span class='text-danger'>*</span></th><td>";

@@ -14,7 +14,7 @@ if ($csr_id <= 0) {
     exit;
 }
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ?", [$csr_id]);
 } else {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ? AND t_id = ?", [$csr_id, $user->t_id]);
@@ -139,7 +139,7 @@ if (!empty($ext_data)) {
 // Key + status section
 $rows .= "<tr><td colspan='2' class='pb-1 pt-3'><span class='text-muted small fw-bold text-uppercase'>" . _("Key & status") . "</span></td></tr>";
 $rows .= "<tr><th style='width:130px;font-weight:500;color:#6c757d;padding:2px 8px 2px 0;'>" . _("Key") . "</th><td style='padding:2px 0;'>" . htmlspecialchars($key_label) . "</td></tr>";
-if ($user->admin === "1" || (int)$user->permission >= 3) {
+if ($user->admin == "1" || (int)$user->permission >= 3) {
     $dl_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg>';
     if (!empty($csr->pkey_id)) {
         $pkey_val = "<span class='badge bg-green-lt me-2'>" . _("Stored") . "</span>"

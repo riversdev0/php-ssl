@@ -24,7 +24,7 @@ if ($template_id <= 0) {
     exit;
 }
 
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $tpl = $Database->getObjectQuery("SELECT * FROM csr_templates WHERE id = ?", [$template_id]);
 } else {
     $tpl = $Database->getObjectQuery("SELECT * FROM csr_templates WHERE id = ? AND t_id = ?", [$template_id, $user->t_id]);

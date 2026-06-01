@@ -25,7 +25,7 @@ if($tenant===null)
 $Result->show("danger", _("Invalid tenant").".", true, false, false, false);
 
 # tenant access - non-admins can only manage their own tenant
-if($user->admin !== "1" && $user->t_id !== $tenant->id)
+if($user->admin != "1" && $user->t_id !== $tenant->id)
 $Result->show("danger", _("Access denied").".", true, false, false, false);
 
 # fetch domain to edit/delete
@@ -93,7 +93,7 @@ if($_POST['action']!=="delete") {
 	$update['autocreateGroup']    = $_POST['autocreateGroup'];
 
 	# admin credentials - only update if user is admin
-	if($user->admin === "1") {
+	if($user->admin == "1") {
 		$update['adminUsername'] = strlen($_POST['adminUsername']) > 0 ? $_POST['adminUsername'] : null;
 		# only update password if provided
 		if(strlen($_POST['adminPassword']) > 0) {
@@ -121,7 +121,7 @@ if($_POST['action']==="edit") {
 			break;
 		}
 	}
-	if($user->admin === "1") {
+	if($user->admin == "1") {
 		if(isset($update['adminUsername']) && $domain->adminUsername != $update['adminUsername']) $is_change = true;
 		if(isset($update['adminPassword'])) $is_change = true;
 	}

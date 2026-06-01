@@ -1,5 +1,7 @@
 <?php
 
+// In CLI/cron context $user is null — menu config is not needed
+if (!$user) return;
 
 $url_items = [
 	"dashboard"       => [],

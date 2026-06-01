@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**php-ssl** (v0.9.0) is a PHP 7.4+ SSL/TLS certificate monitoring web application. It scans predefined hostnames for certificate changes, supports DNS zone transfers (AXFR) to auto-discover hosts, remote scanning agents, and sends email notifications for changes and expirations. Multi-tenant architecture with full tenant isolation.
+**php-ssl** (v0.9.0) is a PHP 8.0+ SSL/TLS certificate monitoring web application. It scans predefined hostnames for certificate changes, supports DNS zone transfers (AXFR) to auto-discover hosts, remote scanning agents, and sends email notifications for changes and expirations. Multi-tenant architecture with full tenant isolation.
 
 Key features: certificate monitoring, CA management, CSR generation/signing, testssl.sh integration, WebAuthn/Passkey authentication, Active Directory sync, multi-language (EN/SL/DE), database migrations UI, private key management, public scan report sharing.
 
@@ -37,6 +37,8 @@ git submodule update --init --recursive
 php cron.php <tenant_id> <script_name>
 # e.g.: php cron.php 1 update_certificates
 ```
+
+**PHP required:** 8.0 or later (server currently runs PHP 8.3)
 
 **PHP extensions required:** `curl`, `gettext`, `openssl`, `pcntl`, `PDO`, `pdo_mysql`, `session`
 
@@ -259,11 +261,11 @@ Key settings beyond DB credentials:
 
 ### PHP Version Compatibility
 
-The server runs **PHP 7.4**. Do not use PHP 8.0+ syntax:
-- No `match` expressions → use `switch/case`
-- No `str_starts_with()` / `str_ends_with()` → use `strncmp()` or `substr()`
-- No named arguments
-- Typed properties (PHP 7.4+) and arrow functions `fn()` (PHP 7.4+) are fine
+The server runs **PHP 8.3**. PHP 8.0+ syntax is fully supported and preferred:
+- `match` expressions, `str_starts_with()`, `str_ends_with()`, `str_contains()`
+- Named arguments, union types, nullsafe operator (`?->`)
+- Enums (PHP 8.1+), readonly properties (PHP 8.1+), fibers (PHP 8.1+)
+- A runtime warning banner is shown to all users if PHP < 8.0 is detected (via `route/common/checks.php`)
 
 ### Translations
 

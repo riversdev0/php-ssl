@@ -2,7 +2,7 @@
 require('../../../functions/autoload.php');
 $User->validate_session(false, true, false);
 
-$is_admin    = $user->admin === "1";
+$is_admin    = $user->admin == "1";
 $all_tenants = $is_admin ? $Tenants->get_all() : [];
 
 $content = [];

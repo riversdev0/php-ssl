@@ -436,7 +436,7 @@ class SSL extends Common
 	 * @param  string $execution_time
 	 * @return int|void
 	 */
-	public function update_db_certificate($certificate = [], $tenant_id = 0, $zone_id = 0, $execution_time)
+	public function update_db_certificate($certificate, $tenant_id, $zone_id, $execution_time)
 	{
 
 		try {

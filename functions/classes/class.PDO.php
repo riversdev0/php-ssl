@@ -986,7 +986,7 @@ abstract class DB
      * @param mixed $value
      * @return object|false
      */
-    public function fetch_object($table = null, $method = null, $value)
+    public function fetch_object($table, $method, $value)
     {
         # null table
         if (is_null($table) || strlen($table) == 0)
@@ -1078,7 +1078,7 @@ abstract class DB
      * @param mixed $values
      * @return bool
      */
-    public function create_object($table = null, $values)
+    public function create_object($table, $values)
     {
         # null table
         if (is_null($table) || strlen($table) == 0)
@@ -1114,7 +1114,7 @@ abstract class DB
      * @param mixed $values
      * @return bool
      */
-    public function update_object($table = null, $values, $key = "id")
+    public function update_object($table, $values, $key = "id")
     {
         # null table
         if (is_null($table) || strlen($table) == 0)
@@ -1154,7 +1154,7 @@ abstract class DB
      * @param mixed $id
      * @return bool
      */
-    public function remove_object($table = null, $id)
+    public function remove_object($table, $id)
     {
         # null table
         if (is_null($table) || strlen($table) == 0)

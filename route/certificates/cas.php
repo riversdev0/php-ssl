@@ -12,12 +12,12 @@ $select = "SELECT ca.id, ca.t_id, ca.name, ca.subject, ca.expires, ca.created, c
            FROM cas ca
            LEFT JOIN pkey pk ON ca.pkey_id = pk.id
            LEFT JOIN cas pca ON ca.parent_ca_id = pca.id"
-         . ($user->admin !== "1" ? " WHERE ca.t_id = " . (int)$user->t_id : "")
+         . ($user->admin != "1" ? " WHERE ca.t_id = " . (int)$user->t_id : "")
          . " ORDER BY ca.name ASC";
 $all_cas = $Database->getObjectsQuery($select, []);
 
 $groups = [];
-if ($user->admin === "1") {
+if ($user->admin == "1") {
 	foreach ($all_tenants as $t) { $groups[$t->id] = []; }
 }
 foreach ($all_cas as $ca) { $groups[$ca->t_id][] = $ca; }

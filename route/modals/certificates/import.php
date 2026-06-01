@@ -137,7 +137,7 @@ else {
 
 	// Check if encryption is configured for at least one tenant the user can access
 	global $private_key_encryption_key;
-	$pkey_enc_available = $user->admin === "1"
+	$pkey_enc_available = $user->admin == "1"
 		? !empty($private_key_encryption_key)
 		: !empty($private_key_encryption_key[(int)$user->t_id]);
 

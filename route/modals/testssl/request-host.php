@@ -7,7 +7,7 @@ $port     = isset($_GET['port']) && is_numeric($_GET['port']) ? (int)$_GET['port
 $tid      = isset($_GET['t_id']) && is_numeric($_GET['t_id']) ? (int)$_GET['t_id'] : (int)$user->t_id;
 
 // Non-admins scoped to own tenant
-if ($user->admin !== "1") { $tid = (int)$user->t_id; }
+if ($user->admin != "1") { $tid = (int)$user->t_id; }
 
 $content   = [];
 $content[] = "<form id='modal-form'>";

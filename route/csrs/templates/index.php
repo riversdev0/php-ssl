@@ -1,14 +1,14 @@
 <?php
 $User->validate_session();
 
-$can_manage = $user->admin === "1" || (int)$user->permission >= 3;
+$can_manage = $user->admin == "1" || (int)$user->permission >= 3;
 
-$all_tpls    = $Database->getObjectsQuery("SELECT * FROM csr_templates" . ($user->admin !== "1" ? " WHERE t_id = " . (int)$user->t_id : "") . " ORDER BY name ASC", []);
+$all_tpls    = $Database->getObjectsQuery("SELECT * FROM csr_templates" . ($user->admin != "1" ? " WHERE t_id = " . (int)$user->t_id : "") . " ORDER BY name ASC", []);
 $all_tenants = $Tenants->get_all();
 
 // Group by tenant
 $groups = [];
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     foreach ($all_tenants as $t) { $groups[$t->id] = []; }
 }
 foreach ($all_tpls as $tpl) { $groups[$tpl->t_id][] = $tpl; }
@@ -68,7 +68,7 @@ if (empty($groups)) {
     print "<tr><td colspan='5' class='text-muted'>" . _("No templates found.") . "</td></tr>";
 } else {
     foreach ($groups as $tenant_id => $tpls) {
-        if ($user->admin === "1") {
+        if ($user->admin == "1") {
             $tenant_name = isset($all_tenants[$tenant_id]) ? htmlspecialchars($all_tenants[$tenant_id]->name) : $tenant_id;
             print "<tr class='header'>";
             print "  <td colspan='5' style='padding-top:20px'>" . $url_items['tenants']['icon'] . " " . _("Tenant") . " <span style='color:var(--tblr-info);'>" . $tenant_name . "</span></td>";

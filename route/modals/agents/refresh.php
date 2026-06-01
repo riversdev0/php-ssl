@@ -26,7 +26,7 @@ $agent = $Database->getObject ("agents",$_GET['id']);
 $title = _("Refresh")." "._("agent");
 
 # tenant validation
-if($user->admin !== "1" && $user->t_id!=$_GET['tenant']) {
+if($user->admin != "1" && $user->t_id!=$_GET['tenant']) {
 	# content
 	$content = [];
 	$content[] = $Result->show("danger", _("Admin user required"), false, false, true);

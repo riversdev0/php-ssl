@@ -77,7 +77,7 @@
 	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-danger"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
 	<?php print _("Delete user"); ?>
 </a>
-<?php if ($user->admin === "1" && !isset($_SESSION['impersonate_original']) && $view_user->email !== $user->email): ?>
+<?php if ($user->admin == "1" && !isset($_SESSION['impersonate_original']) && $view_user->email !== $user->email): ?>
 <a href='/<?php print htmlspecialchars($user->href); ?>/user/impersonate/<?php print (int)$view_user->id; ?>/' class='btn btn-sm text-warning'>
 	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-switch-3 text-warning"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17h5l1.67 -2.386m3.66 -5.227l1.67 -2.387h6" /><path d="M18 4l3 3l-3 3" /><path d="M3 7h5l7 10h6" /><path d="M18 20l3 -3l-3 -3" /></svg>
 	<?php print _("Impersonate"); ?>

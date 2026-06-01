@@ -36,7 +36,7 @@ if(!$User->validate_action($_GET['action'])) {
 	$btn_text = "";
 }
 # tenant access - non-admins can only manage their own tenant
-elseif($user->admin !== "1" && (is_null($tenant) || $user->t_id !== $tenant->id)) {
+elseif($user->admin != "1" && (is_null($tenant) || $user->t_id !== $tenant->id)) {
 	# content
 	$content      = [];
 	$content[]    = $Result->show("danger", _("Access denied"), false, false, true);

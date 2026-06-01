@@ -3,7 +3,7 @@ require('../../../functions/autoload.php');
 $User->validate_session(false, true, false);
 $User->validate_csrf_token();
 
-$is_admin     = $user->admin === "1";
+$is_admin     = $user->admin == "1";
 $hostname     = trim($_POST['hostname'] ?? '');
 $port         = isset($_POST['port']) && is_numeric($_POST['port']) ? (int)$_POST['port'] : 443;
 $tenant_id    = isset($_POST['tenant_id']) && is_numeric($_POST['tenant_id']) ? (int)$_POST['tenant_id'] : (int)$user->t_id;

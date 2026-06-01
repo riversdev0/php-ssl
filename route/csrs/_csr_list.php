@@ -5,7 +5,7 @@ $all_tenants = $Tenants->get_all();
 
 $source_filter = $is_local ? " AND c.source = 'internal'" : " AND c.source = 'external'";
 
-$tenant_filter = $user->admin !== "1" ? " AND c.t_id = " . (int)$user->t_id : "";
+$tenant_filter = $user->admin != "1" ? " AND c.t_id = " . (int)$user->t_id : "";
 
 $select = "SELECT c.id, c.cn, c.sans, c.csr_pem, c.key_algo, c.key_size, c.status, c.created, c.t_id, c.cert_id, c.renewed_by,
            cert.expires AS cert_expires,
@@ -19,7 +19,7 @@ $select = "SELECT c.id, c.cn, c.sans, c.csr_pem, c.key_algo, c.key_size, c.statu
 $all_csrs = $Database->getObjectsQuery($select, []);
 
 $groups = [];
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     foreach ($all_tenants as $t) { $groups[$t->id] = []; }
 }
 foreach ($all_csrs as $c) { $groups[$c->t_id][] = $c; }
@@ -92,7 +92,7 @@ if (empty($groups)) {
     print "<tr><td colspan='7' class='text-muted'>" . _("No CSRs found.") . "</td></tr>";
 } else {
     foreach ($groups as $tenant_id => $csrs) {
-        if ($user->admin === "1") {
+        if ($user->admin == "1") {
             $tenant_name = isset($all_tenants[$tenant_id]) ? htmlspecialchars($all_tenants[$tenant_id]->name) : $tenant_id;
             print "<tr class='header'>";
             print "  <td colspan='7' style='padding-top:20px'>" . $url_items['tenants']['icon'] . " " . _("Tenant") . " <span style='color:var(--tblr-info);'>" . $tenant_name . "</span></td>";
@@ -178,7 +178,7 @@ if (empty($groups)) {
                          . " data-bs-toggle='modal' data-bs-target='#modal2'>"
                          . "{$renew_icon} " . _("Renew") . "</a>";
                 if (!empty($c->has_pkey)) {
-                    if ($user->admin === "1" || (int)$user->permission >= 3) {
+                    if ($user->admin == "1" || (int)$user->permission >= 3) {
                         $actions .= "<a class='btn btn-sm bg-info-lt text-info me-1' href='/route/ajax/csr/download.php?csr_id={$csr_id}&type=pkey'>{$dl_icon} .key</a>";
                     } else {
                         $actions .= "<a class='btn btn-sm bg-danger-lt text-danger me-1 disabled' tabindex='-1' title='" . _("Insufficient permissions") . "'>{$dl_icon} .key</a>";

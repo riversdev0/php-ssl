@@ -23,7 +23,7 @@ if ($csr_id <= 0 || $zone_id <= 0 || $pem === '') {
 }
 
 // Fetch and authorise CSR
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ?", [$csr_id]);
 } else {
     $csr = $Database->getObjectQuery("SELECT * FROM csrs WHERE id = ? AND t_id = ?", [$csr_id, $user->t_id]);
@@ -40,7 +40,7 @@ if ($csr->status === 'signed') {
 }
 
 // Fetch and authorise zone
-if ($user->admin === "1") {
+if ($user->admin == "1") {
     $zone = $Database->getObjectQuery("SELECT * FROM zones WHERE id = ?", [$zone_id]);
 } else {
     $zone = $Database->getObjectQuery("SELECT * FROM zones WHERE id = ? AND t_id = ?", [$zone_id, $user->t_id]);

@@ -298,7 +298,7 @@ class User extends Common
 	 * @param  object $domain
 	 * @return void
 	 */
-	public function authenticate_local(string $email = "", string $password = "", object $domain)
+	public function authenticate_local(string $email, string $password, object $domain)
 	{
 		// fetch user details
 		$user = $this->fetch_user_details($email);
@@ -364,7 +364,7 @@ class User extends Common
 	 * @param mixed $password
 	 * @return void
 	 */
-	public function authenticate_ad($username = "", $password = "", object $domain)
+	public function authenticate_ad($username, $password, object $domain)
 	{
 		// connect to ad and init search
 		$AD = new ADsync($this->Database, $domain);
