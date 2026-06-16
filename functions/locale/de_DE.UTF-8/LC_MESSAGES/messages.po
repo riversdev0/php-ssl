@@ -440,6 +440,9 @@ msgstr "Privat"
 msgid "Only visible to you — not even admins can see it"
 msgstr "Nur für Sie sichtbar – nicht einmal Admins können es sehen"
 
+msgid "Appends zone name to each host"
+msgstr "Hängt den Zonennamen an jeden Host an"
+
 msgid "Only visible to you"
 msgstr "Nur für Sie sichtbar"
 

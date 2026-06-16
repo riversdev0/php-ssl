@@ -900,6 +900,9 @@ msgstr "Vidno samo vam"
 msgid "Only visible to you — not even admins can see it"
 msgstr "Vidno samo vam — tega ne vidijo niti skrbniki"
 
+msgid "Appends zone name to each host"
+msgstr "Imenu gostitelja doda ime cone"
+
 msgid "Remove all hosts from zone"
 msgstr "Odstrani vse gostitelje iz cone"
 

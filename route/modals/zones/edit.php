@@ -83,7 +83,6 @@ else {
 	$content[] = "		<input type='hidden' id='target' name='target' value='/".$user->href."/zones/'>";
 	$content[] = "		<input type='hidden' name='zone_id' value='{$zone->id}'>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// type
 	$content[] = "<tr>";
@@ -131,6 +130,7 @@ else {
 	$content[] =  "<option value='$type' $selected>".$name."</option>";
 	}
 	$content[] = "</select>";
+	$content[] = "	<div class='text-muted small mt-1'>"._('Appends zone name to each host')."</div>";
 	$content[] = "	</td>";
 	$content[] = "</tr>";
 	// description
@@ -139,7 +139,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='description' value='".@$zone->z_description."' $disabled>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// private zone - checkbox on add, info label on edit
 	if ($_GET['action'] == "add") {
@@ -151,14 +150,13 @@ else {
 		$content[] = "			<span class='form-check-label text-muted'>"._("Only visible to you — not even admins can see it")."</span>";
 		$content[] = "		</label>";
 		$content[] = "	</td>";
-		$content[] = "	<td>";
 		$content[] = "</tr>";
 	}
 	elseif (!empty($zone->private_zone_uid)) {
 		$content[] = "<tr>";
 		$content[] = "	<th style='width:100px;'>"._("Private zone")."</th>";
 		$content[] = "	<td><span class='badge text-purple'>"._("Private")."</span> <span class='text-muted small'>"._("Only visible to you")."</span></td>";
-		$content[] = "	<td>";
+
 		$content[] = "</tr>";
 	}
 	$content[] = "</tbody>";
@@ -174,7 +172,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='dns' value='".@$zone->dns."' $disabled>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// aname
 	$content[] = "<tr>";
@@ -182,7 +179,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='aname' value='".@$zone->aname."' $disabled>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// tsig
 	$content[] = "<tr>";
@@ -190,7 +186,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='tsig_name' value='".@$zone->tsig_name."' $disabled>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// tsig
 	$content[] = "<tr>";
@@ -198,7 +193,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='tsig' value='".@$zone->tsig."' $disabled>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// types
 	$content[] = "<tr>";
@@ -206,7 +200,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='record_types' value='".@$zone->record_types."' $disabled>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// delete
 	$content[] = "<tr>";
@@ -238,7 +231,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='regex_include' value='".@$zone->regex_include."' $disabled>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// regex - exclude
 	$content[] = "<tr>";
@@ -246,7 +238,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<input type='text' class='form-control form-control-sm' name='regex_exclude' value='".@$zone->regex_exclude."' $disabled>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 	// test axfr transfer
 	$content[] = "<tr>";
@@ -254,7 +245,6 @@ else {
 	$content[] = "	<td>";
 	$content[] = "		<a href='/route/modals/zones/axfr-test.php' class='btn btn-sm btn-outline-success float-end' id='axfr-regex-test' data-bs-toggle='modal' data-bs-target='#modal2'>Test transfer</a>";
 	$content[] = "	</td>";
-	$content[] = "	<td>";
 	$content[] = "</tr>";
 
 	$content[] = "</tbody>";
