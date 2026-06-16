@@ -624,10 +624,13 @@ class SSL extends Common
 			if (isset($result[$m + 1])) {
 				// make sure current issued child certificate
 				$aki_raw = trim(str_replace("keyid:", "", $result[$m + 1]['certificate']['extensions']['authorityKeyIdentifier']));
-				$aki = explode(" ", $aki_raw)[0];
+				$aki = explode("\n", $aki_raw)[0];
+
 				if ($result[$m]['certificate']['extensions']['subjectKeyIdentifier'] != $aki) {
 					$result[$m + 1]['errors']['authorityKeyIdentifier'] = _("Certificate not signed by parent");
 				}
+
+
 				// can current sign certificates ? :)
 				if (strpos($result[$m]['certificate']['extensions']['basicConstraints'], "CA:TRUE") === false) {
 					$result[$m]['errors']['basicConstraints'] = _("Certificate not allowed to issue certificates");
