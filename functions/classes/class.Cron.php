@@ -239,6 +239,16 @@ class Cron extends Common
 				include(dirname(__FILE__) . "/../cron/testssl_scan.php");
 			}
 		}
+
+		// always run nmap_scan for every tenant that has pending scans
+		$pending = $this->Database->getObjectsQuery(
+			"SELECT DISTINCT tenant_id AS t_id FROM nmap_scans WHERE status = 'Requested'", []
+		);
+		if ($pending) {
+			foreach ($pending as $j) {
+				include(dirname(__FILE__) . "/../cron/nmap_scan.php");
+			}
+		}
 	}
 
 	/**

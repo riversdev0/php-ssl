@@ -1,0 +1,3 @@
+ALTER TABLE `logs`
+    MODIFY COLUMN `json_object_old` MEDIUMTEXT DEFAULT NULL,
+    MODIFY COLUMN `json_object_new` MEDIUMTEXT DEFAULT NULL;

@@ -121,6 +121,16 @@ $webauthn_origin = "";
 $webauthn_rpid   = "";
 
 /**
+ * Path to the nmap binary used for network host discovery scans.
+ *
+ * Install nmap via your package manager: apt install nmap / yum install nmap
+ * The web server user must have execute permission on this binary.
+ *
+ * @var string
+ */
+$nmap_path = "/usr/bin/nmap";
+
+/**
  * Private key encryption keys — one entry per tenant (keyed by tenant ID).
  *
  * Each value is used to derive a 256-bit AES-GCM key for encrypting stored

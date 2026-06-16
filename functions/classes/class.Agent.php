@@ -121,6 +121,7 @@ class Agent
 		else {
 			// save result and result code
 			$result_info = curl_getinfo($API_conn);
+			if (!is_array($this->result)) { $this->result = []; }
 			$this->result['result_code'] = $result_info['http_code'];
 
 			// error ?

@@ -329,8 +329,8 @@ CREATE TABLE `logs` (
   `action` varchar(32) NOT NULL,
   `public` tinyint(1) NOT NULL DEFAULT 0,
   `text` text DEFAULT NULL,
-  `json_object_old` text DEFAULT NULL,
-  `json_object_new` text DEFAULT NULL,
+  `json_object_old` mediumtext DEFAULT NULL,
+  `json_object_new` mediumtext DEFAULT NULL,
   `is_revertable` tinyint(1) NOT NULL DEFAULT 0,
   `date` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
@@ -603,6 +603,31 @@ CREATE TABLE `testssl` (
   CONSTRAINT `testssl_user`   FOREIGN KEY (`user_id`)   REFERENCES `users` (`id`)   ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+# Dump of table nmap_scans
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `nmap_scans`;
+
+CREATE TABLE `nmap_scans` (
+  `id`          int(11)      NOT NULL AUTO_INCREMENT,
+  `tenant_id`   int(11)      NOT NULL,
+  `zone_id`     int(11)      NOT NULL,
+  `user_id`     int(11)      NOT NULL,
+  `prefix`      varchar(50)  NOT NULL,
+  `pg_id`       int(11)      DEFAULT NULL,
+  `ptr_lookup`  tinyint(1)   NOT NULL DEFAULT 0,
+  `notify_email` varchar(255) DEFAULT NULL,
+  `status`      enum('Requested','Scanning','Completed','Error') NOT NULL DEFAULT 'Requested',
+  `hosts_found` int(11)      NOT NULL DEFAULT 0,
+  `hosts_added` int(11)      NOT NULL DEFAULT 0,
+  `requested`   datetime     DEFAULT NULL,
+  `completed`   datetime     DEFAULT NULL,
+  `error_msg`   text         DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_status` (`tenant_id`,`status`),
+  KEY `idx_zone_id`       (`zone_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

@@ -11,7 +11,7 @@
  */
 $version_major = 0;
 $version_minor = 9;
-$version_patch = 0;
+$version_patch = 3;
 
 /**
  * Full version string, e.g. "1.0"

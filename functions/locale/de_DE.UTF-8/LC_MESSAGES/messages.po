@@ -2593,3 +2593,78 @@ msgstr "2FA-Geheimnis konnte nicht gelesen werden."
 
 msgid "Disable and clear TOTP two-factor authentication for this user"
 msgstr "TOTP Zwei-Faktor-Authentifizierung für diesen Benutzer deaktivieren und löschen"
+
+msgid "Scan hosts"
+msgstr "Hosts scannen"
+
+msgid "IP prefix"
+msgstr "IP-Präfix"
+
+msgid "IPv4 CIDR, minimum /16 (e.g. 10.0.0.0/24)"
+msgstr "IPv4 CIDR, mindestens /16 (z.B. 10.0.0.0/24)"
+
+msgid "Ports"
+msgstr "Ports"
+
+msgid "Comma-separated SSL ports to scan (e.g. 443,8443,8080)"
+msgstr "Kommagetrennte SSL-Ports zum Scannen (z.B. 443,8443,8080)"
+
+msgid "PTR lookup"
+msgstr "PTR-Abfrage"
+
+msgid "Resolve PTR records and add hostnames too"
+msgstr "PTR-Einträge auflösen und Hostnamen ebenfalls hinzufügen"
+
+msgid "Request scan"
+msgstr "Scan anfordern"
+
+msgid "Scan requested. Results will be added to this zone after the next cron run."
+msgstr "Scan angefordert. Ergebnisse werden nach dem nächsten Cron-Lauf zur Zone hinzugefügt."
+
+msgid "Invalid prefix. Use IPv4 CIDR with prefix length between /16 and /32 (e.g. 10.0.0.0/24)."
+msgstr "Ungültiges Präfix. Verwenden Sie IPv4 CIDR mit Präfixlänge zwischen /16 und /32 (z.B. 10.0.0.0/24)."
+
+msgid "Invalid ports. Enter 1–20 comma-separated port numbers (1–65535)."
+msgstr "Ungültige Ports. Geben Sie 1–20 kommagetrennte Portnummern (1–65535) ein."
+
+msgid "nmap binary not found. Contact your administrator."
+msgstr "nmap-Programm nicht gefunden. Kontaktieren Sie Ihren Administrator."
+
+msgid "Network scans"
+msgstr "Netzwerk-Scans"
+
+msgid "No scans yet."
+msgstr "Noch keine Scans."
+
+msgid "Found"
+msgstr "Gefunden"
+
+msgid "Added"
+msgstr "Hinzugefügt"
+
+msgid "Notify email"
+msgstr "Benachrichtigungs-E-Mail"
+
+msgid "Optional — leave blank to skip"
+msgstr "Optional — leer lassen zum Überspringen"
+
+msgid "An email summary will be sent here when the scan completes."
+msgstr "Nach Abschluss des Scans wird eine Zusammenfassung an diese Adresse gesendet."
+
+msgid "Network scan completed"
+msgstr "Netzwerk-Scan abgeschlossen"
+
+msgid "View zone"
+msgstr "Zone anzeigen"
+
+msgid "Invalid notification email address."
+msgstr "Ungültige Benachrichtigungs-E-Mail-Adresse."
+
+msgid "Port group"
+msgstr "Port-Gruppe"
+
+msgid "Port group defines which SSL ports to discover and monitor."
+msgstr "Die Port-Gruppe legt fest, welche SSL-Ports erkannt und überwacht werden sollen."
+
+msgid "Invalid port group."
+msgstr "Ungültige Port-Gruppe."

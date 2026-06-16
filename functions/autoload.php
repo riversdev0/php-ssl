@@ -137,6 +137,7 @@ include ("classes/class.ADsync.php");
 include ("classes/class.Migration.php");
 include ("classes/class.WebAuthn.php");
 include ("classes/class.testssl.php");
+include ("classes/class.Nmap.php");
 
 # testssl submodule availability flag
 $testssl_available = file_exists(dirname(__FILE__)."/testSSL/testssl.sh");

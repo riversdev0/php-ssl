@@ -2628,3 +2628,78 @@ msgstr "Ni mogoče prebrati skrivnosti 2FA."
 
 msgid "Disable and clear TOTP two-factor authentication for this user"
 msgstr "Onemogoči in izbriši TOTP dvostopenjsko avtentikacijo za tega uporabnika"
+
+msgid "Scan hosts"
+msgstr "Preglej gostitelje"
+
+msgid "IP prefix"
+msgstr "IP predpona"
+
+msgid "IPv4 CIDR, minimum /16 (e.g. 10.0.0.0/24)"
+msgstr "IPv4 CIDR, najmanj /16 (npr. 10.0.0.0/24)"
+
+msgid "Ports"
+msgstr "Vrata"
+
+msgid "Comma-separated SSL ports to scan (e.g. 443,8443,8080)"
+msgstr "SSL vrata za pregled, ločena z vejico (npr. 443,8443,8080)"
+
+msgid "PTR lookup"
+msgstr "PTR iskanje"
+
+msgid "Resolve PTR records and add hostnames too"
+msgstr "Razreši PTR zapise in dodaj tudi gostitelja po imenu"
+
+msgid "Request scan"
+msgstr "Zahtevaj pregled"
+
+msgid "Scan requested. Results will be added to this zone after the next cron run."
+msgstr "Pregled zahtevan. Rezultati bodo dodani v cono po naslednjem zagonu crona."
+
+msgid "Invalid prefix. Use IPv4 CIDR with prefix length between /16 and /32 (e.g. 10.0.0.0/24)."
+msgstr "Neveljavna predpona. Uporabite IPv4 CIDR z dolžino predpone med /16 in /32 (npr. 10.0.0.0/24)."
+
+msgid "Invalid ports. Enter 1–20 comma-separated port numbers (1–65535)."
+msgstr "Neveljavna vrata. Vnesite 1–20 vrat, ločenih z vejico (1–65535)."
+
+msgid "nmap binary not found. Contact your administrator."
+msgstr "Izvršljiva datoteka nmap ni bila najdena. Kontaktirajte skrbnika."
+
+msgid "Network scans"
+msgstr "Omrežni pregledi"
+
+msgid "No scans yet."
+msgstr "Še ni pregledov."
+
+msgid "Found"
+msgstr "Najdenih"
+
+msgid "Added"
+msgstr "Dodanih"
+
+msgid "Notify email"
+msgstr "E-mail za obvestilo"
+
+msgid "Optional — leave blank to skip"
+msgstr "Neobvezno — pustite prazno za preskočitev"
+
+msgid "An email summary will be sent here when the scan completes."
+msgstr "Ko se pregled zaključi, bo na ta naslov poslano povzetno sporočilo."
+
+msgid "Network scan completed"
+msgstr "Omrežni pregled zaključen"
+
+msgid "View zone"
+msgstr "Odpri cono"
+
+msgid "Invalid notification email address."
+msgstr "Neveljaven e-poštni naslov za obvestilo."
+
+msgid "Port group"
+msgstr "Skupina vrat"
+
+msgid "Port group defines which SSL ports to discover and monitor."
+msgstr "Skupina vrat določa, katera SSL vrata naj se odkrijejo in nadzirajo."
+
+msgid "Invalid port group."
+msgstr "Neveljavna skupina vrat."

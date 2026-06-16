@@ -189,7 +189,7 @@ class Log extends Common
 	 */
 	public function validate_json($json_object = "")
 	{
-		if (json_decode($json_object) === NULL && $json_object !== NULL) {
+		if ($json_object !== null && json_decode($json_object) === null) {
 			throw new Exception("Invalid object");
 		}
 	}

@@ -322,7 +322,7 @@ class mailer extends Common
 	 */
 	public function prevent_linkable_text($text = "")
 	{
-		return str_replace(".", "&#8203.", $text);
+		return str_replace(".", "&#8203.", $text ?? '');
 	}
 }
 

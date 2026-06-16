@@ -92,8 +92,21 @@ if ($zone->type!="axfr") {
 
 	print "<tr class='line'>";
 	print "	<th>"._("Add host")."</th>";
-	print "	<td><a href='/route/modals/zones/add-hostnames.php?action=add&tenant=".$_params['tenant']."&zone_name=".$zone->name."' class='btn btn-sm bg-info-lt text-success' data-bs-toggle='modal' data-bs-target='#modal1'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>'." "._("Add host")."</a></td>";
+	print "	<td><a href='/route/modals/zones/add-hostnames.php?action=add&tenant=".$_params['tenant']."&zone_name=".$zone->name."' class='btn btn-sm bg-info-lt text-success' data-bs-toggle='modal' data-bs-target='#modal1'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>'." "._("Add new host")."</a></td>";
 	print "</tr>";
+
+	if ($User->get_user_permissions(3)) {
+		$Nmap         = new Nmap($Database);
+		$nmap_pending = $Nmap->get_zone_pending_scans((int) $zone->id);
+
+		print "<tr class='line'>";
+		print "	<th>"._("Scan hosts")."</th>";
+		print "	<td>";
+		print "<a href='/route/modals/zones/nmap-scan.php?tenant=".$_params['tenant']."&zone_name=".$zone->name."' class='btn btn-sm bg-info-lt text-green' data-bs-toggle='modal' data-bs-target='#modal1'>".'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-cloud-search"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M11 18.004h-4.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99" /><path d="M15 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M20.2 20.2l1.8 1.8" /></svg>'." "._("Scan hosts")."</a>";
+
+		print "</td>";
+		print "</tr>";
+	}
 }
 
 print "<tr class='line'>";
@@ -274,4 +287,73 @@ if ($zone->type=="axfr") {
 
 	print "</div>";
 	print "</div>";
+}
+
+
+//
+// Nmap scan history (RWA+ only)
+//
+if ($User->get_user_permissions(3)) {
+	// $Nmap and $nmap_scans were already populated above in the button block
+	if (!isset($Nmap)) {
+		$Nmap = new Nmap($Database);
+	}
+	$nmap_scans = $Nmap->get_zone_scans((int) $zone->id);
+
+	print "<div class='col-12' style='margin-top:20px'>";
+	print "<div class='card'>";
+	print "<div class='card-header'>";
+	print '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-cloud-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M11 18.004h-4.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99"></path><path d="M15 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path><path d="M20.2 20.2l1.8 1.8"></path></svg>';
+	print _("Network scans");
+	print "</div>";
+
+	if (empty($nmap_scans)) {
+		print "<div class='card-body text-muted'>"._("No scans yet.")."</div>";
+	} else {
+		print "<table class='table table-sm table-hover table-borderless'>";
+		print "<thead><tr>";
+		print "<th>"._("Prefix")."</th>";
+		print "<th class='d-none d-lg-table-cell'>"._("Port group")."</th>";
+		print "<th>"._("PTR")."</th>";
+		print "<th>"._("Status")."</th>";
+		print "<th>"._("Found")."</th>";
+		print "<th>"._("Added")."</th>";
+		print "<th>"._("Requested")."</th>";
+		print "<th class='d-none d-lg-table-cell'>"._("Completed")."</th>";
+		print "<th class='d-none d-lg-table-cell'>"._("User")."</th>";
+		print "</tr></thead>";
+		print "<tbody>";
+
+		foreach ($nmap_scans as $s) {
+			switch ($s->status) {
+				case "Completed": $badge = "badge bg-info-lt  text-green";  break;
+				case "Scanning":  $badge = "badge bg-info-lt  text-blue";   break;
+				case "Error":     $badge = "badge bg-info-lt  text-red";    break;
+				default:          $badge = "badge bg-info-lt  text-muted";  break;
+			}
+			$ptr_icon  = $s->ptr_lookup ? "<span class='badge text-azure bg-info-lt '>"._("Yes")."</span>" : "<span class='text-muted'>—</span>";
+			$completed = $s->completed  ? $s->completed : "<span class='text-muted'>—</span>";
+			$error_tip = $s->status === "Error" && $s->error_msg
+				? " title='" . htmlspecialchars($s->error_msg) . "' data-bs-toggle='tooltip'"
+				: "";
+
+			print "<tr>";
+			$pg_display = !empty($s->pg_name) ? htmlspecialchars($s->pg_name) . " <small class='text-muted'>(" . htmlspecialchars($s->pg_ports ?? '') . ")</small>" : "<span class='text-muted'>—</span>";
+			print "<td><span class='badge'>" . htmlspecialchars($s->prefix) . "</span></td>";
+			print "<td class='text-muted d-none d-lg-table-cell'>{$pg_display}</td>";
+			print "<td>{$ptr_icon}</td>";
+			print "<td><span class='{$badge}'{$error_tip}>" . htmlspecialchars($s->status) . "</span></td>";
+			print "<td>" . (int) $s->hosts_found . "</td>";
+			print "<td>" . (int) $s->hosts_added . "</td>";
+			print "<td class='text-muted d-none d-lg-table-cell'>" . htmlspecialchars($s->requested) . "</td>";
+			print "<td class='text-muted d-none d-lg-table-cell'>" . $completed . "</td>";
+			print "<td>" . htmlspecialchars($s->username ?? '') . "</td>";
+			print "</tr>";
+		}
+
+		print "</tbody></table>";
+	}
+
+	print "</div>"; // card
+	print "</div>"; // col
 }

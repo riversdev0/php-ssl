@@ -238,7 +238,7 @@ try {
 		                }
 
 		                // add to per-host recipients (always list style)
-		                foreach (explode(";", $c->h_recipients) as $r) {
+		                foreach (explode(";", $c->h_recipients ?? '') as $r) {
 		                    $r = trim($r);
 		                    if ($Common->validate_mail($r)) {
 		                        if (!isset($content[$r])) { $content[$r] = $header_list; }
