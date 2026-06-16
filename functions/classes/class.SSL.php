@@ -623,7 +623,9 @@ class SSL extends Common
 			// check if it has childs in chain
 			if (isset($result[$m + 1])) {
 				// make sure current issued child certificate
-				if ($result[$m]['certificate']['extensions']['subjectKeyIdentifier'] != trim(str_replace("keyid:", "", $result[$m + 1]['certificate']['extensions']['authorityKeyIdentifier']))) {
+				$aki_raw = trim(str_replace("keyid:", "", $result[$m + 1]['certificate']['extensions']['authorityKeyIdentifier']));
+				$aki = explode(" ", $aki_raw)[0];
+				if ($result[$m]['certificate']['extensions']['subjectKeyIdentifier'] != $aki) {
 					$result[$m + 1]['errors']['authorityKeyIdentifier'] = _("Certificate not signed by parent");
 				}
 				// can current sign certificates ? :)
