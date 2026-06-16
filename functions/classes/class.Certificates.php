@@ -309,7 +309,7 @@ class Certificates extends Common
 	 * @param  array|bool $cert_parsed Parsed certificate array or false
 	 * @param  bool $validate_domain Whether to validate domain against certificate
 	 * @param  string $domain Domain to validate
-	 * @return int Status code: 0=unknown, 1=expired, 2=expires soon, 3=valid, 10=domain mismatch
+	 * @return int Status code: 0=unknown, 1=expired, 2=expires soon, 3=valid, 10=domain mismatch, 11=self-signed
 	 */
 	public function get_status_int($cert_parsed = false, $validate_domain = false, $domain = "")
 	{
@@ -327,6 +327,10 @@ class Certificates extends Common
 			if ($this->validate_cert_domain_validity($domain, $cert_parsed) === false) {
 				return 10;
 			}
+		}
+		// check if certificate is self-signed (subject matches issuer)
+		if ($this->is_self_signed($cert_parsed)) {
+			return 11;
 		}
 
 		// result
@@ -357,6 +361,7 @@ class Certificates extends Common
 			case 2:  return 'orange';
 			case 3:  return 'green';
 			case 10: return 'red';
+			case 11: return 'orange';
 			default: return 'secondary';
 		}
 	}
@@ -377,6 +382,9 @@ class Certificates extends Common
 		// return
 		if ($status_int == 10) {
 			return "<span class='badge bg-red-lt $status_class' data-bs-toggle='tooltip' data-bs-placement='left' title='" . _("Domain mismatch") . "'> <span class='$span_hidden'>" . _("Domain mismatch") . "</span></span> ";
+		}
+		if ($status_int == 11) {
+			return "<span class='badge bg-orange-lt $status_class' data-bs-toggle='tooltip' data-bs-placement='left' title='" . _("Self-signed") . "'> <span class='$span_hidden'>" . _("Self-signed") . "</span></span> ";
 		}
 		if ($status_int == 0) {
 			return "<span class='badge bg-light-lt $status_class bg-light text-muted' data-bs-toggle='tooltip' data-bs-placement='left' title='" . _("Unknown") . "'> <span class='$span_hidden'>" . _("Unknown") . "</span></span> ";
@@ -458,6 +466,20 @@ class Certificates extends Common
 
 		// false
 		return false;
+	}
+
+	/**
+	 * Check if certificate is self-signed (subject and issuer are identical)
+	 * @method is_self_signed
+	 * @param  array|bool $cert_parsed
+	 * @return bool
+	 */
+	private function is_self_signed($cert_parsed = false)
+	{
+		if (empty($cert_parsed['subject']) || empty($cert_parsed['issuer'])) {
+			return false;
+		}
+		return $cert_parsed['subject'] === $cert_parsed['issuer'];
 	}
 
 	/**
