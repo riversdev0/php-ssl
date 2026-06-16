@@ -840,6 +840,9 @@ msgstr "Ist Domain"
 msgid "Domain mismatch"
 msgstr "Domainabweichung"
 
+msgid "Self-signed"
+msgstr "Selbstsigniert"
+
 msgid "Issued by"
 msgstr "Ausgestellt von"
 

@@ -1822,6 +1822,9 @@ msgstr "Vrednost kontrolnikov domene je predolga"
 msgid "Domain mismatch"
 msgstr "Neskladje domene"
 
+msgid "Self-signed"
+msgstr "Samopodpisano"
+
 msgid "Domain is not active"
 msgstr "Domena ni aktivna"
 
