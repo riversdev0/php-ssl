@@ -479,7 +479,11 @@ class Certificates extends Common
 		if (empty($cert_parsed['subject']) || empty($cert_parsed['issuer'])) {
 			return false;
 		}
-		return $cert_parsed['subject'] === $cert_parsed['issuer'];
+		// Strip custom keys added by route files (e.g. CN_all) before comparing
+		$standard_keys = ['C', 'ST', 'L', 'O', 'OU', 'CN', 'emailAddress', 'serialNumber'];
+		$subject = array_intersect_key($cert_parsed['subject'], array_flip($standard_keys));
+		$issuer  = array_intersect_key($cert_parsed['issuer'],  array_flip($standard_keys));
+		return $subject === $issuer;
 	}
 
 	/**
