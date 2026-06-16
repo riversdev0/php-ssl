@@ -68,7 +68,7 @@ else {
 			$cert_old = $Zones->get_host_old_certificate($host->c_id_old);
 			if ($cert_old) {
 				$cert_old_parsed = $Certificates->parse_cert($cert_old->certificate);
-				$cert_old_status = $Certificates->get_status($cert_old_parsed, true, false, "");
+				$cert_old_status = $Certificates->get_status($cert_old_parsed, false, false, "");
 
 				$cert_old_textclass = $Certificates->get_status_color($cert_old_status['code']);
 

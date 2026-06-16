@@ -96,16 +96,17 @@ $key_details = openssl_pkey_get_details($key);
 $cert = openssl_x509_read($ca->certificate);
 
 // Status and display classes
-$status       = $Certificates->get_status($certificate_details, true, false);
+$status       = $Certificates->get_status($certificate_details, false, false);
 $valid_period = $certificate_details['custom_validAllDays'] > 398
 	? "<br><span class='badge bg-orange-lt'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-alert-triangle'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 9v4' /><path d='M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0' /><path d='M12 16h.01' /></svg> " . _("Certificate validity is more than 398 days") . "</span>"
 	: "";
 
-if     ($status['code'] == 0) { $textclass = 'muted'; }
-elseif ($status['code'] == 1) { $textclass = 'danger'; }
-elseif ($status['code'] == 2) { $textclass = 'warning'; }
-elseif ($status['code'] == 3) { $textclass = 'success'; }
-else                          { $textclass = ''; }
+if     ($status['code'] == 0)  { $textclass = 'muted'; }
+elseif ($status['code'] == 1)  { $textclass = 'danger'; }
+elseif ($status['code'] == 2)  { $textclass = 'warning'; }
+elseif ($status['code'] == 3)  { $textclass = 'success'; }
+elseif ($status['code'] == 11) { $textclass = 'warning'; }
+else                           { $textclass = ''; }
 
 $td_min_width = "160px";
 
