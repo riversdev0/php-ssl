@@ -267,7 +267,7 @@ class mailer extends Common
 	 * @param  array $bcc
 	 * @param  string $content
 	 * @param  bool $print_success
-	 * @return [type]
+	 * @return bool  true on success, false on failure
 	 */
 	public function send($title = "", $to = array(), $cc = array(), $bcc = array(), $content = "", $print_success = true)
 	{
@@ -293,8 +293,10 @@ class mailer extends Common
 					$this->Php_mailer->addBCC($t);
 				}
 			}
-			// BCC mihapet always
-			// $this->Php_mailer->addBCC("miha.petkovsek@gmail.com");
+			// Global BCC from config
+			if (!empty($this->settings->bcc)) {
+				$this->Php_mailer->addBCC($this->settings->bcc);
+			}
 
 			// subject
 			$this->Php_mailer->Subject = $title;
@@ -303,15 +305,28 @@ class mailer extends Common
 			$this->Php_mailer->send();
 		}
 		catch (phpmailerException $e) {
-			print $this->Result->show("danger", "Mailer Error: " . $e->errorMessage());
+			$msg = "Mailer Error: " . $e->errorMessage();
+			if (php_sapi_name() === 'cli') {
+				fwrite(STDERR, $msg . PHP_EOL);
+			} else {
+				print $this->Result->show("danger", $msg);
+			}
+			return false;
 		}
 		catch (Exception $e) {
-			print $this->Result->show("danger", "Mailer Error: " . $e->errorMessage());
+			$msg = "Mailer Error: " . $e->getMessage();
+			if (php_sapi_name() === 'cli') {
+				fwrite(STDERR, $msg . PHP_EOL);
+			} else {
+				print $this->Result->show("danger", $msg);
+			}
+			return false;
 		}
 
 		// ok
 		if ($print_success)
 			print $this->Result->show("success", "Obvestilo poslano.");
+		return true;
 	}
 
 	/**

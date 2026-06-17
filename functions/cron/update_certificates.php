@@ -267,21 +267,26 @@ try {
 				$log_content_rows[] = "<br><br>".$Mail->font_norm."Visit <a href='".$mail_sender_settings->www."' style='color:#003551;'>".$mail_sender_settings->www."</a></font>";
 
 				// send to tenant recipients together
+				$Log = new Log ($Database);
 				if (!empty($email_to_tenant_recipents)) {
-					$Mail->send ("Telemach php-ssl :: changed certificates [".$tenant->name."]", $email_to_tenant_recipents, [], [], implode("\n", $content[$email_to_tenant_recipents[0]]), false);
+					$sent = $Mail->send ("Telemach php-ssl :: changed certificates [".$tenant->name."]", $email_to_tenant_recipents, [], [], implode("\n", $content[$email_to_tenant_recipents[0]]), false);
+					if ($sent) {
+						$Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate change notification email sent to all tenant admins for certificate change", json_encode($email_to_tenant_recipents), json_encode(["title"=>"Telemach php-ssl :: changed certificates [".$tenant->name."]", "data"=>$log_content_rows]), false);
+					} else {
+						$Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate change notification email FAILED for tenant recipients", json_encode($email_to_tenant_recipents), null, false);
+					}
 				}
-
-		        // Log
-		        $Log = new Log ($Database);
-		        $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate change notification email sent to all tenant admins for certificate change", json_encode($email_to_tenant_recipents), json_encode(["title"=>"Telemach php-ssl :: changed certificates [".$tenant->name."]", "data"=>$log_content_rows]), false);
 
 				// send to per-host recipients individually; private zone creators get no BCC to tenant recipients
 		        foreach ($content as $email => $rows) {
 		        	if (!in_array($email, $email_to_tenant_recipents)) {
 		        		$bcc = isset($private_zone_emails[$email]) ? [] : $email_to_tenant_recipents;
-		                $Mail->send ("Telemach php-ssl :: changed certificates", [$email], [], $bcc, implode("\n", $rows), false);
-		                // Log
-		                $Log->write ("users", $all_users[$email]->id ?? null, $tenant->id, null, "notification", true, "Certificate change notification email sent to user ".(isset($all_users[$email]) ? $all_users[$email]->name : $email)." (".$email.")", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: changed certificates", "data"=>$rows]), false);
+		                $sent = $Mail->send ("Telemach php-ssl :: changed certificates", [$email], [], $bcc, implode("\n", $rows), false);
+		                if ($sent) {
+		                	$Log->write ("users", $all_users[$email]->id ?? null, $tenant->id, null, "notification", true, "Certificate change notification email sent to user ".(isset($all_users[$email]) ? $all_users[$email]->name : $email)." (".$email.")", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: changed certificates", "data"=>$rows]), false);
+		                } else {
+		                	$Log->write ("users", $all_users[$email]->id ?? null, $tenant->id, null, "notification", true, "Certificate change notification email FAILED for user ".(isset($all_users[$email]) ? $all_users[$email]->name : $email)." (".$email.")", json_encode([$email]), null, false);
+		                }
 		        	}
 		        }
 	    	}
