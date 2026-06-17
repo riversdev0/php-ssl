@@ -248,19 +248,26 @@ try {
         unset($rows);
 
         // send to tenant recipients together
-        $Mail->send ("Telemach php-ssl :: certificate expiration [".$tenant->name."]", $email_to_tenant_recipents, [], [], implode("\n", $content[$email_to_tenant_recipents[0]]), false);
-
-        // Log
         $Log = new Log ($Database);
-        $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate expire notification email sent to all tenant admins", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: certificate expiration [".$tenant->name."]", "data"=>implode("\n", $content[$email_to_tenant_recipents[0]])]), false);
+        if (!empty($email_to_tenant_recipents)) {
+            $sent = $Mail->send ("Telemach php-ssl :: certificate expiration [".$tenant->name."]", $email_to_tenant_recipents, [], [], implode("\n", $content[$email_to_tenant_recipents[0]]), false);
+            if ($sent) {
+                $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate expiry notification email sent to tenant recipients", json_encode($email_to_tenant_recipents), json_encode(["title"=>"Telemach php-ssl :: certificate expiration [".$tenant->name."]", "data"=>implode("\n", $content[$email_to_tenant_recipents[0]])]), false);
+            } else {
+                $Log->write ("users", NULL, $tenant->id, null, "notification", true, "Certificate expiry notification email FAILED for tenant recipients", json_encode($email_to_tenant_recipents), null, false);
+            }
+        }
 
         // send to per-cert recipients individually; private zone creators get no BCC to tenant recipients
         foreach ($content as $email => $rows) {
             if (!in_array($email, $email_to_tenant_recipents)) {
                 $bcc = isset($private_zone_emails[$email]) ? [] : $email_to_tenant_recipents;
-                $Mail->send ("Telemach php-ssl :: certificate expiration", [$email], [], $bcc, implode("\n", $rows), false);
-                // Log
-                $Log->write ("users", $all_users[$email]->id ?? null, $tenant->id, null, "notification", true, "Certificate expire notification email sent to user ".(isset($all_users[$email]) ? $all_users[$email]->name : $email)." (".$email.")", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: certificate expiration", "data"=>$rows]), false);
+                $sent = $Mail->send ("Telemach php-ssl :: certificate expiration", [$email], [], $bcc, implode("\n", $rows), false);
+                if ($sent) {
+                    $Log->write ("users", $all_users[$email]->id ?? null, $tenant->id, null, "notification", true, "Certificate expiry notification email sent to user ".(isset($all_users[$email]) ? $all_users[$email]->name : $email)." (".$email.")", json_encode([$email]), json_encode(["title"=>"Telemach php-ssl :: certificate expiration", "data"=>$rows]), false);
+                } else {
+                    $Log->write ("users", $all_users[$email]->id ?? null, $tenant->id, null, "notification", true, "Certificate expiry notification email FAILED for user ".(isset($all_users[$email]) ? $all_users[$email]->name : $email)." (".$email.")", json_encode([$email]), null, false);
+                }
             }
         }
     }
