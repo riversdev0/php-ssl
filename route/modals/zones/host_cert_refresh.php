@@ -73,7 +73,7 @@ try {
 		$cert_text[] = _("Valid to").": ".$cert_parsed['custom_validTo']." (".$cert_parsed['custom_validDays']." days)"."<br>";
 		$cert_text[] = _("TLS version").": ".$host_certificate['tls_proto']."<br>";
 		$cert_text[] = _("Scan agent").": ".$host->agname."<br>";
-		$cert_text[] = "<hr><a href='/".$tenant->href."/certificates/".$cert_parsed['serialNumber']."/' target='_blank' class='btn btn-sm btn-outline-info'>".$url_items["certificates"]["icon"]." "._("Show certificate details")."</a>";
+		$cert_text[] = "<hr><a href='/".$tenant->href."/certificates/".$host->zone_name."/".$cert_parsed['serialNumber']."/' target='_blank' class='btn btn-sm btn-outline-info'>".$url_items["certificates"]["icon"]." "._('Show certificate details')."</a>";
 		$cert_text[] = "</div>";
 		// ok
 		$content[] = $Result->show("success", _("Certificate fetched"), false, false, true, false);

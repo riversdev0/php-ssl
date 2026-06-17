@@ -1,6 +1,16 @@
 <?php
 
 
+// Pre-load CAs for this tenant keyed by SKI so we can link chain cert names to their CA page
+$_ca_by_ski = [];
+$_cas_for_link = $Database->getObjectsQuery(
+	"SELECT id, serial, ski FROM cas WHERE t_id = ? AND ski IS NOT NULL AND ski != ''",
+	[(int)$certificate->t_id]
+);
+foreach ($_cas_for_link as $_ca_row) {
+	$_ca_by_ski[strtolower(trim($_ca_row->ski))] = $_ca_row;
+}
+
 // chain
 $delimiter = "-----BEGIN CERTIFICATE-----\n";
 $chains = array_reverse(array_values(array_filter(explode($delimiter, $certificate->chain))));
@@ -61,7 +71,15 @@ foreach ($cert_chain as $index=>$cert) {
 	print "<table class='table table-cert-details table-borderless table-auto table-details table-condensed' style='width:auto'>";
 	print "<tr>";
 	print "	<td style=''>";
-	print "<strong><a href=''>".$cert['certificate']['subject']['CN']."</a></strong> $ignored_issuer $ignored_cert<br>";
+	$_chain_ski = strtolower(trim($cert['certificate']['extensions']['subjectKeyIdentifier'] ?? ''));
+	$_chain_ca  = isset($_ca_by_ski[$_chain_ski]) ? $_ca_by_ski[$_chain_ski] : null;
+	$_chain_slug = $_chain_ca ? (!empty($_chain_ca->serial) ? $_chain_ca->serial : (int)$_chain_ca->id) : null;
+	$_cn_escaped = htmlspecialchars($cert['certificate']['subject']['CN']);
+	if ($_chain_slug) {
+		print "<strong><a href='/".$_params['tenant']."/ca-certificates/".$_chain_slug."/'>".$_cn_escaped."</a></strong> $ignored_issuer $ignored_cert<br>";
+	} else {
+		print "<strong>".$_cn_escaped."</strong> $ignored_issuer $ignored_cert<br>";
+	}
 	print _("Issued by").": ".$cert['certificate']['issuer']['CN']."<br>";
 	print "<span class='text-muted $validto_class'>"._("Expires on").": ".date("Y-m-d H:i:s", $cert['certificate']['validTo_time_t'])."</span><br>";
 	print "<span style='font-size:10px;padding-left:10px;font-style:italic' class='text-muted'>"._("SHA-256 Fingerprint").": ".chunk_split(openssl_x509_fingerprint($cert_x509, 'SHA256'), 2, ' ')."</span><br>";
