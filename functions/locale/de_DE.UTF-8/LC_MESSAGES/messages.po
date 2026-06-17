@@ -1027,6 +1027,9 @@ msgstr "Verwaiste entfernen"
 msgid "Mail recipients"
 msgstr "E-Mail-Empfänger"
 
+msgid "Tenant mail recipients"
+msgstr "Mandanten-E-Mail-Empfänger"
+
 msgid "Mail style"
 msgstr "E-Mail-Stil"
 

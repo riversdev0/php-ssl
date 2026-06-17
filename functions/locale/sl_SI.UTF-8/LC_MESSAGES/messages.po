@@ -1370,6 +1370,9 @@ msgstr "Prejemniki obvestil"
 msgid "Mail recipients"
 msgstr "Poštni prejemniki"
 
+msgid "Tenant mail recipients"
+msgstr "Poštni prejemniki najemnika"
+
 msgid "Recipients updated"
 msgstr "Prejemniki posodobljeni"
 

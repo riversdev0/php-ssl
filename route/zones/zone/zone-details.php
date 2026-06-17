@@ -65,7 +65,7 @@ print "</tr>";
 
 $zone->recipients = str_replace(";", "<br>", $zone->recipients);
 print "<tr>";
-print "	<th>"._("Mail recipients")."</th>";
+print "	<th>"._("Tenant mail recipients")."</th>";
 print "	<td>".$zone->recipients."</td>";
 print "</tr>";
 
